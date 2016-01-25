@@ -2,6 +2,7 @@
 
 var autoprefixer = require('autoprefixer');
 var HtmlWepbackPlugin = require('html-webpack-plugin');
+var UglifyJsPlugin = require('webpack').optimize.UglifyJsPlugin;
 
 module.exports = {
   context: __dirname,
@@ -10,7 +11,6 @@ module.exports = {
     path: 'dist',
     filename: '[hash].js',
   },
-  devtool: 'source-map',
   module: {
     loaders: [
       {
@@ -39,7 +39,8 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['', '.js', '.jsx', '.min.js'],
+    // modulesDirectories: ['node_modules'],
+    extensions: ['', '.min.js', '.js', '.jsx'],
   },
   postcss: function () {
     return [autoprefixer];
@@ -50,6 +51,8 @@ module.exports = {
       template: './src/index.html',
       inject: 'body',
       version: require('./package.json').version,
+      chunks: ['main'],
     }),
+    new UglifyJsPlugin(),
   ],
 };

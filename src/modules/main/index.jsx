@@ -2,8 +2,6 @@ import React from 'react';
 
 import BaseComponent from '../../classes/base-component';
 
-import './index.styl';
-
 class Main extends BaseComponent {
 
   constructor() {
