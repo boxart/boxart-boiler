@@ -8,5 +8,6 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('default', ['webpack-dev-server']);
-  grunt.registerTask('build', ['build-env', 'webpack']);
+  grunt.registerTask('test', ['karma:ci']);
+  grunt.registerTask('build', ['karma:ci', 'build-env', 'webpack']);
 };
