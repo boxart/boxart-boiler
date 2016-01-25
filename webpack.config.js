@@ -39,6 +39,7 @@ module.exports = {
     ],
   },
   resolve: {
+    modulesDirectories: ['node_modules', 'vendor'],
     extensions: ['', '.js', '.jsx', '.min.js'],
   },
   postcss: function () {

@@ -25,6 +25,10 @@ module.exports = {
   module: {
     loaders: [
       {
+        test: /soundjs/,
+        loader: 'exports-loader?createjs!script-loader',
+      },
+      {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
@@ -53,6 +57,7 @@ module.exports = {
     ],
   },
   resolve: {
+    modulesDirectories: ['node_modules', 'vendor'],
     extensions: ['', '.min.js', '.js', '.jsx'],
   },
   postcss: function () {
