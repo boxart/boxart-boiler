@@ -2,6 +2,7 @@
 
 var autoprefixer = require('autoprefixer');
 var HtmlWepbackPlugin = require('html-webpack-plugin');
+var OfflinePlugin = require('offline-plugin');
 var UglifyJsPlugin = require('webpack').optimize.UglifyJsPlugin;
 
 module.exports = {
@@ -9,7 +10,7 @@ module.exports = {
   entry: { main: './src' },
   output: {
     path: 'dist',
-    filename: '[hash].js',
+    filename: '[name].js',
   },
   module: {
     loaders: [
@@ -46,6 +47,14 @@ module.exports = {
     return [autoprefixer];
   },
   plugins: [
+    new OfflinePlugin({
+      caches: {
+        main: ['index.html', '*.js'],
+      },
+      updateStrategy: 'changed',
+      // scope is any subdirectory the deployed files will be under.
+      // scope: '/game-skeleton/',
+    }),
     new HtmlWepbackPlugin({
       filename: 'index.html',
       template: './src/index.html',
