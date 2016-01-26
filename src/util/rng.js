@@ -18,7 +18,7 @@ import seedrandom from 'seedrandom';
  *
  */
 
-export default function rng(state = {}) {
+function _rng(state = {}, handler = gen => gen()) {
   const seed = state.seed;
   const options = {
     state: state.arc || {},
@@ -27,13 +27,21 @@ export default function rng(state = {}) {
   const result = seedrandom(seed, options);
 
   return {
-    number: result(),
+    number: handler(result),
     state: {
       seed,
       arc: result.state(),
       count: (state.count || 0) + 1,
     },
   };
+}
+
+export default function rng(state) {
+  return _rng(state, gen => gen());
+}
+
+export function int(state) {
+  return _rng(state, gen => gen.int32());
 }
 
 // split one random number

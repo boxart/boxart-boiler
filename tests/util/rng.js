@@ -1,4 +1,4 @@
-import rng, {splitChance} from '../../src/util/rng';
+import rng, {int, splitChance} from '../../src/util/rng';
 
 describe('util/rng', function() {
 
@@ -37,6 +37,13 @@ describe('util/rng', function() {
 
     expect(rng(g.state).number, 'still matches').to.eq(rng(g.state).number);
 
+  });
+
+  describe('int', function() {
+    it('returns a predictable whole number', function() {
+      const g = int({seed: 'random'});
+      expect(g.number).to.eq(1895931530);
+    });
   });
 
   describe('splitChance', function() {
