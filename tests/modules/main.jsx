@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
+import React, {Component} from 'react';
+import {render} from 'react-dom';
 
 import Main from '../../src/modules/main';
 
@@ -10,8 +10,8 @@ describe('<Main>', function() {
   });
 
   it('renders a div.game-board elment', function() {
-    let root = document.createElement('div');
-    let mainInstance = render(<Main />, root);
+    const root = document.createElement('div');
+    render(<Main />, root);
     expect(root.querySelector('div.game-board')).to.be.ok;
   });
 

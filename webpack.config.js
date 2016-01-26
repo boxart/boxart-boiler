@@ -5,7 +5,9 @@ var HtmlWepbackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   context: __dirname,
-  entry: { main: './src' },
+  entry: {
+    main: './src',
+  },
   output: {
     path: 'dist',
     filename: '[hash].js',
@@ -50,7 +52,7 @@ module.exports = {
     modulesDirectories: ['node_modules', 'vendor'],
     extensions: ['', '.js', '.jsx', '.min.js'],
   },
-  postcss: function () {
+  postcss: function() {
     return [autoprefixer];
   },
   plugins: [

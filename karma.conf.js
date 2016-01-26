@@ -38,11 +38,11 @@ module.exports = function(config) {
 
     webpack: (function() {
       process.env.NODE_ENV = 'production';
-      var config = require('./webpack.config');
-      delete config.entry;
-      delete config.context;
-      delete config.plugins;
-      return config;
+      var webpackConf = require('./webpack.config');
+      delete webpackConf.entry;
+      delete webpackConf.context;
+      delete webpackConf.plugins;
+      return webpackConf;
     })(),
 
     // preprocess matching files before serving them to the browser
@@ -83,4 +83,4 @@ module.exports = function(config) {
     concurrency: Infinity,
 
   });
-}
+};

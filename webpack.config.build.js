@@ -17,7 +17,9 @@ var mainCssExtraction = new ExtractTextPlugin('style.css');
 
 module.exports = {
   context: __dirname,
-  entry: { main: './src' },
+  entry: {
+    main: './src',
+  },
   output: {
     path: 'dist',
     filename: '[name].js',
@@ -60,7 +62,7 @@ module.exports = {
     modulesDirectories: ['node_modules', 'vendor'],
     extensions: ['', '.min.js', '.js', '.jsx'],
   },
-  postcss: function () {
+  postcss: function() {
     return [autoprefixer];
   },
   plugins: [

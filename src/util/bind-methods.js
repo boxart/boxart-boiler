@@ -1,6 +1,6 @@
 /**
  * @file Auto-binds class methods to an object
- * @module util/dates-range
+ * @module utilBindMethods
  */
 
 /**
