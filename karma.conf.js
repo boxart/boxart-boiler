@@ -20,6 +20,7 @@ module.exports = function(config) {
       require('karma-mocha'),
       require('karma-chai'),
       require('karma-webpack'),
+      require('karma-browserstack-launcher'),
       require('karma-chrome-launcher'),
       require('karma-safari-launcher'),
       require('karma-firefox-launcher'),
