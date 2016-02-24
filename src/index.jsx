@@ -6,6 +6,11 @@ import ReactDOM from 'react-dom';
 
 import Main from './modules/main';
 
+if (!global.Intl) {
+  require('intl');
+  require('intl/locale-data/jsonp/en');
+}
+
 import {addLocaleData, IntlProvider} from 'react-intl';
 import enLocaleData from 'react-intl/dist/locale-data/en';
 addLocaleData(enLocaleData);

@@ -31,6 +31,7 @@
     "grunt-karma": "^0.12.1",
     "grunt-webpack": "^1.0.11",
     "html-webpack-plugin": "^2.7.2",
+    "intl": "^1.1.0",
     "json-loader": "^0.5.4",
     "karma": "^0.13.19",
     "karma-browserstack-launcher": "^0.1.9",
