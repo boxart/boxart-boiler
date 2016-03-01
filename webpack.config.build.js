@@ -25,10 +25,6 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /soundjs/,
-        loader: 'exports-loader?createjs!script-loader',
-      },
-      {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
@@ -53,6 +49,10 @@ module.exports = {
       {
         test: /\.json$/,
         loader: 'json-loader',
+      },
+      {
+        test: /\/soundjs/,
+        loader: 'exports-loader?createjs!script-loader',
       },
     ],
   },

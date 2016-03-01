@@ -3,6 +3,9 @@ import './styles/index.styl';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {SoundContext} from 'react-soundjs';
+
+import {Sound as SoundJS} from 'soundjs';
 
 import Main from './modules/main';
 
@@ -18,8 +21,10 @@ addLocaleData(enLocaleData);
 import strings from './locale/en/strings.json';
 
 ReactDOM.render(
+  <SoundContext soundjs={SoundJS}>
     <IntlProvider locale="en" messages={strings}>
-        <Main />
-    </IntlProvider>,
-    document.getElementById('root')
+      <Main />
+    </IntlProvider>
+  </SoundContext>,
+  document.getElementById('root')
 );

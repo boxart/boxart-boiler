@@ -36,6 +36,10 @@ module.exports = {
         test: /\.json$/,
         loader: 'json-loader',
       },
+      {
+        test: /\/soundjs/,
+        loader: 'exports-loader?createjs!script-loader',
+      },
     ],
   },
   resolve: {
