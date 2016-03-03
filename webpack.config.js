@@ -40,6 +40,10 @@ module.exports = {
         test: /\/soundjs/,
         loader: 'exports-loader?createjs!script-loader',
       },
+      {
+        test: /\.wav$/,
+        loader: 'file-loader',
+      },
     ],
   },
   resolve: {
