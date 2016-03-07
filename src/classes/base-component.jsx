@@ -19,8 +19,15 @@ import bindMethods from '../util/bind-methods';
 class BaseComponent extends React.Component {
   constructor(props) {
     super(props);
-    bindMethods(this);
+    bindMethods(this, null, BaseComponent.prototype);
   }
+}
+
+if (module.hot) {
+  BaseComponent.prototype.componentWillUpdate = function(...args) {
+    (React.Component.componentWillUpdate || (() => {})).call(this, ...args);
+    bindMethods(this, null, BaseComponent.prototype);
+  };
 }
 
 export default BaseComponent;

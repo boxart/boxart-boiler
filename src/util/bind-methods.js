@@ -10,14 +10,23 @@
  * @param {array} [methodNames] - The list of methods to bind. Defaults to all.
  * @returns {void}
  */
-export default function(thisValue, methodNames) {
+export default function(thisValue, methodNames, RootClass = Object.prototype) {
   const protoObj = Object.getPrototypeOf(thisValue);
   let methods = methodNames;
 
   if (!methods) {
-    methods = Object.getOwnPropertyNames(protoObj).filter(
-      name => typeof protoObj[name] === 'function'
+    methods = [];
+    let nextProtoObj = protoObj;
+    const filterBound = name => (
+          typeof protoObj[name] === 'function' &&
+          // Don't rebind already bound methods
+          !thisValue.hasOwnProperty(name)
     );
+    do {
+      methods = methods.concat(Object.getOwnPropertyNames(nextProtoObj).filter(filterBound));
+      // Climb the hierarchy to bind methods listed by parents
+      nextProtoObj = Object.getPrototypeOf(nextProtoObj);
+    } while (nextProtoObj !== RootClass);
   }
 
   methods.forEach(name => {
