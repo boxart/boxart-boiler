@@ -15,7 +15,7 @@ if (!global.Intl) {
 }
 
 import {addLocaleData, IntlProvider} from 'react-intl';
-import enLocaleData from 'react-intl/dist/locale-data/en';
+import enLocaleData from 'react-intl/locale-data/en';
 addLocaleData(enLocaleData);
 
 import strings from './locale/en/strings.json';
