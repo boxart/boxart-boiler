@@ -7,6 +7,8 @@ import {SoundContext} from 'react-soundjs';
 
 import {Sound as SoundJS} from 'soundjs';
 
+import Component from './classes/base-component';
+
 import Main from './modules/main';
 
 if (!global.Intl) {
@@ -18,13 +20,31 @@ import {addLocaleData, IntlProvider} from 'react-intl';
 import enLocaleData from 'react-intl/locale-data/en';
 addLocaleData(enLocaleData);
 
-import strings from './locale/en/strings.json';
+let strings = require('./locale/en/strings.json');
+
+class IntlMain extends Component {
+  render() {
+    return (
+      <SoundContext soundjs={SoundJS}>
+        <IntlProvider locale="en" messages={strings}>
+          <Main />
+        </IntlProvider>
+      </SoundContext>
+    );
+  }
+}
 
 ReactDOM.render(
-  <SoundContext soundjs={SoundJS}>
-    <IntlProvider locale="en" messages={strings}>
-      <Main />
-    </IntlProvider>
-  </SoundContext>,
+  <IntlMain />,
   document.getElementById('root')
 );
+
+if (module.hot) {
+  module.hot.accept('./locale/en/strings.json', function() {
+    strings = require('./locale/en/strings.json');
+    ReactDOM.render(
+      <IntlMain />,
+      document.getElementById('root')
+    );
+  });
+}
