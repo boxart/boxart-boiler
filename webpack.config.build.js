@@ -1,6 +1,9 @@
 'use strict';
 
 var autoprefixer = require('autoprefixer');
+var ChildCompilerLoaderListPlugin = require(
+  'child-compiler-loader-list-webpack-plugin'
+);
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWepbackPlugin = require('html-webpack-plugin');
 var OfflinePlugin = require('offline-plugin');
@@ -13,7 +16,40 @@ var UglifyJsPlugin = require('webpack').optimize.UglifyJsPlugin;
 // Multiple extractions could be done, as one option a critical section of css
 // could be extracted and with a small plugin to HtmlWebpackPlugin, inlined
 // into the output html.
-var mainCssExtraction = new ExtractTextPlugin('style.css');
+var mainCssExtraction = new ExtractTextPlugin('[contenthash].css');
+
+var loaders = [
+    {
+      test: /\.jsx?$/,
+      exclude: /node_modules/,
+      loader: 'babel-loader',
+    },
+    // Autoload style files named like an included jsx file.
+    {
+      test: /\.jsx$/,
+      exclude: /node_modules/,
+      loader: 'baggage-loader?[file].styl',
+    },
+    {
+      test: /\.styl$/,
+      loader: mainCssExtraction.extract(
+        'style-loader',
+        'css-loader!postcss-loader!stylus-loader'
+      ),
+    },
+    {
+      test: /\.(png|webm|svg)$/,
+      loader: 'file-loader',
+    },
+    {
+      test: /\.json$/,
+      loader: 'json-loader',
+    },
+    {
+      test: /\/soundjs/,
+      loader: 'exports-loader?createjs!script-loader',
+    },
+];
 
 module.exports = {
   context: __dirname,
@@ -22,45 +58,17 @@ module.exports = {
   },
   output: {
     path: 'dist',
-    filename: '[name].js',
+    filename: '[hash].js',
   },
   module: {
-    loaders: [
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-      },
-      // Autoload style files named like an included jsx file.
-      {
-        test: /\.jsx$/,
-        exclude: /node_modules/,
-        loader: 'baggage-loader?[file].styl',
-      },
-      {
-        test: /\.styl$/,
-        loader: mainCssExtraction.extract(
-          'style-loader',
-          'css-loader!postcss-loader!stylus-loader'
-        ),
-      },
-      {
-        test: /\.(png|webm|svg)$/,
-        loader: 'file-loader',
-      },
-      {
-        test: /\.json$/,
-        loader: 'json-loader',
-      },
-      {
-        test: /\/soundjs/,
-        loader: 'exports-loader?createjs!script-loader',
-      },
-    ],
+    loaders: loaders,
   },
   resolve: {
     modulesDirectories: ['node_modules', 'vendor'],
     extensions: ['', '.min.js', '.js', '.jsx'],
+  },
+  resolveLoaders: {
+    modulesDirectories: ['node_modules', 'web_loaders'],
   },
   postcss: function() {
     return [autoprefixer];
@@ -75,11 +83,19 @@ module.exports = {
       // scope is any subdirectory the deployed files will be under.
       // scope: '/game-skeleton/',
     }),
+    new ChildCompilerLoaderListPlugin({
+      test: /html-webpack-plugin/,
+      loaders: loaders
+      .filter(function(loader) {return loader.test.source !== '\\.styl$';})
+      .concat({
+        test: /\.styl$/,
+        loader: 'css-loader/locals!stylus-loader',
+      }),
+    }),
     new HtmlWepbackPlugin({
       filename: 'index.html',
-      template: './src/index.html',
+      template: './src/index.bake.html',
       inject: 'body',
-      version: require('./package.json').version,
       chunks: ['main'],
     }),
     new UglifyJsPlugin(),

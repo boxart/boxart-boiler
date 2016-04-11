@@ -60,7 +60,6 @@ module.exports = {
       filename: 'index.html',
       template: './src/index.html',
       inject: 'body',
-      version: require('./package.json').version,
     }),
   ],
 };
