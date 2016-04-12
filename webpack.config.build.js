@@ -77,11 +77,11 @@ module.exports = {
     mainCssExtraction,
     new OfflinePlugin({
       caches: {
-        main: ['index.html', '*.js'],
+        main: ['index.html', '*'],
       },
       updateStrategy: 'changed',
       // scope is any subdirectory the deployed files will be under.
-      // scope: '/game-skeleton/',
+      // scope: '/rwd-game-boiler/',
     }),
     new ChildCompilerLoaderListPlugin({
       test: /html-webpack-plugin/,
