@@ -10,6 +10,8 @@ import {Sound as SoundJS} from 'soundjs';
 import Component from './classes/base-component';
 
 import Main from './modules/main';
+import FullViewport from './modules/full-viewport';
+import PreventZoom from './modules/prevent-zoom';
 
 if (!global.Intl) {
   require('intl');
@@ -27,7 +29,7 @@ class IntlMain extends Component {
     return (
       <SoundContext soundjs={SoundJS}>
         <IntlProvider locale="en" messages={strings}>
-          <Main />
+          <PreventZoom><FullViewport><Main /></FullViewport></PreventZoom>
         </IntlProvider>
       </SoundContext>
     );
