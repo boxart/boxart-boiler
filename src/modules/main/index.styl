@@ -1,5 +1,52 @@
-.board {
-  margin: 0 auto;
-  max-width: 1400px;
+.screen {
+  width: 100%;
+  height: 100%;
 }
 
+.board {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #ccc;
+}
+
+.bar {
+  font-family: Verdana, arial;
+  font-size: 11.5vh;
+}
+
+@media (max-aspect-ratio: 24/17) {
+  .bar {
+    font-size: 8.15vw;
+  }
+}
+
+.score {
+  display: inline-block;
+  float: right;
+  margin: 0 0.4em;
+}
+
+.reset {
+  display: inline-block;
+  float: left;
+  transform: rotateZ(90deg);
+  margin: 0 0.4em;
+}
+
+.win-screen {
+  z-index: 2;
+
+  font-family: Verdana, arial;
+  font-size: 11.5vh;
+}
+
+@media (max-aspect-ratio: 24/17) {
+  .win-screen {
+    font-size: 8.15vw;
+  }
+}
+
+.win-screen-button {
+  cursor: pointer;
+}
