@@ -32,7 +32,7 @@ module.exports = {
         loader: 'style-loader!css-loader!postcss-loader!stylus-loader',
       },
       {
-        test: /\.(png|webm|svg)$/,
+        test: /\.(png|webm|webp|svg)$/,
         loader: 'file-loader',
       },
       {

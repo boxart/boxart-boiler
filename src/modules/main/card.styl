@@ -1,0 +1,28 @@
+.card {
+  position: relative;
+  width: 100%;
+  padding-bottom: 140%;
+  border-radius: 6.5%;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg);
+}
+
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+  background: no-repeat center/100% url('images/memory-card-game-back-blue.svg');
+}
+
+.card-face-down {
+  transform: rotateY(180deg);
+}
+
+for $i in 1...9 {
+  .rooster-{$i}.card {
+    background: no-repeat bottom/100% url('images/memorygame_rooster0' + $i + '.png'), no-repeat center/100% url('images/memory-card-game-background.svg');
+  }
+}
