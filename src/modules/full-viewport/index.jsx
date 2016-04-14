@@ -1,7 +1,7 @@
 import React from 'react';
 import {findDOMNode} from 'react-dom';
 
-import Component from '../../classes/base-component';
+import Component from '../auto-bind-ancestor';
 
 /**
  * FullViewport

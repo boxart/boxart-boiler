@@ -1,8 +1,8 @@
 import React from 'react';
 
-import BaseComponent from '../../classes/base-component';
+import Component from '../update-ancestor';
 
-class Main extends BaseComponent {
+class Main extends Component {
 
   constructor() {
     super();

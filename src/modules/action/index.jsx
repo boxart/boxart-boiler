@@ -1,8 +1,8 @@
 import React from 'react';
 
-import BaseComponent from '../../classes/base-component';
+import Component from '../update-ancestor';
 
-export default class Action extends BaseComponent {
+export default class Action extends Component {
   action() {
     this.props.action();
   }
