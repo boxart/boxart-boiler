@@ -46,7 +46,7 @@ var loaders = [
       loader: 'json-loader',
     },
     {
-      test: /\/soundjs/,
+      test: /[/\\]soundjs/,
       loader: 'exports-loader?createjs!script-loader',
     },
 ];
