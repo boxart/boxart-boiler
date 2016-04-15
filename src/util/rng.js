@@ -37,7 +37,11 @@ function _rng(state = {}, handler = gen => gen()) {
 }
 
 export default function rng(state) {
-  return _rng(state, gen => gen());
+  return _rng(state);
+}
+
+export function custom(state, handler) {
+  return _rng(state, handler);
 }
 
 export function int(state) {

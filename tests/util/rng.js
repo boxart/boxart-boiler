@@ -1,4 +1,7 @@
-import rng, {int, splitChance} from '../../src/util/rng';
+/* global sinon */
+'use strict';
+
+import rng, {custom, int, splitChance} from '../../src/util/rng';
 
 describe('util/rng', function() {
 
@@ -76,6 +79,16 @@ describe('util/rng', function() {
       });
     });
 
+    it('Custom RNG utilizes a passed in handler', function() {
+      const myHandler = function(gen) {
+        return gen();
+      };
+      const spy = sinon.spy(myHandler);
+      const myRng = custom({seed: 'wakawaka'}, spy);
+      const num = myRng.number;
+      expect(num).to.equal(0.7354555783423689);
+      expect(spy).to.be.called.once;
+    });
   });
 
 });
