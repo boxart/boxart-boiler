@@ -4,7 +4,7 @@ import update from 'react-addons-update';
 import Component from '../update-ancestor';
 
 import Animated from '../animated';
-import AnimatedAgent from '../animation-agent';
+import AnimatedAgent from '../animated-agent';
 import Clamp from '../clamp';
 import Batch from '../batch';
 
@@ -242,11 +242,18 @@ class Main extends Component {
             <Batch items={cells}
               // subgroup={tile => (tile.x / 8 | 0) + (tile.y / 10 | 0) * this.state.grid.width / 8}
               // subgroupIndex={tile => (tile.x % 8) + (tile.y % 10) * 8}
-              subgroup={tile => tile.x}
-              subgroupIndex={tile => tile.y}
+              subbatch={tile => tile.x}
+              subbatchIndex={tile => tile.y}
+              key={3}
+              // style={{width: '300%', height: '300%', transform: 'translate3d(-25%, -25%, 0) scale(0.5)'}}
               >
               {(tile) => (
-                <Animated key={tile.key} animateKey={tile.key}>
+                <Animated
+                  key={tile.key} animateKey={tile.key}
+                  animate={options => {
+                    options.transitionBetween(options.lastRect, options.rect, 0.3);
+                  }}
+                  >
                   <div style={{
                     position: 'absolute',
                     width: `${100 / this.state.grid.width}%`,
