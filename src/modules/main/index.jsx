@@ -6,7 +6,7 @@ import Component from '../update-ancestor';
 import Animated from '../animated';
 import AnimatedAgent from '../animation-agent';
 import Clamp from '../clamp';
-import Group from '../group';
+import Batch from '../batch';
 
 import {int} from '../../util/rng';
 
@@ -239,23 +239,25 @@ class Main extends Component {
           width={this.state.grid.width}
           height={this.state.grid.height}>
           <AnimatedAgent>
-            <Group items={cells}
+            <Batch items={cells}
               // subgroup={tile => (tile.x / 8 | 0) + (tile.y / 10 | 0) * this.state.grid.width / 8}
               // subgroupIndex={tile => (tile.x % 8) + (tile.y % 10) * 8}
               subgroup={tile => tile.x}
               subgroupIndex={tile => tile.y}
               >
               {(tile) => (
-                <Animated key={tile.key} animateKey={tile.key}><div style={{
-                  position: 'absolute',
-                  width: `${100 / this.state.grid.width}%`,
-                  height: `${100 / this.state.grid.height}%`,
-                  left: `${tile.x * 100 / this.state.grid.width}%`,
-                  bottom: `${tile.y * 100 / this.state.grid.height}%`,
-                  background: colors[tile.color],
-                }} onClick={() => this.matchTile(tile)}></div></Animated>
+                <Animated key={tile.key} animateKey={tile.key}>
+                  <div style={{
+                    position: 'absolute',
+                    width: `${100 / this.state.grid.width}%`,
+                    height: `${100 / this.state.grid.height}%`,
+                    left: `${tile.x * 100 / this.state.grid.width}%`,
+                    bottom: `${tile.y * 100 / this.state.grid.height}%`,
+                    background: colors[tile.color],
+                  }} onClick={() => this.matchTile(tile)}></div>
+                </Animated>
               )}
-            </Group>
+            </Batch>
           </AnimatedAgent>
         </Clamp>
       </div>
