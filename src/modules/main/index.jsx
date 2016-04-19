@@ -3,6 +3,8 @@ import update from 'react-addons-update';
 
 import Component from '../update-ancestor';
 
+import Animated from '../animated';
+import AnimatedAgent from '../animation-agent';
 import Clamp from '../clamp';
 import Group from '../group';
 
@@ -18,10 +20,10 @@ function intGen(rngState) {
   return fn;
 }
 
-function createGrid() {
+function createGrid(_width, _height) {
   const colors = 4;
-  const width = 8;
-  const height = 10;
+  const width = _width || 8;
+  const height = _height || 10;
   const gen = intGen({seed: 'fff'});
   const grid = {
     colors,
@@ -77,13 +79,6 @@ function matchGrid(grid, target) {
   const matches = {};
   const tmp = [];
   const [i, j] = target;
-  console.log(
-    gridKeyXY(i, j),
-    gridKey(addXY(directions[0], i, j)),
-    gridKey(addXY(directions[1], i, j)),
-    gridKey(addXY(directions[2], i, j)),
-    gridKey(addXY(directions[3], i, j))
-  )
   const here = grid.cells[gridKeyXY(i, j)].color;
   if (
     isSameColor(here, grid.cells[gridKey(addXY(directions[0], i, j))]) ||
@@ -98,7 +93,6 @@ function matchGrid(grid, target) {
       const neighbor = grid.cells[gridKey(coord)].color;
       for (let d = 0; d < 4; d++) {
         const newCoord = add(coord, directions[d]);
-        console.log(newCoord, grid.cells[gridKey(newCoord)]);
         if (isSameColor(neighbor, grid.cells[gridKey(newCoord)])) {
           let alreadyChecked = false;
           for (let t = 0; t < tmp.length; t++) {
@@ -107,14 +101,12 @@ function matchGrid(grid, target) {
               break;
             }
           }
-          console.log(newCoord, alreadyChecked);
           if (!alreadyChecked) {
             tmp.push(newCoord);
           }
         }
       }
     }
-    console.log(tmp);
     if (tmp.length >= 2) {
       for (let t = 0; t < tmp.length; t++) {
         matches[gridKey(tmp[t])] = tmp[t];
@@ -227,7 +219,7 @@ class Main extends Component {
     super();
 
     this.state = {
-      grid: createGrid(),
+      grid: createGrid(80, 100),
     };
   }
 
@@ -246,18 +238,25 @@ class Main extends Component {
         <Clamp
           width={this.state.grid.width}
           height={this.state.grid.height}>
-          <Group items={cells}>
-            {(tile) => (
-              <div key={tile.key} style={{
-                position: 'absolute',
-                width: `${100 / this.state.grid.width}%`,
-                height: `${100 / this.state.grid.height}%`,
-                left: `${tile.x * 100 / this.state.grid.width}%`,
-                bottom: `${tile.y * 100 / this.state.grid.height}%`,
-                background: colors[tile.color],
-              }} onClick={() => this.matchTile(tile)}></div>
-            )}
-          </Group>
+          <AnimatedAgent>
+            <Group items={cells}
+              // subgroup={tile => (tile.x / 8 | 0) + (tile.y / 10 | 0) * this.state.grid.width / 8}
+              // subgroupIndex={tile => (tile.x % 8) + (tile.y % 10) * 8}
+              subgroup={tile => tile.x}
+              subgroupIndex={tile => tile.y}
+              >
+              {(tile) => (
+                <Animated key={tile.key} animateKey={tile.key}><div style={{
+                  position: 'absolute',
+                  width: `${100 / this.state.grid.width}%`,
+                  height: `${100 / this.state.grid.height}%`,
+                  left: `${tile.x * 100 / this.state.grid.width}%`,
+                  bottom: `${tile.y * 100 / this.state.grid.height}%`,
+                  background: colors[tile.color],
+                }} onClick={() => this.matchTile(tile)}></div></Animated>
+              )}
+            </Group>
+          </AnimatedAgent>
         </Clamp>
       </div>
     );
