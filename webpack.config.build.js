@@ -4,6 +4,7 @@ var autoprefixer = require('autoprefixer');
 var ChildCompilerLoaderListPlugin = require(
   'child-compiler-loader-list-webpack-plugin'
 );
+var DefinePlugin = require('webpack').DefinePlugin;
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWepbackPlugin = require('html-webpack-plugin');
 var OfflinePlugin = require('offline-plugin');
@@ -75,6 +76,9 @@ module.exports = {
   },
   plugins: [
     mainCssExtraction,
+    new DefinePlugin({
+      'process.env.NODE_ENV': '"production"',
+    }),
     new OfflinePlugin({
       caches: {
         main: ['index.html', '*'],

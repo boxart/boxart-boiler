@@ -7,7 +7,7 @@ import {SoundContext} from 'react-soundjs';
 
 import {Sound as SoundJS} from 'soundjs';
 
-import Component from './classes/base-component';
+import Component from './modules/auto-bind-ancestor';
 
 import Main from './modules/main';
 import FullViewport from './modules/full-viewport';
