@@ -54,12 +54,12 @@ function gridKey([x, y]) {
   return `${x}-${y}`;
 }
 
-function swapGrid(grid, {from, to}) {
-  return update(grid, {
-    [gridKey(from)]: grid[gridKey[to]],
-    [gridKey(to)]: grid[gridKey[from]],
-  });
-}
+// function swapGrid(grid, {from, to}) {
+//   return update(grid, {
+//     [gridKey(from)]: grid[gridKey[to]],
+//     [gridKey(to)]: grid[gridKey[from]],
+//   });
+// }
 
 function add(a, b) {
   return [a[0] + b[0], a[1] + b[1]];
@@ -77,48 +77,49 @@ function isSameColor(here, cell) {
 
 function matchGrid(grid, target) {
   const matches = {};
-  const tmp = [];
-  const [i, j] = target;
-  const here = grid.cells[gridKeyXY(i, j)].color;
-  if (
-    isSameColor(here, grid.cells[gridKey(addXY(directions[0], i, j))]) ||
-    isSameColor(here, grid.cells[gridKey(addXY(directions[1], i, j))]) ||
-    isSameColor(here, grid.cells[gridKey(addXY(directions[2], i, j))]) ||
-    isSameColor(here, grid.cells[gridKey(addXY(directions[3], i, j))])
-  ) {
-    let newestChecked = 0;
-    tmp.push([i, j]);
-    while (newestChecked < tmp.length) {
-      const coord = tmp[newestChecked++];
-      const neighbor = grid.cells[gridKey(coord)].color;
-      for (let d = 0; d < 4; d++) {
-        const newCoord = add(coord, directions[d]);
-        if (isSameColor(neighbor, grid.cells[gridKey(newCoord)])) {
-          let alreadyChecked = false;
-          for (let t = 0; t < tmp.length; t++) {
-            if (tmp[t][0] === newCoord[0] && tmp[t][1] === newCoord[1]) {
-              alreadyChecked = true;
-              break;
+  (() => {
+    const tmp = [];
+    const [i, j] = target;
+    const here = grid.cells[gridKeyXY(i, j)].color;
+    if (
+      isSameColor(here, grid.cells[gridKey(addXY(directions[0], i, j))]) ||
+      isSameColor(here, grid.cells[gridKey(addXY(directions[1], i, j))]) ||
+      isSameColor(here, grid.cells[gridKey(addXY(directions[2], i, j))]) ||
+      isSameColor(here, grid.cells[gridKey(addXY(directions[3], i, j))])
+    ) {
+      let newestChecked = 0;
+      tmp.push([i, j]);
+      while (newestChecked < tmp.length) {
+        const coord = tmp[newestChecked++];
+        const neighbor = grid.cells[gridKey(coord)].color;
+        for (let d = 0; d < 4; d++) {
+          const newCoord = add(coord, directions[d]);
+          if (isSameColor(neighbor, grid.cells[gridKey(newCoord)])) {
+            let alreadyChecked = false;
+            for (let t = 0; t < tmp.length; t++) {
+              if (tmp[t][0] === newCoord[0] && tmp[t][1] === newCoord[1]) {
+                alreadyChecked = true;
+                break;
+              }
             }
-          }
-          if (!alreadyChecked) {
-            tmp.push(newCoord);
+            if (!alreadyChecked) {
+              tmp.push(newCoord);
+            }
           }
         }
       }
-    }
-    if (tmp.length >= 2) {
-      for (let t = 0; t < tmp.length; t++) {
-        matches[gridKey(tmp[t])] = tmp[t];
+      if (tmp.length >= 2) {
+        for (let t = 0; t < tmp.length; t++) {
+          matches[gridKey(tmp[t])] = tmp[t];
+        }
       }
+      else {
+        return grid;
+      }
+      tmp.length = 0;
     }
-    else {
-      return grid;
-    }
-    tmp.length = 0;
-  }
+  })();
   const change = {cells: {}};
-  const keys = Object.keys(matches);
   for (let j = grid.height - 1; j >= 0; j--) {
     for (let i = 0; i < grid.width; i++) {
       if (matches[gridKeyXY(i, j)]) {
@@ -218,8 +219,9 @@ class Main extends Component {
   constructor() {
     super();
 
+    this.gravity = 256;
     this.state = {
-      grid: createGrid(80, 100),
+      grid: createGrid(8, 10),
     };
   }
 
@@ -227,6 +229,66 @@ class Main extends Component {
     this.updateState({
       grid: {$set: matchGrid(this.state.grid, [tile.x, tile.y])},
     });
+  }
+
+  fallAnimation(options) {
+    return (options.timer(timer => {
+      timer.cancelable(() => options.lastRect);
+      return Promise.resolve()
+      .then(() => timer.frame())
+      .then(() => {
+        const start = Date.now();
+        const tRect = options.lastRect.clone();
+        const {rect, lastRect} = options;
+        const top = rect.top;
+        const lastTop = lastRect.top;
+        const style = {
+          transform: '',
+          zIndex: 1,
+        };
+        timer.cancelable(() => tRect);
+        return timer.loop(() => {
+          const seconds = (Date.now() - start) / 1000;
+          const y = lastTop + this.gravity * seconds * seconds;
+          const t = Math.min(1 - (top - y) / (top - lastTop), 1);
+          rect.t(lastRect, t, tRect);
+          style.transform = tRect.transform(rect);
+          options.setStyle(style);
+          return t;
+        });
+      })
+      .then(() => options.setStyle());
+    }));
+  }
+
+  renderTile(tile) {
+    return (<Animated
+      key={tile.key} animateKey={tile.key}
+      animate={options => (
+        // Don't animate if it didn't move
+        options.lastRect.equal(options.rect) ? null :
+        // No vertical movement but there is horizontal movement, just slide
+        options.lastRect.top === options.rect.top ?
+        options.animateFromLast(
+          Math.sqrt(
+            Math.abs(options.rect.left - options.lastRect.left) / this.gravity
+          )
+        ) :
+        // Perform a gravity like fall
+        this.fallAnimation(options)
+        // Simplest animation to demo
+        // options.animateFromLast(0.3)
+      )}
+      >
+      <div style={{
+        position: 'absolute',
+        width: `${100 / this.state.grid.width}%`,
+        height: `${100 / this.state.grid.height}%`,
+        left: `${tile.x * 100 / this.state.grid.width}%`,
+        bottom: `${tile.y * 100 / this.state.grid.height}%`,
+        background: colors[tile.color],
+      }} onClick={() => this.matchTile(tile)}></div>
+    </Animated>);
   }
 
   render() {
@@ -240,30 +302,10 @@ class Main extends Component {
           height={this.state.grid.height}>
           <AnimatedAgent>
             <Batch items={cells}
-              // subgroup={tile => (tile.x / 8 | 0) + (tile.y / 10 | 0) * this.state.grid.width / 8}
-              // subgroupIndex={tile => (tile.x % 8) + (tile.y % 10) * 8}
               subbatch={tile => tile.x}
               subbatchIndex={tile => tile.y}
-              key={3}
-              // style={{width: '300%', height: '300%', transform: 'translate3d(-25%, -25%, 0) scale(0.5)'}}
               >
-              {(tile) => (
-                <Animated
-                  key={tile.key} animateKey={tile.key}
-                  animate={options => {
-                    options.transitionBetween(options.lastRect, options.rect, 0.3);
-                  }}
-                  >
-                  <div style={{
-                    position: 'absolute',
-                    width: `${100 / this.state.grid.width}%`,
-                    height: `${100 / this.state.grid.height}%`,
-                    left: `${tile.x * 100 / this.state.grid.width}%`,
-                    bottom: `${tile.y * 100 / this.state.grid.height}%`,
-                    background: colors[tile.color],
-                  }} onClick={() => this.matchTile(tile)}></div>
-                </Animated>
-              )}
+              {this.renderTile}
             </Batch>
           </AnimatedAgent>
         </Clamp>
