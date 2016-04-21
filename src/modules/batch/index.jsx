@@ -105,7 +105,7 @@ export default class Batch extends Component {
         }
       }
       if (this.props.subbatch) {
-        for (let removeKey in removeKeys) {
+        for (const removeKey in removeKeys) {
           if (removeKeys[removeKey]) {
             const item = this.keyedItems[removeKey];
             const subbatch = this.props.subbatch(item);
@@ -120,7 +120,7 @@ export default class Batch extends Component {
             this.keyedElements[removeKey] = null;
           }
         }
-        for (let subbatchKey in change.subbatchs) {
+        for (const subbatchKey in change.subbatchs) {
           change.subbatchElements.$splice.push(
             [subbatchKey, 1, <SubBatch key={subbatchKey}>{change.subbatchs[subbatchKey].$set}</SubBatch>]
           );
