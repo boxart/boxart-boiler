@@ -123,6 +123,14 @@ function matchGrid(grid, target) {
   for (let j = grid.height - 1; j >= 0; j--) {
     for (let i = 0; i < grid.width; i++) {
       if (matches[gridKeyXY(i, j)]) {
+        change.cells[gridKeyXY(i, j) + '-matched'] = {$set: {
+          x: i,
+          y: j,
+          key: grid.cells[gridKeyXY(i, j)].key,
+          color: grid.cells[gridKeyXY(i, j)].color,
+          matchX: target[0],
+          matchY: target[1],
+        }};
         for (let jj = j; jj < grid.height; jj++) {
           const keyHere = gridKeyXY(i, jj);
           const keyAbove = gridKeyXY(i, jj + 1);
@@ -212,6 +220,14 @@ function matchGrid(grid, target) {
   return update(grid, change);
 }
 
+function cleanGrid(grid, cells) {
+  const change = {cells: {}};
+  cells.forEach(function(cell) {
+    change.cells[gridKeyXY(cell.x, cell.y) + '-matched'] = {$set: null};
+  });
+  return update(grid, change);
+}
+
 const colors = ['#777', '#999', '#bbb', '#ddd'];
 
 class Main extends Component {
@@ -221,7 +237,7 @@ class Main extends Component {
 
     this.gravity = 256;
     this.state = {
-      grid: createGrid(8, 10),
+      grid: createGrid(24, 30),
     };
   }
 
@@ -229,6 +245,21 @@ class Main extends Component {
     this.updateState({
       grid: {$set: matchGrid(this.state.grid, [tile.x, tile.y])},
     });
+  }
+
+  cleanTile(tile) {
+    if (!this._cleanTile) {
+      this._cleanTiles = [];
+      this._cleanTile = Promise.resolve()
+      .then(() => {
+        this._cleanTile = null;
+        this.updateState({
+          grid: {$set: cleanGrid(this.state.grid, this._cleanTiles)},
+        });
+        this._cleanTiles = [];
+      });
+    }
+    this._cleanTiles.push(tile);
   }
 
   gravityFromLast(options, gravity) {
@@ -241,12 +272,12 @@ class Main extends Component {
 
   fallAnimation(options) {
     return (options.timer(timer => {
-      timer.cancelable(() => options.lastRect);
+      const tRect = options.lastRect.clone();
+      timer.cancelable(() => tRect);
       return Promise.resolve()
       .then(() => timer.frame())
       .then(() => {
         const start = Date.now();
-        const tRect = options.lastRect.clone();
         const {rect, lastRect} = options;
         const top = rect.top;
         const lastTop = lastRect.top;
@@ -254,7 +285,6 @@ class Main extends Component {
           transform: '',
           zIndex: 1,
         };
-        timer.cancelable(() => tRect);
         return timer.loop(() => {
           const seconds = (Date.now() - start) / 1000;
           const y = lastTop + this.gravity * seconds * seconds;
@@ -269,10 +299,50 @@ class Main extends Component {
     }));
   }
 
-  renderTile(tile) {
-    return (<Animated
-      key={tile.key} animateKey={tile.key}
-      animate={options => (
+  explodeAnimation(options, tile) {
+    return (options.timer(timer => {
+      const {rect, lastRect} = options;
+      const tRect = lastRect.clone();
+      timer.cancelable(() => tRect);
+      return Promise.resolve()
+      .then(() => timer.frame())
+      .then(() => {
+        const start = Date.now();
+        const top = rect.top;
+        const lastTop = lastRect.top;
+        const vx = (tile.x - tile.matchX) * 32 + (Math.random() - 0.5) * 128;
+        const vy = -(tile.y - tile.matchY) * 32 - Math.random() * 256;
+        lastRect.angle = Math.PI * Math.random() * 4;
+        const style = {
+          transform: '',
+          zIndex: 2,
+        };
+        return timer.loop(() => {
+          const seconds = (Date.now() - start) / 1000;
+          const y = lastTop + vy * seconds + this.gravity * seconds * seconds;
+          const t = Math.min(1 - (top - y) / (top - lastTop), 1);
+          tRect.left = lastRect.left + vx * seconds;
+          tRect.top = y;
+          tRect.width = lastRect.width * (1 - seconds) / 1;
+          tRect.height = lastRect.height * (1 - seconds) / 1;
+          tRect.angle = lastRect.angle * seconds / 1;
+          // rect.t(lastRect, t, tRect);
+          style.transform = tRect.transform(rect);
+          options.setStyle(style);
+          return seconds / 1;
+        });
+      })
+      .then(() => {
+        options.setStyle();
+        this.cleanTile(tile);
+      });
+    }));
+  }
+
+  animateTile(tile) {
+    return typeof tile.matchX === 'number' ?
+      (options => this.explodeAnimation(options, tile)) :
+      options => (
         // Don't animate if it didn't move
         options.lastRect.equal(options.rect) ? null :
         // No vertical movement but there is horizontal movement, just slide
@@ -286,7 +356,13 @@ class Main extends Component {
         this.fallAnimation(options)
         // Simplest animation to demo
         // options.animateFromLast(0.3)
-      )}
+      );
+  }
+
+  renderTile(tile) {
+    return (<Animated
+      key={tile.key} animateKey={tile.key}
+      animate={this.animateTile(tile)}
       >
       <div style={{
         position: 'absolute',
@@ -311,7 +387,7 @@ class Main extends Component {
           <AnimatedAgent>
             <Batch items={cells}
               subbatch={tile => tile.x}
-              subbatchIndex={tile => tile.y}
+              subbatchIndex={tile => tile.matchY >= 0 ? tile.y + this.state.grid.height : tile.y}
               >
               {this.renderTile}
             </Batch>
