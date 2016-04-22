@@ -70,7 +70,7 @@ export default class Batch extends Component {
               change.subbatchs[oldBatch] = {$set: (this.state.subbatchs[oldBatch] || []).slice()};
             }
             if (change.subbatchs[oldBatch].$set[oldBatchIndex] === oldElement) {
-              change.subbatchs[oldBatch].$set[oldBatchIndex] = '';
+              change.subbatchs[oldBatch].$set[oldBatchIndex] = null;
             }
           }
           if (
@@ -114,7 +114,7 @@ export default class Batch extends Component {
               change.subbatchs[subbatch] = {$set: (this.state.subbatchs[subbatch] || []).slice()};
             }
             if (change.subbatchs[subbatch].$set[subbatchIndex] === this.keyedElements[removeKey]) {
-              change.subbatchs[subbatch].$set[subbatchIndex] = '';
+              change.subbatchs[subbatch].$set[subbatchIndex] = null;
             }
             this.keyedItems[removeKey] = null;
             this.keyedElements[removeKey] = null;
