@@ -231,6 +231,14 @@ class Main extends Component {
     });
   }
 
+  gravityFromLast(options, gravity) {
+    const top = options.rect.top;
+    const lastTop = options.lastRect.top;
+    const duration = Math.sqrt(Math.abs(top - lastTop) / gravity);
+    const easing = t => t * t;
+    return options.animateFromLast(duration, easing);
+  }
+
   fallAnimation(options) {
     return (options.timer(timer => {
       timer.cancelable(() => options.lastRect);
