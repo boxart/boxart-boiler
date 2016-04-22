@@ -277,6 +277,7 @@ class Main extends Component {
       return Promise.resolve()
       .then(() => timer.frame())
       .then(() => {
+        const gravity = options._agent.rect.width / 4;
         const start = Date.now();
         const {rect, lastRect} = options;
         const top = rect.top;
@@ -287,7 +288,7 @@ class Main extends Component {
         };
         return timer.loop(() => {
           const seconds = (Date.now() - start) / 1000;
-          const y = lastTop + this.gravity * seconds * seconds;
+          const y = lastTop + gravity * seconds * seconds;
           const t = Math.min(1 - (top - y) / (top - lastTop), 1);
           rect.t(lastRect, t, tRect);
           style.transform = tRect.transform(rect);
@@ -307,11 +308,12 @@ class Main extends Component {
       return Promise.resolve()
       .then(() => timer.frame())
       .then(() => {
+        const gravity = options._agent.rect.width / 4;
         const start = Date.now();
         const top = rect.top;
         const lastTop = lastRect.top;
-        const vx = (tile.x - tile.matchX) * 32 + (Math.random() - 0.5) * 128;
-        const vy = -(tile.y - tile.matchY) * 32 - Math.random() * 256;
+        const vx = (tile.x - tile.matchX) * gravity / 4 + (Math.random() - 0.5) * gravity / 2;
+        const vy = -(tile.y - tile.matchY) * gravity / 4 - Math.random() * gravity;
         lastRect.angle = Math.PI * Math.random() * 4;
         const style = {
           transform: '',
@@ -319,7 +321,7 @@ class Main extends Component {
         };
         return timer.loop(() => {
           const seconds = (Date.now() - start) / 1000;
-          const y = lastTop + vy * seconds + this.gravity * seconds * seconds;
+          const y = lastTop + vy * seconds + gravity * seconds * seconds;
           const t = Math.min(1 - (top - y) / (top - lastTop), 1);
           tRect.left = lastRect.left + vx * seconds;
           tRect.top = y;
