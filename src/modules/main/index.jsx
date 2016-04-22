@@ -290,7 +290,7 @@ class Main extends Component {
           const seconds = (Date.now() - start) / 1000;
           const y = lastTop + gravity * seconds * seconds;
           const t = Math.min(1 - (top - y) / (top - lastTop), 1);
-          rect.t(lastRect, t, tRect);
+          rect.interpolate(lastRect, t, tRect);
           style.transform = tRect.transform(rect);
           options.setStyle(style);
           return t;
