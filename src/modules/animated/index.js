@@ -29,21 +29,6 @@ import Component from '../auto-bind-ancestor';
  * items, for that you'd need to combine Animated with ReactTransitionGroup to
  * persist the removed item until its removal animation completes.
  *
- * Animated takes an animate property to define custom animations.
- *
- * ```js
- * <Animated animateKey={uniqueKey} animate={options => {
- *   const {rect, lastRect} = options;
- *   if (this.justAddedItem(item)) {
- *     lastRect.height = 0;
- *   }
- *   if (this.justRemovedItem(item)) {
- *     rect.height = 0;
- *   }
- *   return options.animateFrom(lastRect, rect, 0.3);
- * }}><li>{item.name}</li></Animated>
- * ```
- *
  * Since the animateKey is unique on the page, an Animated can be removed from
  * one part of the DOM's hierarchy and added to another. A simple example is
  * moving an animated from one list to another.
@@ -66,6 +51,23 @@ import Component from '../auto-bind-ancestor';
  *   </ol>
  * </AnimatedAgent>
  * ```
+ *
+ * Animated takes an animate property to define custom animations.
+ *
+ * ```js
+ * <Animated animateKey={uniqueKey} animate={options => {
+ *   const {rect, lastRect} = options;
+ *   if (this.justAddedItem(item)) {
+ *     lastRect.height = 0;
+ *   }
+ *   if (this.justRemovedItem(item)) {
+ *     rect.height = 0;
+ *   }
+ *   return options.animateFrom(lastRect, rect, 0.3);
+ * }}><li>{item.name}</li></Animated>
+ * ```
+ *
+ * `animate` is given an options object that holds members to build animations with. `animateFrom` and `animateFromLast` let you build simple linear animations from where the Animated was last to where it is now. `lastRect` and `rect` are those values. `rect` is a little special, while `lastRect` is a unique copy of the last state for the Animated `rect` is the current state and will be updated if for example the window resized.
  */
 export default class Animated extends Component {
   componentDidMount() {
