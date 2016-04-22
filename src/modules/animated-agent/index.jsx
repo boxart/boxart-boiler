@@ -145,7 +145,7 @@ export default class AnimationAgent extends Component {
   timer(fn) {
     // Create a timer that can create easily cancelable animations by throwing
     // an Error at any timed section when the animation is canceled.
-    const timer = this.timerPool.shift() || new AnimateTimer();
+    const timer = this.timerPool.shift() || new AnimateTimer(this);
     timer._init(fn);
     // When the timer completes normally or abnormally (such as being canceled)
     // add it to the timer pool so that it can be reusued.
@@ -295,6 +295,16 @@ export default class AnimationAgent extends Component {
         }
       });
     }
+  }
+
+  frame() {
+    if (!this._frame) {
+      this._frame = new Promise(requestAnimationFrame)
+      .then(() => {
+        this._frame = null;
+      });
+    }
+    return this._frame;
   }
 
   soon() {

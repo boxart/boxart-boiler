@@ -1,5 +1,6 @@
 export default class AnimateTimer {
-  constructor() {
+  constructor(agent) {
+    this._agent = agent;
     this.run = 1;
     this._oncancel = null;
     this.promise = Promise.resolve();
@@ -13,7 +14,8 @@ export default class AnimateTimer {
 
   frame() {
     const run = this.run;
-    return new Promise(requestAnimationFrame)
+    return this._agent.frame()
+    // return new Promise(requestAnimationFrame)
     .then(() => {
       if (this.run !== run) {
         throw new Error('Timer canceled');
