@@ -328,7 +328,7 @@ class Main extends Component {
           tRect.width = lastRect.width * (1 - seconds) / 1;
           tRect.height = lastRect.height * (1 - seconds) / 1;
           tRect.angle = lastRect.angle * seconds / 1;
-          // rect.t(lastRect, t, tRect);
+          // rect.interpolate(lastRect, t, tRect);
           style.transform = tRect.transform(rect);
           options.setStyle(style);
           return seconds / 1;
