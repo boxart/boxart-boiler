@@ -1,6 +1,8 @@
 import React from 'react';
 import update from 'react-addons-update';
 
+import Box2D from 'box2d';
+
 import Component from '../update-ancestor';
 
 import Animated from '../animated';
@@ -236,9 +238,40 @@ class Main extends Component {
     super();
 
     this.gravity = 256;
+    // debugger;
+    this.b2Gravity = new Box2D.b2Vec2(0, -3);
+    this.world = new Box2D.b2World(this.b2Gravity);
+    this.shapes = {};
+    this.shapeCount = 0;
     this.state = {
-      grid: createGrid(24, 30),
+      width: 8,
+      height: 10,
+      tiles: {},
     };
+    this.addStatic(0, 0, 8, 1);
+    this.addStatic(-1, 10, 1, 10);
+    this.addStatic(8, 10, 1, 10);
+    this._stepBox2dId = null;
+    this._stepBox2dTimer = 0;
+    this._stepBox2dLast = Date.now();
+  }
+
+  addStatic(x, y, w, h) {
+    const bodyDef = new Box2D.b2BodyDef();
+    bodyDef.set_type(Box2D.b2_staticBody);
+    const body = this.world.CreateBody(bodyDef);
+    const shape = new Box2D.b2PolygonShape();
+    shape.SetAsBox(w / 2, h / 2);
+    // const shape = Box2D.createPolygonShape([
+    //   new Box2D.b2Vec2(0, 0),
+    //   new Box2D.b2Vec2(w, 0),
+    //   new Box2D.b2Vec2(w, -h),
+    //   new Box2D.b2Vec2(0, -h),
+    // ]);
+    const fixtureDef = new Box2D.b2FixtureDef();
+    fixtureDef.set_shape(shape);
+    body.CreateFixture(fixtureDef);
+    body.SetTransform(new Box2D.b2Vec2(x + w / 2, y - h / 2), 0);
   }
 
   matchTile(tile) {
@@ -341,7 +374,39 @@ class Main extends Component {
     }));
   }
 
+  box2dAnimation(tile) {
+    return (options => {
+      const agentRect = this.refs.agent.rect;
+      const body = this.createBody(
+        (options.lastRect.left - agentRect.left) / options.lastRect.width,
+        10 - (options.lastRect.top - agentRect.top) / options.lastRect.width
+      );
+      return options.timer(timer => {
+        const rect = options.rect.clone();
+        timer.cancelable(() => {
+          this.destroyBody(body);
+          return rect;
+        });
+        const style = {
+          transform: '',
+        };
+        return timer.loop(() => {
+          const transform = body.GetTransform();
+          const position = transform.get_p();
+          const width = rect.width;
+          rect.left = agentRect.left + (position.get_x() - 0.5) * width;
+          rect.top = agentRect.top + (10 - position.get_y() - 0.5) * width;
+          rect.angle = -transform.get_q().GetAngle();
+          style.transform = rect.transform(options.rect);
+          options.setStyle(style);
+          return 0;
+        });
+      });
+    });
+  }
+
   animateTile(tile) {
+    return this.box2dAnimation(tile);
     return typeof tile.matchX === 'number' ?
       (options => this.explodeAnimation(options, tile)) :
       options => (
@@ -361,6 +426,92 @@ class Main extends Component {
       );
   }
 
+  handleAddRepeatStart(event) {
+    this._addRepeatLocation = [event.pageX, event.pageY];
+    this._addRepeatId = setTimeout(this.handleAddRepeat, 250);
+  }
+
+  handleAddRepeatEnd() {
+    clearTimeout(this._addRepeatId);
+  }
+
+  handleAddRepeat() {
+    clearTimeout(this._addRepeatId);
+    this._addRepeatId = setTimeout(this.handleAddRepeat, 250);
+    this.handleAdd(...this._addRepeatLocation);
+  }
+
+  createBody(x, y) {
+    if (this.shapeCount === 0) {
+      // This is the first dynamic physics body in a while. Set the last time so
+      // the physics loop doesn't do a lot of steps to account since page load
+      // or when there was last a dynamic body.
+      this._stepBox2dLast = Date.now();
+    }
+
+    const bodyDef = new Box2D.b2BodyDef();
+    const canvasRect = this.refs.agent.rect;
+    bodyDef.set_position(new Box2D.b2Vec2(x, y));
+    bodyDef.set_angle(Math.PI * 2 * Math.random());
+    bodyDef.set_type(Box2D.b2_dynamicBody);
+    bodyDef.set_awake(1);
+    bodyDef.set_active(1);
+    const body = this.world.CreateBody(bodyDef);
+
+    const shape = new Box2D.b2PolygonShape();
+    shape.SetAsBox(0.5, 0.5);
+    const fixtureDef = new Box2D.b2FixtureDef();
+    fixtureDef.set_shape(shape);
+    fixtureDef.set_density(1);
+    fixtureDef.set_friction(0.3);
+    body.CreateFixture(fixtureDef);
+
+    // this.shapes[id] = body;
+    this.shapeCount++;
+
+    this.stepBox2d();
+
+    return body;
+  }
+
+  destroyBody(body) {
+    this.world.DestroyBody(body);
+    this.shapeCount--;
+  }
+
+  handleAdd(pageX, pageY) {
+    const id = Math.random().toString(36).substring(2);
+    const key = Math.random().toString(36).substring(2);
+    const canvasRect = this.refs.agent.rect;
+    this.updateState({tiles: {[id]: {$set: {
+      key,
+      shapeId: id,
+      startX: (pageX - canvasRect.left) / canvasRect.width,
+      startY: (pageY - canvasRect.top) / (canvasRect.width / 8 * 10),
+    }}}});
+  }
+
+  stepBox2d() {
+    cancelAnimationFrame(this._stepBox2dId);
+    if (this.shapeCount === 0) {
+      return;
+    }
+    this._stepBox2dId = requestAnimationFrame(this.stepBox2d);
+    this._stepBox2dTimer += (Date.now() - this._stepBox2dLast) / 1000;
+    this._stepBox2dLast = Date.now();
+    // console.log(this._stepBox2dTimer);
+    if (this._stepBox2dTimer > 0.05) {
+      this.world.Step(0.05, 5, 5);
+      this._stepBox2dTimer -= 0.05;
+    }
+  }
+
+  removeTile(tile, event) {
+    this.updateState({tiles: {[tile.shapeId]: {$set: null}}});
+    event.stopPropagation();
+    return false;
+  }
+
   renderTile(tile) {
     return (<Animated
       key={tile.key} animateKey={tile.key}
@@ -368,31 +519,33 @@ class Main extends Component {
       >
       <div style={{
         position: 'absolute',
-        width: `${100 / this.state.grid.width}%`,
-        height: `${100 / this.state.grid.height}%`,
-        left: `${tile.x * 100 / this.state.grid.width}%`,
-        bottom: `${tile.y * 100 / this.state.grid.height}%`,
-        background: colors[tile.color],
-      }} onClick={() => this.matchTile(tile)}></div>
+        width: `${100 / this.state.width}%`,
+        height: `${100 / this.state.height}%`,
+        left: `${tile.startX * 100}%`,
+        top: `${tile.startY * 100}%`,
+        // left: `${tile.x * 100 / this.state.grid.width}%`,
+        // bottom: `${tile.y * 100 / this.state.grid.height}%`,
+        background: colors[0],
+      }} onClick={event => this.removeTile(tile, event)}>
+      </div>
     </Animated>);
   }
 
   render() {
-    const cells = Object.keys(this.state.grid.cells)
-    .map(key => this.state.grid.cells[key])
-    .filter(cell => cell);
+    const tiles = Object.keys(this.state.tiles)
+    .map(key => this.state.tiles[key])
+    .filter(tile => tile);
     return (
       <div className="game-board">
         <Clamp
-          width={this.state.grid.width}
-          height={this.state.grid.height}>
-          <AnimatedAgent>
-            <Batch items={cells}
-              subbatch={tile => tile.x}
-              subbatchIndex={tile => tile.matchY >= 0 ? tile.y + this.state.grid.height : tile.y}
-              >
-              {this.renderTile}
-            </Batch>
+          width={this.state.width}
+          height={this.state.height}>
+          <AnimatedAgent ref="agent">
+          <div style={{width: '100%', height: '100%'}} onClick={event => this.handleAdd(event.pageX, event.pageY)} onMouseDown={this.handleAddRepeatStart} onMouseUp={this.handleAddRepeatEnd}>
+              <Batch items={tiles}>
+                {this.renderTile}
+              </Batch>
+            </div>
           </AnimatedAgent>
         </Clamp>
       </div>

@@ -22,7 +22,7 @@ var mainCssExtraction = new ExtractTextPlugin('[contenthash].css');
 var loaders = [
     {
       test: /\.jsx?$/,
-      exclude: /node_modules/,
+      exclude: /node_modules|vendor/,
       loader: 'babel-loader',
     },
     // Autoload style files named like an included jsx file.
@@ -49,6 +49,10 @@ var loaders = [
     {
       test: /[/\\]soundjs/,
       loader: 'exports-loader?createjs!script-loader',
+    },
+    {
+      test: /box2d/,
+      loader: 'exports-loader?Box2D!script-loader',
     },
 ];
 
