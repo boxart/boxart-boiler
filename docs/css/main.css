@@ -1,0 +1,15 @@
+---
+/* This is the main CSS file and we will put CSS in this file */
+
+.wrapper {
+    margin: 0 auto;
+    max-width: 1300px;
+}
+
+.hed-a {
+    font-size: 18px;
+}
+
+.hed-b {
+    font-size: 16px;
+}
