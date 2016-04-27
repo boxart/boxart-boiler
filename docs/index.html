@@ -1,16 +1,16 @@
 ---
 layout: default
 ---
-  <h1>Posts</h1>
+  <h2 class="hed-a">Posts</h2>
 
-  <ul>
+  <ul class="v-list">
     {% for post in site.posts %}
       <li>
-        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+        <span>{{ post.date | date: "%b %-d, %Y" }}</span>
 
-        <h2>
-          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-        </h2>
+        <h3 class="hed-b">
+            <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+        </h3>
       </li>
     {% endfor %}
   </ul>
