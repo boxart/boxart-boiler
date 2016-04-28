@@ -178,7 +178,7 @@ img {
 [class*="hed-"]+p {
 	margin-top: .5em;
 }
-.hed-a {
+.hed-a, .post h2 {
 	background: #981e0f;
 	color: #fff;
 	float: left;
@@ -191,7 +191,7 @@ img {
 	margin-left: -20%;
 	position: relative;
 }
-.hed-a:before {
+.hed-a:before, .post h2 {
 	content: " ";
 	display: block;
 	background: #981e0f;
@@ -204,7 +204,7 @@ img {
 	height: .95em;
 }
 
-.hed-b {
+.hed-b, .post h3 {
 	font-family: "Determination sans", monospace;
 	text-transform: uppercase;
 	font-size: 1.5em;
@@ -350,4 +350,3 @@ pre, pre code {
 	width: 20%;
 	max-width: 125px;
 }
-
