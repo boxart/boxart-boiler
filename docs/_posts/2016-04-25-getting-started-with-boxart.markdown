@@ -2,7 +2,7 @@
 layout: post
 title:  "Getting started with Boxart"
 date:   2016-04-25 11:05:11 -0400
-categories: documentation
+categories: home
 ---
 To start working with this repo and build your own responsive, accessible game we recommend you either download the code for the latest release from the releases page, or fork this repo and use git to clone your fork.
 
