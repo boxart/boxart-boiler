@@ -11,6 +11,27 @@ img {
 	max-width: 100%;
 }
 
+ul a, ol a, p a {
+	transition: border-bottom 0.2s ease;
+	border-bottom: 2px solid rgba( 139, 48, 231, .2 );
+	color: #663399;
+	color: rebeccapurple;
+	text-decoration: none;
+}
+ul a:hover, ol a:hover, p a:hover {
+	color: #8b30e7;
+	text-decoration: none;
+	border-bottom: 2px solid #8b30e7;
+}
+
+ul {
+	list-style-type: square;
+}
+ul li {
+	line-height: 1.2;
+	padding: .35em .5em;
+}
+
 .a11y-only{
 	border: 0;
 	clip: rect(0 0 0 0);
@@ -178,7 +199,7 @@ img {
 [class*="hed-"]+p {
 	margin-top: .5em;
 }
-.hed-a, .post h2 {
+.hed-a, h2 {
 	background: #981e0f;
 	color: #fff;
 	float: left;
@@ -188,10 +209,12 @@ img {
 	padding: .25em 1em .2em 20%;
 	text-transform: uppercase;
 	line-height: 1.3;
+	font-size: 1.55em;
+	letter-spacing: .05em;
 	margin-left: -20%;
 	position: relative;
 }
-.hed-a:before, .post h2:before {
+.hed-a:before, h2:before {
 	content: " ";
 	display: block;
 	background: #981e0f;
@@ -204,12 +227,31 @@ img {
 	height: .95em;
 }
 
-.hed-b, .post h3 {
-	font-family: "Determination sans", monospace;
+.hed-b, h3 {
+	background: #000;
+	color: #eee;
+	float: left;
+	font-family: "Determination Sans", monospace;
+	font-weight: normal;
+	padding: .25em .75em;
+	font-size: 1.3em;
+	margin-bottom: 1.25em;
+	margin-top: 2em;
+	letter-spacing: .1em;
 	text-transform: uppercase;
-	font-size: 1.5em;
-	margin: 1.5em 0 0 0;
 }
+.hed-b:after, h3:after {
+	content: " ";
+	background: #ddd;
+	display: block;
+	height: .55em;
+	width: 100%;
+	left: 0;
+	margin-top: -.825em;
+	position: absolute;
+	z-index: -1;
+}
+
 
 p {
 	clear: both;
@@ -228,13 +270,21 @@ p img {
 	line-height: 1.4;
 	max-width: 1200px;
 }
+.intro .hed-b, .intro h3 {
+	background: none;
+	padding: 0;
+	color: #333;
+	font-size: 1.4em;
+	letter-spacing: normal;
+	margin: .75em 0 .65em 0;
+}
 
 code {
 	background: #f1f1f1;
-	color: #222;
+	color: #444;
 	font-family: "Determination Mono", monospace;
 	font-size: .9em;
-	padding: 0 .5em;
+	padding: 0 .35em;
 }
 .snippet {
 	position: relative;
@@ -285,26 +335,16 @@ pre, pre code {
 .example {
 	margin: 1em 0 3em 0;
 }
-.ex-hed {
-	background: #000;
-	color: #eee;
-	float: left;
-	font-family: "Determination Mono", monospace;
-	font-weight: normal;
-	padding: .25em .75em;
+.ex-hed, h4 {
+	font-family: "Determination sans", monospace;
+	text-transform: uppercase;
 	font-size: 1.3em;
-	margin-bottom: 1.5em;
-}
-.ex-hed:after {
-	content: " ";
-	background: #ddd;
-	display: block;
-	height: .55em;
-	width: 100%;
-	left: 0;
-	margin-top: -.825em;
-	position: absolute;
-	z-index: -1;
+	font-weight: normal;
+	margin: 2.5em 0 1em 0;
+	padding-left: 0;
+	letter-spacing: .1em;
+	padding-bottom: .25em;
+	border-bottom: 3px solid #ddd;
 }
 .ex-hed code {
 	background: none;
