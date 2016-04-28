@@ -1,0 +1,353 @@
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+body {
+	margin: 0;
+	font-family: sans-serif;
+}
+img {
+	max-width: 100%;
+}
+
+.a11y-only{
+	border: 0;
+	clip: rect(0 0 0 0);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+}
+.a11y-only:active,
+.a11y-only:focus {
+	clip: auto;
+	height: auto;
+	margin: 0;
+	overflow: visible;
+	position: static;
+	width: auto;
+}
+
+
+/* Header
+----------------------- */
+.lede {
+	background: #000;
+	box-shadow: 0 0 1px #000; /* This is to hide the seam between the skewed element and the `outline` in Chrome. */
+	float: left;
+	width: 100%;
+	position: relative;
+	transform: rotate(-6deg) skewX(-6deg);
+	transform-origin: bottom left;
+	outline: 1em solid #000;
+	padding: 0 3.5%;
+	padding-top: 5%;
+	margin-bottom: 3.5em;
+}
+.lede:after {
+	content: " ";
+	display: table;
+	clear: both;
+}
+
+.seal {
+	display: block;
+	position: absolute;
+	right: 2.5%;
+	bottom: 0;
+	margin-bottom: -10%;
+	width: 25%;
+	max-width: 200px;
+	transform: rotate(6deg) skewX(6deg);
+}
+
+.intro {
+	background: #f1f1f1;
+	border-bottom: 1px solid #ccc;
+	margin: 0 -3.75% 1em -3.75%;
+	padding: 10% 3.75% 1.5em 3.75%;
+}
+.intro .hed-b {
+	font-size: 1.6em;
+	line-height: 1.1;
+}
+
+.art {
+	transform: rotate(6deg) skewX(6deg) translateZ( 0 );
+}
+.art img {
+	image-rendering: pixelated;
+	margin-top: 5%;
+	width: 100%;
+}
+
+.title {
+	background: #000;
+	bottom: 0;
+	color: #e01c00;
+	position: relative;
+	font-size: 7.5vw;
+	padding-top: 2em;
+	position: relative;
+	float: left;
+	text-transform: uppercase;
+	padding-top: .85em;
+	padding-bottom: .25em;
+	margin-top: -6%;
+	width: 100%;
+}
+.title-copy {
+	float: left;
+}
+.title:after {
+	content: " ";
+	display: table;
+	clear: both;
+}
+
+.vers {
+	font-size: .55em;
+	font-weight: bold;
+	position: absolute;
+	top: 0;
+	margin: .8em 0 0 0;
+}
+.hed {
+	margin: 0;
+	padding: 0;
+	display: block;
+	float: left;
+	text-indent: -.06em;
+}
+@media( min-width: 75em ) {
+	.title {
+		font-size: 5.6203125em;
+	}
+}
+
+.subhed {
+	margin: 0;
+	color: #ffbf00;
+	clear: both;
+	float: right;
+	text-align: center;
+	font-weight: bold;
+	font-size: .5em;
+	margin-top: -.65em;
+	line-height: .9;
+}
+
+/* Docs Body
+----------------------- */
+@font-face {
+    font-family: 'Source Sans';
+    src: url('type/sourcesanspro-regular-webfont.woff2') format('woff2'),
+         url('type/sourcesanspro-regular-webfont.woff') format('woff'),
+         url('type/sourcesanspro-regular-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Determination Mono';
+    src: url('type/dtm-mono-webfont.woff2') format('woff2'),
+         url('type/dtm-mono-webfont.woff') format('woff'),
+         url('type/dtm-mono-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Determination sans';
+    src: url('type/dtm-sans-webfont.woff2') format('woff2'),
+         url('type/dtm-sans-webfont.woff') format('woff'),
+         url('type/dtm-sans-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.central {
+	padding: 3em 3.5% 0 3.5%;
+}
+
+[class*="hed-"] {
+	margin: 1.2em 0 .75em 0;
+	font-weight: normal;
+}
+[class*="hed-"]+p {
+	margin-top: .5em;
+}
+.hed-a {
+	background: #981e0f;
+	color: #fff;
+	float: left;
+	font-family: "Determination sans", monospace;
+	font-weight: normal;
+	margin: 1.5em 0 1em 0;
+	padding: .25em 1em .2em 20%;
+	text-transform: uppercase;
+	line-height: 1.3;
+	margin-left: -20%;
+	position: relative;
+}
+.hed-a:before {
+	content: " ";
+	display: block;
+	background: #981e0f;
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: -1;
+	width: 100%;
+	padding-right: .75em;
+	height: .95em;
+}
+
+.hed-b {
+	font-family: "Determination sans", monospace;
+	text-transform: uppercase;
+	font-size: 1.5em;
+	margin: 1.5em 0 0 0;
+}
+
+p {
+	clear: both;
+	font-family: "Source Sans Pro", sans-serif;
+	font-size: 1.15em;
+	line-height: 1.45;
+	margin: 1.1em 0;
+	max-width: 960px;
+}
+p img {
+	margin: -.5em .5em -.35em .5em;
+	max-height: 1.8em;
+}
+.intro p {
+	font-size: 1.25em;
+	line-height: 1.4;
+	max-width: 1200px;
+}
+
+code {
+	background: #f1f1f1;
+	color: #222;
+	font-family: "Determination Mono", monospace;
+	font-size: .9em;
+	padding: 0 .5em;
+}
+.snippet {
+	position: relative;
+	margin: 2.5em 0;
+}
+.snippet:after {
+	content: " ";
+	background: -webkit-linear-gradient( 90deg, rgba(255,255,255,0), black );
+	background: -moz-linear-gradient( 90deg, rgba(255,255,255,0), black );
+	background: linear-gradient( 90deg, rgba(255,255,255,0), black );
+	pointer-events: none;
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	bottom: 5px;
+	width: 2em;
+}
+pre {
+	overflow: auto;
+	background: #000;
+	font-size: 1em;
+	border: 5px solid #ddd;
+	margin: 0;
+	padding: .7em 2em .85em 1em;
+	width: 100%;
+	box-sizing: border-box;
+}
+pre, pre code {
+	color: #eee;
+	font-family: "Determination Mono", monospace;
+	font-size: 1.05em;
+	font-weight: normal;
+	line-height: 1.5;
+ }
+ pre code {
+ 	padding: 0;
+ }
+ pre ::selection {
+ 	background: #ddd;
+ }
+ pre code {
+	background: none;
+}
+
+ /* Example Sections
+----------------------- */
+
+.example {
+	margin: 1em 0 3em 0;
+}
+.ex-hed {
+	background: #000;
+	color: #eee;
+	float: left;
+	font-family: "Determination Mono", monospace;
+	font-weight: normal;
+	padding: .25em .75em;
+	font-size: 1.3em;
+	margin-bottom: 1.5em;
+}
+.ex-hed:after {
+	content: " ";
+	background: #ddd;
+	display: block;
+	height: .55em;
+	width: 100%;
+	left: 0;
+	margin-top: -.825em;
+	position: absolute;
+	z-index: -1;
+}
+.ex-hed code {
+	background: none;
+	color: #eee;
+	font-size: 1em;
+}
+
+
+/* Page Footer
+----------------------- */
+
+.page-foot {
+	background: #000;
+	margin-top: 15em;
+	outline: 2px solid #000;
+	padding-bottom: 20em;
+	position: relative;
+}
+
+.closing {
+	background: #000;
+	outline: 15px solid #000;
+	transform: rotate(-6deg) skewX(-6deg);
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	transform-origin: top left;
+	padding: 0 3.5% 5em 3.5%;
+	box-shadow: 0 0 1px #000; /* This is to hide the seam between the skewed element and the `outline` in Chrome. */
+}
+.closing:after {
+	content: " ";
+	display: table;
+	clear: both;
+}
+
+.closing .js {
+	display: block;
+	float: left;
+	margin-top: 2em;
+	transform: rotate(6deg) skewX(6deg);
+	width: 20%;
+	max-width: 125px;
+}
+
