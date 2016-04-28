@@ -191,7 +191,7 @@ img {
 	margin-left: -20%;
 	position: relative;
 }
-.hed-a:before, .post h2 {
+.hed-a:before, .post h2:before {
 	content: " ";
 	display: block;
 	background: #981e0f;
