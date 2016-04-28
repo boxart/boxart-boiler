@@ -1,5 +1,6 @@
 # rwd-game-boiler
 
+[![Build Status](https://ci.appveyor.com/api/projects/status/github/Bocoup/rwd-game-boiler?branch=master&svg=true)](https://ci.appveyor.com/project/Bocoup/rwd-game-boiler)
 [![Build Status](https://travis-ci.org/bocoup/rwd-game-boiler.svg?branch=master)](https://travis-ci.com/bocoup/rwd-game-boiler)
 
 A boilerplate repo for building responsive and accessible games on the web.
