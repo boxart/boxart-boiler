@@ -1,0 +1,170 @@
+---
+/* This is the main CSS file and we will put CSS in this file */
+
+
+/* Reset
+--------------------------------- */
+//--------------------------------------------------
+// Reset
+// -------------------------------------------------
+
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, figure, footer, header, hgroup, menu, nav, section, menu, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+}
+
+body {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+  content: '';
+  content: none;
+}
+
+ins {
+  text-decoration: none;
+}
+
+del {
+  text-decoration: line-through;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+article, aside, figure, footer, header, hgroup, nav, section {
+  display: block;
+}
+
+html {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+img {
+  width: 100%;
+}
+
+.skip,
+.a11y {
+  left: -1000em;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  width: 0;
+}
+
+/* Base styles
+----------------------------------- */
+
+.wrapper {
+    margin: 0 auto;
+    max-width: 1300px;
+}
+
+/* Some reusable patterns (if you like those)
+----------------------------------------- */
+
+/* horizontal list */
+.h-list {
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+}
+
+.h-list > * {
+    float: left;
+}
+
+.h-list-sm > * {
+    margin-left: 8px;
+}
+
+.h-list-md > * {
+    margin-left: 16px;
+}
+
+.h-list-lg > * {
+    margin-left: 32px;
+}
+
+.h-list > *:first-child {
+    margin-left: 0;
+}
+
+.h-list .first.alt {
+    margin-left: 16px;
+}
+
+.h-list-divided li {
+    border-left: 1px solid #6e7a84;
+    margin-left: 8px;
+    padding-left: 8px;
+}
+
+.h-list-divided li:first-child {
+    border: 0;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+/* Vertical List */
+
+.v-list {
+    margin: 0;
+    padding: 0;
+}
+
+.v-list-md > * {
+    margin-top: 16px;
+}
+
+.v-list td,
+.v-list > * {
+    margin-bottom: 4px;
+}
+
+.v-list-divided li {
+    padding: 16px 0;
+    border-bottom: 1px dotted #292f35;
+}
+
+.v-list-divided li.first {
+    border-top: 1px dotted #292f35;
+}
+
+.v-list-divided .last {
+    border: 0;
+    padding-bottom: 0;
+}
+
+/* Type styles
+----------------------------------- */
+
+.hed-a {
+    font-size: 18px;
+}
+
+.hed-b {
+    font-size: 16px;
+}
+
+.hed-c {
+    font-size: 14px;
+}

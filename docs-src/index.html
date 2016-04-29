@@ -1,0 +1,26 @@
+---
+layout: default
+---
+
+{% for post in site.posts %}
+  {% if post.categories contains 'intro' %}
+
+  <div class="intro">
+    {{ post.content }}
+  </div>
+  <nav class="nav-blocks">
+    <a href="#">Layout Helpers</a>
+    <a href="#">UI Helpers</a>
+    <a href="#">Animations</a>
+    <a href="#">Interaction</a>
+    <a href="#">Asset Management</a>
+    <a href="#">Audio helpers</a>
+  </nav>
+
+  {% endif %}
+
+  {% if post.categories contains 'home' %}
+    <h2 class="hed-a">{{ post.title }}</h2>
+    {{ post.content }}
+  {% endif %}
+{% endfor %}

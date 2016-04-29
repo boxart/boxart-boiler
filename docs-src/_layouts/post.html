@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+
+  {% include head.html %}
+
+  <body>
+    <main>
+        {% include header.html %}
+
+        <div class="central post">
+            <h2 class="hed-a">{{page.title}}</h2>
+            {{ content }}
+        </div>
+    </main>
+
+    {% include footer.html %}
+
+  </body>
+
+</html>
