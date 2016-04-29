@@ -1,12 +1,11 @@
 ---
-layout: post
+layout: default
 title:  "Asset Management"
-date:   2016-04-27
-categories: documentation
+permalink: /assets/
 ---
 Examples of asset Management
 
-## Grunticon
+### Grunticon
 
 ### SVG
 

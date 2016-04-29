@@ -4,10 +4,17 @@
   </div>
   <div class="title">
     <div class="title-copy">
-      <h1 class="hed">Boxart</h1>
+      <h1 class="hed"><a href="/">Boxart</a></h1>
       <p class="vers"><span class="a11y-only">Version</span>0.0.1</p>
       <p class="subhed">JavaScript<br>System</p>
     </div>
   </div>
   <a class="seal" href="https://bocoup.com"><img src="/img/bocoup-seal-sm.png" alt="Original Bocoup Seal of Quality"></a>
 </header>
+<nav class="nav-blocks">
+{% for page in site.pages %}
+  {% if page.title and page.categories != 'home' %}
+    <a href="{{ page.url }}">{{ page.title }}</a>
+  {% endif %}
+{% endfor %}  
+</nav>

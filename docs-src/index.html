@@ -2,25 +2,19 @@
 layout: default
 ---
 
-{% for post in site.posts %}
-  {% if post.categories contains 'intro' %}
-
+{% for page in site.pages %}
+  {% if page.categories contains 'intro' %}
   <div class="intro">
-    {{ post.content }}
+    {{ page.content }}
   </div>
-  <nav class="nav-blocks">
-    <a href="#">Layout Helpers</a>
-    <a href="#">UI Helpers</a>
-    <a href="#">Animations</a>
-    <a href="#">Interaction</a>
-    <a href="#">Asset Management</a>
-    <a href="#">Audio helpers</a>
-  </nav>
-
   {% endif %}
+{% endfor %}
 
-  {% if post.categories contains 'home' %}
-    <h2 class="hed-a">{{ post.title }}</h2>
-    {{ post.content }}
+{% for page in site.pages %}
+  {% if page.categories contains 'home' %}
+    {% if page.title %}
+      <h2 class="hed-a">{{ page.title }}</h2>
+    {% endif %}
+    {{ page.content }}
   {% endif %}
 {% endfor %}

@@ -13,9 +13,8 @@ img {
 
 ul a, ol a, p a {
 	transition: border-bottom 0.2s ease;
-	border-bottom: 2px solid rgba( 139, 48, 231, .2 );
-	color: #663399;
-	color: rebeccapurple;
+	border-bottom: 2px solid rgba( 150, 30, 15, .2 );
+	color: #981e0f;
 	text-decoration: none;
 }
 ul a:hover, ol a:hover, p a:hover {
@@ -52,6 +51,12 @@ ul li {
 	width: auto;
 }
 
+main:after {
+	content: " ";
+	clear: both;
+	display: table;
+}
+
 
 /* Header
 ----------------------- */
@@ -66,7 +71,7 @@ ul li {
 	outline: 1em solid #000;
 	padding: 0 3.5%;
 	padding-top: 5%;
-	margin-bottom: 3.5em;
+	margin-bottom: 2.25em;
 }
 .lede:after {
 	content: " ";
@@ -89,7 +94,7 @@ ul li {
 	background: #f1f1f1;
 	border-bottom: 1px solid #ccc;
 	margin: 0 -3.75% 1em -3.75%;
-	padding: 10% 3.75% 1.5em 3.75%;
+	padding: 1em 3.75% 1.5em 3.75%;
 }
 .intro .hed-b {
 	font-size: 1.6em;
@@ -119,6 +124,10 @@ ul li {
 	padding-bottom: .25em;
 	margin-top: -6%;
 	width: 100%;
+}
+.title a {
+	color: #e01c00;
+	text-decoration: none;
 }
 .title-copy {
 	float: left;
@@ -187,9 +196,17 @@ ul li {
     font-weight: normal;
     font-style: normal;
 }
+@font-face {
+    font-family: 'Joystix';
+    src: url('type/joystix_monospace-webfont.woff2') format('woff2'),
+         url('type/joystix_monospace-webfont.woff') format('woff'),
+         url('type/joystix_monospace-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
 
 .central {
-	padding: 3em 3.5% 0 3.5%;
+	padding: 0 3.5% 0 3.5%;
 }
 
 [class*="hed-"] {
@@ -202,16 +219,18 @@ ul li {
 .hed-a, h2 {
 	background: #981e0f;
 	color: #fff;
+	clear: left;
 	float: left;
 	font-family: "Determination sans", monospace;
 	font-weight: normal;
 	margin: 1.5em 0 1em 0;
-	padding: .25em 1em .2em 20%;
+	padding: .35em 1em .35em 20%;
 	text-transform: uppercase;
-	line-height: 1.3;
+	line-height: 1;
 	font-size: 1.55em;
 	letter-spacing: .05em;
 	margin-left: -20%;
+	max-width: 115%;
 	position: relative;
 }
 .hed-a:before, h2:before {
@@ -223,7 +242,8 @@ ul li {
 	top: 0;
 	z-index: -1;
 	width: 100%;
-	padding-right: .75em;
+	max-width: 105%;
+	padding-right: .65em;
 	height: .95em;
 }
 
@@ -239,6 +259,7 @@ ul li {
 	margin-top: 2em;
 	letter-spacing: .1em;
 	text-transform: uppercase;
+	clear: left;
 }
 .hed-b:after, h3:after {
 	content: " ";
@@ -276,7 +297,13 @@ p img {
 	color: #333;
 	font-size: 1.4em;
 	letter-spacing: normal;
+	line-height: 1;
 	margin: .75em 0 .65em 0;
+}
+@media( min-width: 35em ) {
+	.intro .hed-b, .intro h3 {
+		font-size: 1.6em;
+	}
 }
 
 code {
@@ -329,6 +356,83 @@ pre, pre code {
 	background: none;
 }
 
+ /* Navs
+----------------------- */
+
+.nav-blocks {
+	border-bottom: 10px solid #000;
+	padding: .45em 3.5% 1em 3.5%;
+	background: #61656b;
+}
+.nav-blocks:after {
+	content: " ";
+	clear: both;
+	display: table;
+}
+.nav-blocks a {
+	color: #fff;
+	float: left;
+	font-family: "Joystix", sans-serif;
+	display: block;
+	font-size: 1em;
+	padding: .3em .5em .25em 1em;
+	margin: .2em 0;
+	text-decoration: none;
+	position: relative;
+	z-index: 2;
+	text-transform: uppercase;
+	width: 100%;
+	text-shadow: 1px 1px 0 #000, 2px 2px 0 #000, 3px 3px 0 #000;
+	cursor: pointer;
+}
+@media( min-width: 30em ) {
+	.nav-blocks a {
+		font-size: 1.2em;
+	}
+}
+@media( min-width: 40em ) {
+	.nav-blocks a {
+		font-size: 1.35em;
+		width: 50%;
+	}
+}
+@media( min-width: 50em ) {
+	.nav-blocks a {
+		font-size: 1.5em;
+	}
+}
+.nav-blocks a:nth-child(odd) {
+	clear: left;
+}
+.nav-blocks a:hover {
+	color: #222;
+	text-shadow: none;
+}
+
+.nav-blocks a:before,
+.nav-blocks a:after {
+	background: rgba(255,255,255,1);
+	content: " ";
+	display: block;
+	position: absolute;
+	left: .425em;
+	width: 100%;
+	height: 50.1%;
+	z-index: -1;
+	display: none;
+	cursor: pointer;
+}
+.nav-blocks a:after {
+	bottom: 0;
+	margin-left: -.850em;
+}
+.nav-blocks a:before {
+	top: 0;
+}
+.nav-blocks a:hover:before,
+.nav-blocks a:hover:after  {
+	display: block;
+}
  /* Example Sections
 ----------------------- */
 
@@ -338,13 +442,14 @@ pre, pre code {
 .ex-hed, h4 {
 	font-family: "Determination sans", monospace;
 	text-transform: uppercase;
-	font-size: 1.3em;
+	font-size: 1.2em;
 	font-weight: normal;
 	margin: 2.5em 0 1em 0;
 	padding-left: 0;
 	letter-spacing: .1em;
 	padding-bottom: .25em;
-	border-bottom: 3px solid #ddd;
+	text-indent: 1px;
+	border-bottom: 4px solid #e1e1e1;
 }
 .ex-hed code {
 	background: none;
@@ -352,12 +457,12 @@ pre, pre code {
 	font-size: 1em;
 }
 
-
 /* Page Footer
 ----------------------- */
 
 .page-foot {
 	background: #000;
+	clear: both;
 	margin-top: 15em;
 	outline: 2px solid #000;
 	padding-bottom: 20em;
@@ -381,7 +486,6 @@ pre, pre code {
 	display: table;
 	clear: both;
 }
-
 .closing .js {
 	display: block;
 	float: left;

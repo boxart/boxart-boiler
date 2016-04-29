@@ -1,9 +1,10 @@
 ---
-layout: post
-title:  "Getting started with Boxart"
-date:   2016-04-25 11:05:11 -0400
+layout: default
+title: Getting Started with Boxart
+permalink: /about/
 categories: home
 ---
+
 To start working with this repo and build your own responsive, accessible game we recommend you either download the code for the latest release from the releases page, or fork this repo and use git to clone your fork.
 
 Once the code is on your machine open a terminal in its directory and run <code>npm install</code>; this will install all our dependencies, and you’ll be able to run the project's grunt tasks. To see the site hosted locally run <code>grunt</code>, then visit: [http://localhost:8080](http://localhost:8080) in your browser of choice.
