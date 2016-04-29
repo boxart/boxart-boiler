@@ -11,4 +11,5 @@ module.exports = function(grunt) {
   grunt.registerTask('lint', ['eslint']);
   grunt.registerTask('test', ['lint', 'karma:ci']);
   grunt.registerTask('build', ['test', 'build-env', 'webpack']);
+  grunt.registerTask('docs', ['jekyll']);
 };
