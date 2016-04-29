@@ -29,7 +29,8 @@ able to run the project's grunt tasks. To see the site hosted locally run
 
 The following tasks are provided by this boilerplate for use during development.
 
-### default `grunt`
+### default 
+`grunt`
 
 The default grunt task runs `webpack-dev-server`; a task which hosts your 
 site on a local http server and watches your code for changes. When 
@@ -41,7 +42,13 @@ hotswapped the page will be refreshed so the latest changes are visible. The
 [tasks directory], and is setup to read the `webpack.config.js` file to 
 configure webpack's behavior.
 
-### lint `grunt lint`
+### Generate Docs Site
+`grunt docs`
+
+TK
+
+### Lint
+`grunt lint`
 
 This repo uses [eslint](http://eslint.org/) to enforce code quality and 
 a consistent style across the project. Running `grunt lint` will notify
@@ -54,7 +61,8 @@ An `.editorconfig` file is also provided to help reduce frustrating style
 errors that could bog down this linting task. If your text editor or IDE 
 supports it, install an [editor config plugin].
 
-### test `grunt test`
+### Test 
+`grunt test`
 
 The test task first lints the code the runs our tests using the [karma test runner]. 
 Testing in JS typically involves lots of moving parts and this project is no 
@@ -64,7 +72,8 @@ This task also sets up a watcher that will re-run tests when changes are
 detected. To run the tests only once the task `karma:ci` can be used instead,
 but note it will _only_ run the tests and skip linting.
 
-### build `grunt build:dev`
+### Build 
+`grunt build:dev`
 
 The build task uses [Webpack] to bundle our code for release for a dev 
 environment. Before building this task runs both the `lint` and 

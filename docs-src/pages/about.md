@@ -18,6 +18,11 @@ The following tasks are provided by this boilerplate for use during development.
 
 The default grunt task runs `webpack-dev-server`; a task which hosts your site on a local http server and watches your code for changes. When changes are detected webpack will automatically cut a new build and the code (where possible) will be automatically swapped into the browser, meaning you don't have to refresh the page to see updates. If the code cannot be hotswapped the page will be refreshed so the latest changes are visible. The `webpack-dev-server` task is configured in the `grunt-webpack.js` file in the [tasks directory](https://github.com/bocoup/rwd-game-boiler/tree/master/tasks), and is setup to read the <code>webpack.config.js</code> file to configure webpack's behavior.
 
+#### Generate Docs Site
+    grunt docs
+
+TK
+
 #### lint 
     grunt lint
 
