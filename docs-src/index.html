@@ -1,0 +1,20 @@
+---
+layout: default
+---
+
+{% for page in site.pages %}
+  {% if page.categories contains 'intro' %}
+  <div class="intro">
+    {{ page.content }}
+  </div>
+  {% endif %}
+{% endfor %}
+
+{% for page in site.pages %}
+  {% if page.categories contains 'home' %}
+    {% if page.title %}
+      <h2 class="hed-a">{{ page.title }}</h2>
+    {% endif %}
+    {{ page.content }}
+  {% endif %}
+{% endfor %}
