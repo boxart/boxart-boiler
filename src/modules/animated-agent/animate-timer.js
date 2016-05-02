@@ -44,7 +44,7 @@ export default class AnimateTimer {
           resolve();
         }
         else {
-          requestAnimationFrame(loop);
+          this._agent.frame().then(loop);
         }
       };
       loop();
