@@ -61,7 +61,7 @@ export default class Batch extends Component {
         const itemKey = newProps.items[i].key;
         if (this.props.items[i] !== newProps.items[i]) {
           let element;
-          if (this.props.subbatch) {
+          if (this.props.subbatch && this.keyedItems[itemKey]) {
             const oldItem = this.keyedItems[itemKey];
             const oldElement = this.keyedElements[itemKey];
             const oldBatch = this.props.subbatch(oldItem);
@@ -86,6 +86,10 @@ export default class Batch extends Component {
           }
           else {
             element = this.renderItem(newProps.items[i], i, newProps.items, map);
+            if (!this.keyedItems.hasOwnProperty(itemKey)) {
+              this.keyedItems[itemKey] = newProps.items[i];
+              this.keyedElements[itemKey] = element;
+            }
           }
           change.items.$splice.push(
             [i, 1, element]
