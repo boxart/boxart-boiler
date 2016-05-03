@@ -297,6 +297,7 @@ class Main extends Component {
     if (!this._cleanTile) {
       this._cleanTiles = [];
       this._cleanTile = Promise.resolve()
+      .then(() => new Promise(requestAnimationFrame))
       .then(() => {
         this._cleanTile = null;
         this.updateState({
