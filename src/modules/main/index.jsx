@@ -283,7 +283,7 @@ class Main extends Component {
 
     this.gravity = 256;
     this.state = {
-      grid: createGrid(24, 30),
+      grid: createGrid(12, 8),
     };
   }
 
