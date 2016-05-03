@@ -500,22 +500,34 @@ class Main extends Component {
     </Animated>);
   }
 
+  handleReset() {
+    console.log('reset');
+    this.updateState({grid: {$set: resetGrid(this.state.grid)}});
+  }
+
   render() {
     const cells = Object.keys(this.state.grid.cells)
     .map(key => this.state.grid.cells[key])
     .filter(cell => cell);
+    const {width, height} = this.state.grid;
     return (
       <div className="game-board">
         <Clamp
-          width={this.state.grid.width}
-          height={this.state.grid.height}>
+          width={width}
+          height={height + 1}>
           <AnimatedAgent>
-            <Batch items={cells}
-              subbatch={tile => tile.x}
-              subbatchIndex={tile => tile.matchY >= 0 ? tile.y + this.state.grid.height : tile.y}
-              >
-              {this.renderTile}
-            </Batch>
+            <div className="screen">
+              <div className="bar" style={{height: `${1 / height * 100}%`}}>
+                <Score score={this.state.grid.score} />
+                <ResetButton reset={this.handleReset} />
+              </div>
+              <Batch className="board" style={{height: `${(height - 1) / height * 100}%`}} items={cells}
+                subbatch={tile => tile.x}
+                subbatchIndex={tile => tile.matchY >= 0 ? tile.y + height : tile.y}
+                >
+                {this.renderTile}
+              </Batch>
+            </div>
           </AnimatedAgent>
         </Clamp>
       </div>
@@ -524,3 +536,15 @@ class Main extends Component {
 }
 
 export default Main;
+
+class Score extends Component {
+  render() {
+    return <div className="score">{this.props.score || 0}</div>;
+  }
+}
+
+class ResetButton extends Component {
+  render() {
+    return <div className="reset" onClick={this.props.reset}>{'\u21bb'}</div>;
+  }
+}
