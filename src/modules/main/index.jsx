@@ -491,10 +491,10 @@ class Main extends Component {
       >
       <div style={{
         position: 'absolute',
-        width: `${100 / this.state.grid.width}%`,
-        height: `${100 / this.state.grid.height}%`,
-        left: `${tile.x * 100 / this.state.grid.width}%`,
-        bottom: `${tile.y * 100 / this.state.grid.height}%`,
+        width: `${100 / this.state.grid.width + 0.02}%`,
+        height: `${100 / this.state.grid.height + 0.02}%`,
+        left: `${tile.x * 100 / this.state.grid.width - 0.01}%`,
+        bottom: `${tile.y * 100 / this.state.grid.height - 0.01}%`,
         background: colors[tile.color],
       }} onClick={() => this.matchTile(tile)}></div>
     </Animated>);
