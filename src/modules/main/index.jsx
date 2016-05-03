@@ -388,7 +388,7 @@ class Main extends Component {
       const tRect = options.lastRect.clone();
       timer.cancelable(() => tRect);
       return Promise.resolve()
-      .then(() => timer.frame())
+      // .then(() => timer.frame())
       .then(() => {
         const gravity = options._agent.rect.width / 4;
         const start = Date.now();
@@ -419,7 +419,7 @@ class Main extends Component {
       const tRect = lastRect.clone();
       timer.cancelable(() => tRect);
       return Promise.resolve()
-      .then(() => timer.frame())
+      // .then(() => timer.frame())
       .then(() => {
         const gravity = options._agent.rect.width / 4;
         const start = Date.now();
