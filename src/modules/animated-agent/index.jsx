@@ -78,6 +78,7 @@ export default class AnimationAgent extends Component {
   componentDidMount() {
     if (this.clientRender) {
       window.addEventListener('resize', this.resize);
+      window.addEventListener('orientationchange', this.resize);
 
       // Determine the agent's starting rectangle.
       Rect.getBoundingClientRect(findDOMNode(this), this.rect);
@@ -94,6 +95,7 @@ export default class AnimationAgent extends Component {
   componentWillUnmount() {
     if (this.clientRender) {
       window.removeEventListener('resize', this.resize);
+      window.removeEventListener('orientationchange', this.resize);
     }
   }
 
