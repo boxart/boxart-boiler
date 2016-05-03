@@ -29,6 +29,7 @@ function createGrid(_width, _height) {
     colors,
     width,
     height,
+    score: 0,
     cells: {},
   };
   for (let j = 0; j < height; j++) {
@@ -43,7 +44,49 @@ function createGrid(_width, _height) {
       grid.cells[key] = cell;
     }
   }
+  grid.gen = gen.state;
   return grid;
+}
+
+function resetGrid(grid) {
+  const {width, height} = grid;
+  const cells = {};
+  const change = {
+    score: {$set: 0},
+    cells: {$set: cells},
+  };
+  for (let j = 0; j < height; j++) {
+    for (let i = 0; i < width; i++) {
+      const id = gridKeyXY(i, j);
+      const idLeaving = id + '-matched';
+      if (grid.cells[id]) {
+        cells[idLeaving] = {
+          x: i,
+          y: j,
+          key: grid.cells[id].key,
+          color: grid.cells[id].color,
+          matchX: width / 2 | 0,
+          matchY: 0,
+        };
+      }
+    }
+  }
+
+  const {colors} = grid;
+  const gen = intGen(grid.gen);
+  for (let j = 0; j < height; j++) {
+    for (let i = 0; i < width; i++) {
+      const id = gridKeyXY(i, j);
+      cells[id] = {
+        x: i,
+        y: j,
+        key: gen(),
+        color: Math.abs(gen() % colors),
+      };
+    }
+  }
+  change.gen = {$set: gen.state};
+  return update(grid, change);
 }
 
 function gridKeyXY(x, y) {
@@ -119,7 +162,10 @@ function matchGrid(grid, target) {
       tmp.length = 0;
     }
   })();
-  const change = {cells: {}};
+  const change = {
+    score: {$apply: score => score + Math.pow(Object.keys(matches).length, 2)},
+    cells: {},
+  };
   for (let j = grid.height - 1; j >= 0; j--) {
     for (let i = 0; i < grid.width; i++) {
       if (matches[gridKeyXY(i, j)]) {
