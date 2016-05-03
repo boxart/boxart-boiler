@@ -317,6 +317,72 @@ class Main extends Component {
     return options.animateFromLast(duration, easing);
   }
 
+  appearAnimation(options) {
+    return (options.timer(timer => {
+      // const tRect = options.rect.clone();
+      const start = Date.now();
+      const style = {transform: ''};
+      const replaced = {transform: options.animatedEl.style.transform};
+      return Promise.resolve()
+      // .then(() => timer.frame())
+      .then(() => {
+        timer.cancelable(() => {
+          options.animatedEl.style.transform = replaced.transform;
+          return options.lastRect;
+        });
+        return timer.loop(() => {
+          const t = Math.min((Date.now() - start) / 1000, 1);
+          // tRect.width = options.rect.width * t;
+          // tRect.height = options.rect.height * t;
+          // tRect.angle = 2 * Math.PI * t;
+          const angle = -Math.PI * (t / 2 - 0.5);
+          // style.transform = `translateZ(0) scale(${t}) rotateZ(${angle}rad)`;
+          const c = Math.cos(angle);
+          const s = Math.sin(angle);
+          style.transform = `matrix3d(${t * c}, ${t * s}, 0, 0, ${-t * s}, ${t * c}, 0, 0, 0, 0, ${(1 - c) + c}, 0, 0, 0, 0, 1)`;
+          // console.log(style.transform);
+          // style.transform = tRect.transform(options.rect);
+          // options.setStyle(style);
+          options.animatedEl.style.transform = style.transform;
+          return t;
+        });
+      })
+      .then(() => {options.animatedEl.style.transform = replaced.transform;});
+      // .then(() => options.setStyle());
+    }));
+  }
+
+  slideAnimation(options) {
+    return (options.timer(timer => {
+      const tRect = options.lastRect.clone();
+      timer.cancelable(() => tRect);
+      return Promise.resolve()
+      // .then(() => timer.frame())
+      .then(() => {
+        const gravity = options._agent.rect.width / 4;
+        const start = Date.now();
+        const {rect, lastRect} = options;
+        const top = rect.top;
+        const lastTop = lastRect.top;
+        const duration = Math.sqrt(Math.abs(rect.left - lastRect.left) / gravity);
+        const style = {
+          transform: '',
+          zIndex: 1,
+        };
+        return timer.loop(() => {
+          const seconds = (Date.now() - start) / 1000;
+          const t = seconds / duration;
+          const t2 = t * t;
+          rect.interpolate(lastRect, t2, tRect);
+          style.transform = tRect.transform(rect);
+          options.setStyle(style);
+          return t2;
+        });
+      })
+      .then(() => options.setStyle());
+    }));
+  }
+
   fallAnimation(options) {
     return (options.timer(timer => {
       const tRect = options.lastRect.clone();
@@ -376,36 +442,46 @@ class Main extends Component {
           tRect.height = lastRect.height * (1 - seconds) / 1;
           tRect.angle = lastRect.angle * seconds / 1;
           // rect.interpolate(lastRect, t, tRect);
-          style.transform = tRect.transform(rect);
+          // style.transform = tRect.transform(rect);
+          const theta = rect.angle - tRect.angle;
+          const c = Math.cos(theta);
+          const s = Math.sin(theta);
+          const dx = tRect.left - rect.left;
+          const dy = tRect.top - rect.top;
+          const t2 = (1 - seconds);
+          style.transform = `matrix3d(${t2 * c}, ${t2 * s}, 0, 0, ${-t2 * s}, ${t2 * c}, 0, 0, 0, 0, ${(1 - c) + c}, 0, ${dx}, ${dy}, 0, 1)`;
           options.setStyle(style);
           return seconds / 1;
         });
       })
       .then(() => {
-        options.setStyle();
         this.cleanTile(tile);
       });
     }));
   }
 
   animateTile(tile) {
-    return typeof tile.matchX === 'number' ?
+    return (
+      typeof tile.matchX === 'number' ?
+      // (options => this.cleanTile(tile)) :
       (options => this.explodeAnimation(options, tile)) :
       options => (
         // Don't animate if it didn't move
-        options.lastRect.equal(options.rect) ? null :
+        options.lastRect.equal(options.rect) ? this.appearAnimation(options) :
         // No vertical movement but there is horizontal movement, just slide
         options.lastRect.top === options.rect.top ?
-        options.animateFromLast(
-          Math.sqrt(
-            Math.abs(options.rect.left - options.lastRect.left) / this.gravity
-          )
-        ) :
+        this.slideAnimation(options) :
+        // options.animateFromLast(
+        //   Math.sqrt(
+        //     Math.abs(options.rect.left - options.lastRect.left) / this.gravity
+        //   )
+        // ) :
         // Perform a gravity like fall
         this.fallAnimation(options)
         // Simplest animation to demo
         // options.animateFromLast(0.3)
-      );
+      )
+    );
   }
 
   renderTile(tile) {
