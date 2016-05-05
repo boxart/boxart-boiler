@@ -442,6 +442,7 @@ pre, pre code {
 .ex-hed, h4 {
 	font-family: "Determination sans", monospace;
 	text-transform: uppercase;
+	clear: left;
 	font-size: 1.2em;
 	font-weight: normal;
 	margin: 2.5em 0 1em 0;
