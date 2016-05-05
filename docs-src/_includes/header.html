@@ -12,9 +12,9 @@
   <a class="seal" href="https://bocoup.com"><img src="/img/bocoup-seal-sm.png" alt="Original Bocoup Seal of Quality"></a>
 </header>
 <nav class="nav-blocks">
-{% for page in site.pages %}
-  {% if page.title and page.categories != 'home' %}
-    <a href="{{ page.url }}">{{ page.title }}</a>
+{% for p in site.pages %}
+  {% if p.title and p.categories != 'home' %}
+    <a {% if p.url == page.url %}class="active"{% endif %} href="{{ p.url }}">{{ p.title }}</a>
   {% endif %}
-{% endfor %}  
+{% endfor %}
 </nav>
