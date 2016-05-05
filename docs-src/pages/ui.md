@@ -4,7 +4,7 @@ title:  "UI Helpers"
 permalink: /ui/
 categories: mainpage
 ---
-UI Examples (Should “Layouts” just be here?)
+UI Examples (Should “Layouts” just be here?) (should anything be here? can page title be enough?)
 
 
 ### Game Board
