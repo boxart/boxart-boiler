@@ -2,6 +2,7 @@
 layout: demo
 title:  "Header Toolbar"
 permalink: /toolbars/footer/
+categories: subpage
 ---
 
 <div class="board">

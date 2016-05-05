@@ -13,7 +13,7 @@
 </header>
 <nav class="nav-blocks">
 {% for p in site.pages %}
-  {% if p.title and p.categories != 'home' %}
+  {% if p.categories == 'mainpage' %}
     <a {% if p.url == page.url %}class="active"{% endif %} href="{{ p.url }}">{{ p.title }}</a>
   {% endif %}
 {% endfor %}
