@@ -58,15 +58,14 @@ function resetGrid(grid) {
   for (let j = 0; j < height; j++) {
     for (let i = 0; i < width; i++) {
       const id = gridKeyXY(i, j);
-      const idLeaving = id + '-matched';
+      const idLeaving = id + '-disappear';
       if (grid.cells[id]) {
         cells[idLeaving] = {
           x: i,
           y: j,
+          disappear: true,
           key: grid.cells[id].key,
           color: grid.cells[id].color,
-          matchX: width / 2 | 0,
-          matchY: 0,
         };
       }
     }
@@ -77,11 +76,16 @@ function resetGrid(grid) {
   for (let j = 0; j < height; j++) {
     for (let i = 0; i < width; i++) {
       const id = gridKeyXY(i, j);
+      const key = gen();
+      const color = Math.abs(gen() % colors);
       cells[id] = {
         x: i,
         y: j,
-        key: gen(),
-        color: Math.abs(gen() % colors),
+        key,
+        // key: grid.cells[id] && grid.cells[id].color === color ?
+        //   grid.cells[id].key :
+        //   key,
+        color,
       };
     }
   }
@@ -120,48 +124,15 @@ function isSameColor(here, cell) {
 
 function matchGrid(grid, target) {
   const matches = {};
-  (() => {
-    const tmp = [];
-    const [i, j] = target;
-    const here = grid.cells[gridKeyXY(i, j)].color;
-    if (
-      isSameColor(here, grid.cells[gridKey(addXY(directions[0], i, j))]) ||
-      isSameColor(here, grid.cells[gridKey(addXY(directions[1], i, j))]) ||
-      isSameColor(here, grid.cells[gridKey(addXY(directions[2], i, j))]) ||
-      isSameColor(here, grid.cells[gridKey(addXY(directions[3], i, j))])
-    ) {
-      let newestChecked = 0;
-      tmp.push([i, j]);
-      while (newestChecked < tmp.length) {
-        const coord = tmp[newestChecked++];
-        const neighbor = grid.cells[gridKey(coord)].color;
-        for (let d = 0; d < 4; d++) {
-          const newCoord = add(coord, directions[d]);
-          if (isSameColor(neighbor, grid.cells[gridKey(newCoord)])) {
-            let alreadyChecked = false;
-            for (let t = 0; t < tmp.length; t++) {
-              if (tmp[t][0] === newCoord[0] && tmp[t][1] === newCoord[1]) {
-                alreadyChecked = true;
-                break;
-              }
-            }
-            if (!alreadyChecked) {
-              tmp.push(newCoord);
-            }
-          }
-        }
-      }
-      if (tmp.length >= 2) {
-        for (let t = 0; t < tmp.length; t++) {
-          matches[gridKey(tmp[t])] = tmp[t];
-        }
-      }
-      else {
-        return grid;
-      }
-      tmp.length = 0;
+  const tmp = buildMatch(grid, target);
+  if (tmp.length >= 2) {
+    for (let t = 0; t < tmp.length; t++) {
+      matches[gridKey(tmp[t])] = tmp[t];
     }
-  })();
+  }
+  else {
+    return grid;
+  }
   const change = {
     score: {$apply: score => score + Math.pow(Object.keys(matches).length, 2)},
     cells: {},
@@ -269,7 +240,15 @@ function matchGrid(grid, target) {
 function cleanGrid(grid, cells) {
   const change = {cells: {}};
   cells.forEach(function(cell) {
-    change.cells[gridKeyXY(cell.x, cell.y) + '-matched'] = {$set: null};
+    const key = gridKeyXY(cell.x, cell.y);
+    const keyMatched = key + '-matched';
+    if (grid.cells[keyMatched]) {
+      change.cells[keyMatched] = {$set: null};
+    }
+    const keyDisappear = key + '-disappear';
+    if (grid.cells[keyDisappear]) {
+      change.cells[keyDisappear] = {$set: null};
+    }
   });
   return update(grid, change);
 }
@@ -283,6 +262,7 @@ class Main extends Component {
 
     this.gravity = 256;
     this.state = {
+      lastGrid: {cells: {}},
       grid: createGrid(12, 8),
     };
   }
@@ -291,6 +271,14 @@ class Main extends Component {
     this.updateState({
       grid: {$set: matchGrid(this.state.grid, [tile.x, tile.y])},
     });
+    // Promise.resolve()
+    // .then(() => {
+    //   for (const item of this.state.grid) {
+    //     if (item.matchX) {
+    //       this.cleanTile(item);
+    //     }
+    //   }
+    // });
   }
 
   cleanTile(tile) {
@@ -348,6 +336,44 @@ class Main extends Component {
         });
       })
       .then(() => {options.animatedEl.style.transform = replaced.transform;});
+      // .then(() => options.setStyle());
+    }));
+  }
+
+  disappearAnimation(options, tile) {
+    return (options.timer(timer => {
+      // const tRect = options.rect.clone();
+      const start = Date.now();
+      const style = {transform: ''};
+      const replaced = {transform: options.animatedEl.style.transform};
+      return Promise.resolve()
+      // .then(() => timer.frame())
+      .then(() => {
+        timer.cancelable(() => {
+          options.animatedEl.style.transform = replaced.transform;
+          return options.lastRect;
+        });
+        return timer.loop(() => {
+          const t = 1 - Math.min((Date.now() - start) / 1000, 1);
+          // tRect.width = options.rect.width * t;
+          // tRect.height = options.rect.height * t;
+          // tRect.angle = 2 * Math.PI * t;
+          const angle = Math.PI * (t / 2 - 0.5);
+          // style.transform = `translateZ(0) scale(${t}) rotateZ(${angle}rad)`;
+          const c = Math.cos(angle);
+          const s = Math.sin(angle);
+          style.transform = `matrix3d(${t * c}, ${t * s}, 0, 0, ${-t * s}, ${t * c}, 0, 0, 0, 0, ${(1 - c) + c}, 0, 0, 0, 0, 1)`;
+          // console.log(style.transform);
+          // style.transform = tRect.transform(options.rect);
+          // options.setStyle(style);
+          options.animatedEl.style.transform = style.transform;
+          return 1 - t;
+        });
+      })
+      .then(() => {
+        // options.animatedEl.style.transform = replaced.transform;
+        this.cleanTile(tile);
+      });
       // .then(() => options.setStyle());
     }));
   }
@@ -461,16 +487,27 @@ class Main extends Component {
   }
 
   animateTile(tile) {
+    // return this.fallAnimation;
     return (
       typeof tile.matchX === 'number' ?
       // (options => this.cleanTile(tile)) :
       (options => this.explodeAnimation(options, tile)) :
+      tile.disappear ?
+      (options => this.disappearAnimation(options, tile)) :
       options => (
         // Don't animate if it didn't move
-        options.lastRect.equal(options.rect) ? this.appearAnimation(options) :
+        options.lastRect.equal(options.rect) ?
+          // (() => {
+          //   const key = gridKeyXY(tile.x, tile.y);
+          //   const lastCell = this.state.lastGrid.cells[key];
+          //   return lastCell && lastCell.color === tile.color ?
+          //     null :
+          //     this.appearAnimation(options);
+          // })() :
+          this.appearAnimation(options) :
         // No vertical movement but there is horizontal movement, just slide
-        options.lastRect.top === options.rect.top ?
-        this.slideAnimation(options) :
+        // options.lastRect.top === options.rect.top ?
+        // this.slideAnimation(options) :
         // options.animateFromLast(
         //   Math.sqrt(
         //     Math.abs(options.rect.left - options.lastRect.left) / this.gravity
@@ -502,7 +539,14 @@ class Main extends Component {
 
   handleReset() {
     console.log('reset');
-    this.updateState({grid: {$set: resetGrid(this.state.grid)}});
+    this.updateState({
+      lastGrid: {$set: this.state.grid},
+      grid: {$set: resetGrid(this.state.grid)},
+    });
+  }
+
+  handlePlayAgain() {
+    this.handleReset();
   }
 
   render() {
@@ -523,7 +567,7 @@ class Main extends Component {
               </div>
               <Batch className="board" style={{height: `${(height - 1) / height * 100}%`}} items={cells}
                 subbatch={tile => tile.x}
-                subbatchIndex={tile => tile.matchY >= 0 ? tile.y + height : tile.y}
+                subbatchIndex={tile => tile.y + ((tile.matchY >= 0 || tile.disappear) ? height : 0)}
                 >
                 {this.renderTile}
               </Batch>
