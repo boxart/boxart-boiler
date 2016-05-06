@@ -464,29 +464,40 @@ class Main extends Component {
     return (options.timer(timer => {
       const tRect = options.lastRect.clone();
       timer.cancelable(() => tRect);
-      return Promise.resolve()
+      // return Promise.resolve()
       // .then(() => timer.frame())
-      .then(() => {
+      // .then(() => {
         const gravity = options._agent.rect.width / 4;
         const start = Date.now();
         const {rect, lastRect} = options;
         const top = rect.top;
         const lastTop = lastRect.top;
+        const duration = Math.sqrt((top - lastTop) / gravity);
         const style = {
-          transform: '',
+          transform: lastRect.transform(rect),
           zIndex: 1,
         };
+        options.setStyle(style);
         return timer.loop(() => {
           const seconds = (Date.now() - start) / 1000;
-          const y = lastTop + gravity * seconds * seconds;
-          const t = Math.min(1 - (top - y) / (top - lastTop), 1);
-          rect.interpolate(lastRect, t, tRect);
+          // const y = lastTop + gravity * seconds * seconds;
+          // const t = Math.min(1 - (top - y) / (top - lastTop), 1);
+          const t = Math.min(seconds / duration, 1);
+          let s;
+          if (rect.left === lastRect.left) {
+            s = t;
+          }
+          else {
+            s = Math.min(seconds * 4 / (Math.abs(rect.left - lastRect.left) / rect.width), 1);
+          }
+          rect.interpolate(lastRect, t * t, tRect);
+          tRect.left = (rect.left - lastRect.left) * s + lastRect.left;
           style.transform = tRect.transform(rect);
           options.setStyle(style);
-          return t;
-        });
-      })
-      .then(() => options.setStyle());
+          return t * t * s;
+        })
+        .then(() => options.setStyle());
+      // });
     }));
   }
 
