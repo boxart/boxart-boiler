@@ -167,7 +167,6 @@ export default class AnimationAgent extends Component {
     // origin so this animates from a relative position to (0, 0).
     return this.timer(timer => {
       return Promise.resolve()
-      .then(() => timer.frame())
       .then(() => {
         const start = Date.now();
         const style = {
@@ -371,7 +370,7 @@ export default class AnimationAgent extends Component {
     // effected by siblings updating and the lifecycle step for a specific
     // element happens in the middle of the whole set of React elements
     // updating.
-    this.soon()
+    this.frame()
     .then(() => {
       // Temporarily remove animation styling so we can get the new rects.
       for (const key in this.animateds) {
