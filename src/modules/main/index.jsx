@@ -584,19 +584,21 @@ class Main extends Component {
   }
 
   renderTile(tile) {
+    // return (
     return (<Animated
       key={tile.key} animateKey={tile.key}
       animate={this.animateTile(tile)}
       >
-      <div style={{
+      <div key={tile.key} style={{
         position: 'absolute',
-        width: `${100 / this.state.grid.width + 0.02}%`,
-        height: `${100 / this.state.grid.height + 0.02}%`,
-        left: `${tile.x * 100 / this.state.grid.width - 0.01}%`,
-        bottom: `${tile.y * 100 / this.state.grid.height - 0.01}%`,
+        width: `${100 / this.state.grid.width + 0.001953125}%`,
+        height: `${100 / this.state.grid.height + 0.001953125}%`,
+        left: `${tile.x * 100 / this.state.grid.width - 0.0009765625}%`,
+        bottom: `${tile.y * 100 / this.state.grid.height - 0.0009765625}%`,
         background: colors[tile.color],
       }} onClick={() => this.matchTile(tile)}></div>
     </Animated>);
+    // );
   }
 
   handleReset() {
