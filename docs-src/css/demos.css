@@ -54,26 +54,21 @@ body {
 
 .toolbar {
   min-height: 20%;
-  padding: .25% 1% 0 1%;;
+  padding: .25% 1% 0 1%;
+  align-content: flex-end;
 }
-
-
 @media( min-height:30em ) {
-  .top-chrome {
-    min-height: 8%;
-  }
-  .bottom-chrome {
-    min-height: 8%;
+  .toolbar {
+    min-height: 10%;
   }
 }
 
-/* Theming
------------------ */
-.top-chrome {
-  background: rgba(100,100,100,.25);
-  outline: 1px solid rgba(100,100,100,.5);
+/* DEMO STYLES ONLY: */
+.toolbar {
+    background: rgba(100,100,50,.25);
+    outline: 1px solid rgba(100,100,50,.5);
 }
-.bottom-chrome {
+.toolbar-secondary {
   background: rgba(100,50,100,.25);
   outline: 1px solid rgba(100,50,100,.5);  
 }
@@ -145,19 +140,19 @@ Thinking we might want to default to centered, and optionally throw to the left 
 .toolbar {
   text-align: center;
 }
-@media( max-height: 25em ) and ( min-width: 40em ) /* FPO */ {
-  .board {
+@media( max-height: 25em ) and ( min-width: 40em ) {
+  .board.break-col {
     flex-direction: row;
   }
-  .toolbar {
+  .break-col .toolbar {
     flex-direction: column;
     min-width: 20%;
     max-width: 25%;
   }
-  .toolbar.break-top {
+  .break-col .toolbar.break-top {
     align-self: flex-start;
   }
-  .toolbar.break-bottom {
+  .break-col .toolbar.break-bottom {
     align-self: flex-end;
   }
 }
@@ -169,7 +164,7 @@ Thinking we might want to default to centered, and optionally throw to the left 
 .kick-left {
   text-align: left;
   float: left;
-  order: 1;
+  order: 0;
 }
 .kick-right {
   float: right;

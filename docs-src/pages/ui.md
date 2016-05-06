@@ -6,8 +6,9 @@ categories: mainpage
 ---
 UI Examples (Should “Layouts” just be here?) (should anything be here? can page title be enough?)
 
-
 ### Game Board
+
+#### Basic Markup
 
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -16,14 +17,34 @@ consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-<iframe src=""></iframe>
-<a href="#">View Fullscreen</a>
+<iframe src="/layout/playarea"></iframe>
+<a href="/layout/playarea">View Fullscreen</a>
 
 ```
 <div class="board">
+  <div class="play-area">
+  </div>
 </div>
 ```
 
+#### Clamp
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+<iframe src="/layout/clamp"></iframe>
+<a href="/layout/clamp">View Fullscreen</a>
+
+```
+<div class="board">
+  <div class="play-area">
+  </div>
+</div>
+```
 
 ### Toolbars
 
@@ -34,39 +55,29 @@ A set of helper classes allowing …
 
 Lorem ipsum, notes on ensuring accessible markup, depending on usage, etc.
 
-<iframe src="/toolbars/basic"></iframe>
-<a href="/toolbars/basic">View Fullscreen</a>
+<iframe src="/layout/toolbar"></iframe>
+<a href="/layout/toolbar">View Fullscreen</a>
 
 ```
 <div class="board">
   <div class="toolbar">Basic Toolbar</div>
+  <div class="play-area">
+  </div>
 </div>
 ```
 
-
-#### Header Toolbar
+#### Secondary Toolbar
 
 Lorem ipsum dolor sit amet, consectetur adipisicing elit. “Header” and “footer” terminology should be replaced by something more neutral, like “primary”/“secondary.”
 
-<iframe src="/toolbars/header"></iframe>
-<a href="/toolbars/header">View Fullscreen</a>
+<iframe src="/layout/toolbar-secondary"></iframe>
+<a href="/layout/toolbar-secondary">View Fullscreen</a>
 
 ```
 <div class="board">
-  <div class="toolbar top-chrome">Header Toolbar</div>
-</div>
-```
-
-#### Footer Toolbar
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit…
-
-<iframe src="/toolbars/footer"></iframe>
-<a href="/toolbars/footer">View Fullscreen</a>
-
-```
-<div class="board">
-  <div class="toolbar bottom-chrome">Footer Toolbar</div>
+  <div class="play-area">
+  </div>
+  <div class="toolbar toolbar-secondary">Secondary toolbar</div>
 </div>
 ```
 
@@ -74,12 +85,40 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit…
 
 Lorem ipsum dolor sit amet, consectetur adipisicing elit…
 
-<iframe src=""></iframe>
-<a href="#">View Fullscreen</a>
+<iframe src="/layout/rwd-default" class="short"></iframe>
+<a href="/layout/rwd-default">View Fullscreen</a>
+
+```
+<div class="board">
+  <div class="play-area">
+  </div>
+  <div class="toolbar toolbar-secondary">Secondary toolbar</div>
+</div>
+```
+
+<iframe src="/layout/rwd-shrink/" class="short"></iframe>
+<a href="/layout/rwd-shrink/">View Fullscreen</a>
+
+```
+<div class="board">
+  <div class="play-area">
+  </div>
+  <div class="toolbar toolbar-secondary">Secondary toolbar</div>
+</div>
+```
+
+
+<iframe src="/layout/rwd-break-bottom/" class="short"></iframe>
+<a href="/layout/rwd-break-bottom/">View Fullscreen</a>
 
 ```
 ```
 
+<iframe src="/layout/rwd-break-top/" class="short"></iframe>
+<a href="/layout/rwd-break-top/">View Fullscreen</a>
+
+```
+```
 
 
 #### Theming
