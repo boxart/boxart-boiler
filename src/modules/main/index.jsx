@@ -20,624 +20,312 @@ function intGen(rngState) {
   return fn;
 }
 
-function createGrid(_width, _height) {
-  const colors = 4;
-  const width = _width || 8;
-  const height = _height || 10;
-  const gen = intGen({seed: 'fff'});
+function createGrid() {
   const grid = {
-    colors,
-    width,
-    height,
+    genState: intGen('seed').state,
     score: 0,
     cells: {},
   };
-  for (let j = 0; j < height; j++) {
-    for (let i = 0; i < width; i++) {
-      const key = `${i}-${j}`;
-      const cell = {
-        x: i,
-        y: j,
-        key: gen(),
-        color: Math.abs(gen() % colors),
-      };
-      grid.cells[key] = cell;
-    }
-  }
-  grid.gen = gen.state;
   return grid;
 }
 
-function buildMatch(grid, [i, j], tmp = []) {
-  const here = grid.cells[gridKeyXY(i, j)].color;
-  if (
-    isSameColor(here, grid.cells[gridKey(addXY(directions[0], i, j))]) ||
-    isSameColor(here, grid.cells[gridKey(addXY(directions[1], i, j))]) ||
-    isSameColor(here, grid.cells[gridKey(addXY(directions[2], i, j))]) ||
-    isSameColor(here, grid.cells[gridKey(addXY(directions[3], i, j))])
-  ) {
-    let newestChecked = 0;
-    tmp.push([i, j]);
-    while (newestChecked < tmp.length) {
-      const coord = tmp[newestChecked++];
-      const neighbor = grid.cells[gridKey(coord)].color;
-      for (let d = 0; d < 4; d++) {
-        const newCoord = add(coord, directions[d]);
-        if (isSameColor(neighbor, grid.cells[gridKey(newCoord)])) {
-          let alreadyChecked = false;
-          for (let t = 0; t < tmp.length; t++) {
-            if (tmp[t][0] === newCoord[0] && tmp[t][1] === newCoord[1]) {
-              alreadyChecked = true;
-              break;
-            }
-          }
-          if (!alreadyChecked) {
-            tmp.push(newCoord);
-          }
-        }
-      }
-    }
-  }
-  return tmp;
+function gridKey(x, y) {
+  return `${x},${y}`;
 }
 
-function hasMatchesAvailable(grid) {
-  const {width, height} = grid;
-  const tmp = [];
-  const target = [];
-  for (let j = 0; j < height; j++) {
-    for (let i = 0; i < width; i++) {
-      if (!grid.cells[gridKeyXY(i, j)]) {continue;}
-      target[0] = i; target[1] = j;
-      buildMatch(grid, target, tmp);
-      if (tmp.length > 1) {
-        return true;
-      }
-      tmp.length = 0;
+function checkGrid(grid, change, gkey, i, j) {
+  const g2key = gridKey(i, j);
+  if (change.cells[g2key] && change.cells[g2key].$set) {
+    if (grid.cells[gkey].value === change.cells[g2key].$set.value) {
+      change.cells[g2key].$set = {
+        x: i,
+        y: j,
+        key: grid.cells[gkey].key,
+        value: grid.cells[gkey].value * 2,
+      };
+      change.cells[gkey] = {$set: null};
+      return true;
     }
+    // if (j + 1 !== j) {
+    //   change.cells[g2key] = {$set: {
+    //     x: i,
+    //     y: j,
+    //     key: grid.cells[gkey].key,
+    //     value: grid.cells[gkey].value * 2,
+    //   }};
+    //   change.cells[gkey] = {$set: null};
+    // }
+  }
+  if (!change.cells[g2key] && grid.cells[g2key]) {
+    if (grid.cells[gkey].value === grid.cells[g2key].value) {
+      change.cells[g2key] = {$set: {
+        x: i,
+        y: j,
+        key: grid.cells[gkey].key,
+        value: grid.cells[gkey].value * 2,
+      }};
+      change.cells[gkey] = {$set: null};
+      return true;
+    }
+    // if (j + 1 !== j) {
+    //   change.cells[g2key] = {$set: {
+    //     x: i,
+    //     y: j,
+    //     key: grid.cells[gkey].key,
+    //     value: grid.cells[gkey].value * 2,
+    //   }};
+    //   change.cells[gkey] = {$set: null};
+    // }
   }
   return false;
 }
 
-function resetGrid(grid) {
-  const {width, height} = grid;
-  const cells = {};
-  const change = {
-    score: {$set: 0},
-    cells: {$set: cells},
-  };
-  for (let j = 0; j < height; j++) {
-    for (let i = 0; i < width; i++) {
-      const id = gridKeyXY(i, j);
-      const idLeaving = id + '-disappear';
-      if (grid.cells[id]) {
-        cells[idLeaving] = {
-          x: i,
-          y: j,
-          disappear: true,
-          key: grid.cells[id].key,
-          color: grid.cells[id].color,
-        };
+function checkGridEmpty(grid, change, gkey, i, j, i2, j2, i3, j3) {
+  const g2key = gridKey(i, j);
+  const g3key = gridKey(i2, j2);
+  if (
+    (
+      (change.cells[g2key] && change.cells[g2key].$set) || 
+      (!change.cells[g2key] && grid.cells[g2key])
+    )
+  ) {
+    if (i2 !== i3 || j2 !== j3) {
+      change.cells[g3key] = {$set: {
+        x: i2,
+        y: j2,
+        key: grid.cells[gkey].key,
+        value: grid.cells[gkey].value,
+      }};
+      change.cells[gkey] = {$set: null};
+    }
+    return true;
+  }
+  return false;
+}
+
+function checkGridEnd(grid, change, gkey, i, j) {
+  const g2key = gridKey(i, j);
+  if (!change.cells[g2key] && !grid.cells[g2key]) {
+    change.cells[g2key] = {$set: {
+      x: i,
+      y: j,
+      key: grid.cells[gkey].key,
+      value: grid.cells[gkey].value,
+    }};
+    change.cells[gkey] = {$set: null};
+    return true;
+  }
+  return false;
+}
+
+function genCell(grid, change, gen, i, j, i2, j2) {
+  const cells = [];
+  for (let jj = j; jj < j2 + 1; jj++) {
+    for (let ii = i; ii < i2 + 1; ii++) {
+      const gkey = gridKey(ii, jj);
+      if (
+        (
+          (change.cells[gkey] && !change.cells[gkey].$set) ||
+          (!change.cells[gkey] && !grid.cells[gkey])
+        )
+      ) {
+        cells.push([ii, jj, change.cells[gkey], grid.cells[gkey]]);
       }
     }
   }
-
-  const {colors} = grid;
-  const gen = intGen(grid.gen);
-  for (let j = 0; j < height; j++) {
-    for (let i = 0; i < width; i++) {
-      const id = gridKeyXY(i, j);
-      const key = gen();
-      const color = Math.abs(gen() % colors);
-      cells[id] = {
-        x: i,
-        y: j,
-        key,
-        // key: grid.cells[id] && grid.cells[id].color === color ?
-        //   grid.cells[id].key :
-        //   key,
-        color,
-      };
-    }
+  if (cells.length) {
+    const choiceIndex = Math.abs(gen() % cells.length);
+    const choice = cells[choiceIndex];
+    console.log(cells, choice, choiceIndex);
+    const gkey = gridKey(...choice);
+    change.cells[gkey] = {$set: {
+      x: choice[0],
+      y: choice[1],
+      key: gen(),
+      value: 2,
+    }};
   }
-  change.gen = {$set: gen.state};
-  return update(grid, change);
 }
 
-function gridKeyXY(x, y) {
-  return `${x}-${y}`;
-}
-
-function gridKey([x, y]) {
-  return `${x}-${y}`;
-}
-
-// function swapGrid(grid, {from, to}) {
-//   return update(grid, {
-//     [gridKey(from)]: grid[gridKey[to]],
-//     [gridKey(to)]: grid[gridKey[from]],
-//   });
-// }
-
-function add(a, b) {
-  return [a[0] + b[0], a[1] + b[1]];
-}
-
-function addXY(a, x, y) {
-  return [a[0] + x, a[1] + y];
-}
-
-const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
-
-function isSameColor(here, cell) {
-  return cell && cell.color === here;
-}
-
-function matchGrid(grid, target) {
-  const matches = {};
-  const tmp = buildMatch(grid, target);
-  if (tmp.length >= 2) {
-    for (let t = 0; t < tmp.length; t++) {
-      matches[gridKey(tmp[t])] = tmp[t];
-    }
-  }
-  else {
-    return grid;
-  }
-  const change = {
-    score: {$apply: score => score + Math.pow(Object.keys(matches).length, 2)},
-    cells: {},
-  };
-  for (let j = grid.height - 1; j >= 0; j--) {
-    for (let i = 0; i < grid.width; i++) {
-      if (matches[gridKeyXY(i, j)]) {
-        change.cells[gridKeyXY(i, j) + '-matched'] = {$set: {
-          x: i,
-          y: j,
-          key: grid.cells[gridKeyXY(i, j)].key,
-          color: grid.cells[gridKeyXY(i, j)].color,
-          matchX: target[0],
-          matchY: target[1],
-        }};
-        for (let jj = j; jj < grid.height; jj++) {
-          const keyHere = gridKeyXY(i, jj);
-          const keyAbove = gridKeyXY(i, jj + 1);
-          if (change.cells[keyAbove] && change.cells[keyAbove].$set) {
-            change.cells[keyHere] = {$set: {
-              x: i,
-              y: jj,
-              key: change.cells[keyAbove].$set.key,
-              color: change.cells[keyAbove].$set.color,
-            }};
-          }
-          else if (change.cells[keyAbove]) {
-            change.cells[keyHere] = {$set: null};
-          }
-          else if (grid.cells[keyAbove]) {
-            change.cells[keyHere] = {$set: {
-              x: i,
-              y: jj,
-              key: grid.cells[keyAbove].key,
-              color: grid.cells[keyAbove].color,
-            }};
-          }
-          else {
-            change.cells[keyHere] = {$set: null};
-          }
-        }
-
-        if (
-          j === 0 &&
-          change.cells[gridKeyXY(i, j)] &&
-          change.cells[gridKeyXY(i, j)].$set === null
-        ) {
-          for (let jj = 0; jj < grid.height; jj++) {
-            const keyHere = gridKeyXY(i, jj);
-            if (matches[keyHere]) {
-              matches[keyHere] = null;
-            }
-          }
-
-          for (let ii = i; ii < grid.width; ii++) {
-            for (let jj = 0; jj < grid.height; jj++) {
-              const keyHere = gridKeyXY(ii, jj);
-              const keyRight = gridKeyXY(ii + 1, jj);
-              if (change.cells[keyRight] && change.cells[keyRight].$merge) {
-                change.cells[keyHere] = {$set: {
-                  x: ii,
-                  y: jj,
-                  key: change.cells[keyRight].$merge.key,
-                  color: change.cells[keyRight].$merge.color,
-                }};
-              }
-              else if (change.cells[keyRight] && change.cells[keyRight].$set) {
-                change.cells[keyHere] = {$set: {
-                  x: ii,
-                  y: jj,
-                  key: change.cells[keyRight].$set.key,
-                  color: change.cells[keyRight].$set.color,
-                }};
-              }
-              else if (change.cells[keyRight]) {
-                change.cells[keyHere] = {$set: null};
-              }
-              else if (grid.cells[keyRight]) {
-                change.cells[keyHere] = {$set: {
-                  x: ii,
-                  y: jj,
-                  key: grid.cells[keyRight].key,
-                  color: grid.cells[keyRight].color,
-                }};
-              }
-              else {
-                change.cells[keyHere] = {$set: null};
-              }
-
-              if (matches[keyRight]) {
-                matches[keyHere] = matches[keyRight];
-                matches[keyRight] = null;
-              }
-            }
-          }
-
-          i--;
-        }
-      }
-    }
-  }
-  return update(grid, change);
-}
-
-function cleanGrid(grid, cells) {
+function updateGrid(grid, direction) {
   const change = {cells: {}};
-  cells.forEach(function(cell) {
-    const key = gridKeyXY(cell.x, cell.y);
-    const keyMatched = key + '-matched';
-    if (grid.cells[keyMatched]) {
-      change.cells[keyMatched] = {$set: null};
+  const gen = intGen(grid.genState);
+  // Up
+  if (direction === 0) {
+    for (let j = 1; j < 4; j++) {
+      for (let i = 0; i < 4; i++) {
+        const gkey = gridKey(i, j);
+        if (grid.cells[gkey]) {
+          for (let j2 = j - 1; j2 >= 0; j2--) {
+            if (checkGrid(grid, change, gkey, i, j2)) {
+              break;
+            }
+            if (checkGridEmpty(grid, change, gkey, i, j2, i, j2 + 1, i, j)) {
+              break;
+            }
+            if (j2 === 0 && checkGridEnd(grid, change, gkey, i, j2)) {
+              break;
+            }
+          }
+        }
+      }
     }
-    const keyDisappear = key + '-disappear';
-    if (grid.cells[keyDisappear]) {
-      change.cells[keyDisappear] = {$set: null};
+    genCell(grid, change, gen, 0, 3, 3, 3);
+  }
+  // Right
+  else if (direction === 1) {
+    for (let j = 0; j < 4; j++) {
+      for (let i = 2; i >= 0; i--) {
+        const gkey = gridKey(i, j);
+        if (grid.cells[gkey]) {
+          for (let i2 = i + 1; i2 < 4; i2++) {
+            if (checkGrid(grid, change, gkey, i2, j)) {
+              break;
+            }
+            if (checkGridEmpty(grid, change, gkey, i2, j, i2 - 1, j, i, j)) {
+              break;
+            }
+            if (i2 === 3 && checkGridEnd(grid, change, gkey, i2, j)) {
+              break;
+            }
+          }
+        }
+      }
     }
-  });
+    genCell(grid, change, gen, 0, 0, 0, 3);
+  }
+  // Down
+  else if (direction === 2) {
+    for (let j = 2; j >= 0; j--) {
+      for (let i = 0; i < 4; i++) {
+        const gkey = gridKey(i, j);
+        if (grid.cells[gkey]) {
+          for (let j2 = j + 1; j2 < 4; j2++) {
+            if (checkGrid(grid, change, gkey, i, j2)) {
+              break;
+            }
+            if (checkGridEmpty(grid, change, gkey, i, j2, i, j2 - 1, i, j)) {
+              break;
+            }
+            if (j2 === 3 && checkGridEnd(grid, change, gkey, i, j2)) {
+              break;
+            }
+          }
+        }
+      }
+    }
+    genCell(grid, change, gen, 0, 0, 3, 0);
+  }
+  // Left
+  else if (direction === 3) {
+    for (let j = 0; j < 4; j++) {
+      for (let i = 1; i < 4; i++) {
+        const gkey = gridKey(i, j);
+        if (grid.cells[gkey]) {
+          for (let i2 = i - 1; i2 >= 0; i2--) {
+            if (checkGrid(grid, change, gkey, i2, j)) {
+              break;
+            }
+            if (checkGridEmpty(grid, change, gkey, i2, j, i2 + 1, j, i, j)) {
+              break;
+            }
+            if (i2 === 0 && checkGridEnd(grid, change, gkey, i2, j)) {
+              break;
+            }
+          }
+        }
+      }
+    }
+    genCell(grid, change, gen, 3, 0, 3, 3);
+  }
+  change.genState = {$set: gen.state};
+  console.log(change);
   return update(grid, change);
 }
 
-const colors = ['#777', '#999', '#bbb', '#ddd'];
+const colors = {
+  2: '#eee',
+  4: '#ddd',
+  8: '#bbb',
+  16: '#aaa',
+  32: '#999',
+  64: '#888',
+  128: '#777',
+  256: '#666',
+  512: '#555',
+  1024: '#444',
+  2048: '#333',
+  4096: '#222',
+  8192: '#111',
+  16384: '#000',
+};
 
 class Main extends Component {
 
   constructor() {
     super();
 
-    this.gravity = 256;
     this.state = {
-      lastGrid: {cells: {}},
-      grid: createGrid(12, 8),
+      grid: createGrid(),
     };
   }
 
-  matchTile(tile) {
-    this.updateState({
-      grid: {$set: matchGrid(this.state.grid, [tile.x, tile.y])},
-    });
-    // Promise.resolve()
-    // .then(() => {
-    //   for (const item of this.state.grid) {
-    //     if (item.matchX) {
-    //       this.cleanTile(item);
-    //     }
-    //   }
-    // });
+  componentDidMount() {
+    window.addEventListener('keyup', this.handleKeyDown);
   }
 
-  cleanTile(tile) {
-    if (!this._cleanTile) {
-      this._cleanTiles = [];
-      this._cleanTile = Promise.resolve()
-      .then(() => new Promise(requestAnimationFrame))
-      .then(() => {
-        this._cleanTile = null;
-        this.updateState({
-          grid: {$set: cleanGrid(this.state.grid, this._cleanTiles)},
-        });
-        this._cleanTiles = [];
+  handleKeyDown(event) {
+    const direction =
+      event.which === 87 ? 0 :
+      event.which === 68 ? 1 :
+      event.which === 83 ? 2 :
+      event.which === 65 ? 3 :
+      event.which === 38 ? 0 :
+      event.which === 39 ? 1 :
+      event.which === 40 ? 2 :
+      event.which === 37 ? 3 :
+      -1;
+    if (direction >= 0) {
+      this.setState({
+        grid: updateGrid(this.state.grid, direction),
       });
     }
-    this._cleanTiles.push(tile);
-  }
-
-  gravityFromLast(options, gravity) {
-    const top = options.rect.top;
-    const lastTop = options.lastRect.top;
-    const duration = Math.sqrt(Math.abs(top - lastTop) / gravity);
-    const easing = t => t * t;
-    return options.animateFromLast(duration, easing);
-  }
-
-  appearAnimation(options) {
-    return (options.timer(timer => {
-      // const tRect = options.rect.clone();
-      const start = Date.now();
-      const style = {transform: ''};
-      const replaced = {transform: options.animatedEl.style.transform};
-      return Promise.resolve()
-      // .then(() => timer.frame())
-      .then(() => {
-        timer.cancelable(() => {
-          options.animatedEl.style.transform = replaced.transform;
-          return options.lastRect;
-        });
-        return timer.loop(() => {
-          const t = Math.min((Date.now() - start) / 1000, 1);
-          // tRect.width = options.rect.width * t;
-          // tRect.height = options.rect.height * t;
-          // tRect.angle = 2 * Math.PI * t;
-          const angle = -Math.PI * (t / 2 - 0.5);
-          // style.transform = `translateZ(0) scale(${t}) rotateZ(${angle}rad)`;
-          const c = Math.cos(angle);
-          const s = Math.sin(angle);
-          style.transform = `matrix3d(${t * c}, ${t * s}, 0, 0, ${-t * s}, ${t * c}, 0, 0, 0, 0, ${(1 - c) + c}, 0, 0, 0, 0, 1)`;
-          // console.log(style.transform);
-          // style.transform = tRect.transform(options.rect);
-          // options.setStyle(style);
-          options.animatedEl.style.transform = style.transform;
-          return t;
-        });
-      })
-      .then(() => {options.animatedEl.style.transform = replaced.transform;});
-      // .then(() => options.setStyle());
-    }));
-  }
-
-  disappearAnimation(options, tile) {
-    return (options.timer(timer => {
-      // const tRect = options.rect.clone();
-      const start = Date.now();
-      const style = {transform: ''};
-      const replaced = {transform: options.animatedEl.style.transform};
-      return Promise.resolve()
-      // .then(() => timer.frame())
-      .then(() => {
-        timer.cancelable(() => {
-          options.animatedEl.style.transform = replaced.transform;
-          return options.lastRect;
-        });
-        return timer.loop(() => {
-          const t = 1 - Math.min((Date.now() - start) / 1000, 1);
-          // tRect.width = options.rect.width * t;
-          // tRect.height = options.rect.height * t;
-          // tRect.angle = 2 * Math.PI * t;
-          const angle = Math.PI * (t / 2 - 0.5);
-          // style.transform = `translateZ(0) scale(${t}) rotateZ(${angle}rad)`;
-          const c = Math.cos(angle);
-          const s = Math.sin(angle);
-          style.transform = `matrix3d(${t * c}, ${t * s}, 0, 0, ${-t * s}, ${t * c}, 0, 0, 0, 0, ${(1 - c) + c}, 0, 0, 0, 0, 1)`;
-          // console.log(style.transform);
-          // style.transform = tRect.transform(options.rect);
-          // options.setStyle(style);
-          options.animatedEl.style.transform = style.transform;
-          return 1 - t;
-        });
-      })
-      .then(() => {
-        // options.animatedEl.style.transform = replaced.transform;
-        this.cleanTile(tile);
-      });
-      // .then(() => options.setStyle());
-    }));
-  }
-
-  slideAnimation(options) {
-    return (options.timer(timer => {
-      const tRect = options.lastRect.clone();
-      timer.cancelable(() => tRect);
-      return Promise.resolve()
-      // .then(() => timer.frame())
-      .then(() => {
-        const gravity = options._agent.rect.width / 4;
-        const start = Date.now();
-        const {rect, lastRect} = options;
-        const top = rect.top;
-        const lastTop = lastRect.top;
-        const duration = Math.sqrt(Math.abs(rect.left - lastRect.left) / gravity);
-        const style = {
-          transform: '',
-          zIndex: 1,
-        };
-        return timer.loop(() => {
-          const seconds = (Date.now() - start) / 1000;
-          const t = seconds / duration;
-          const t2 = t * t;
-          rect.interpolate(lastRect, t2, tRect);
-          style.transform = tRect.transform(rect);
-          options.setStyle(style);
-          return t2;
-        });
-      })
-      .then(() => options.setStyle());
-    }));
-  }
-
-  fallAnimation(options) {
-    return (options.timer(timer => {
-      const tRect = options.lastRect.clone();
-      timer.cancelable(() => tRect);
-      // return Promise.resolve()
-      // .then(() => timer.frame())
-      // .then(() => {
-        const gravity = options._agent.rect.width / 4;
-        const start = Date.now();
-        const {rect, lastRect} = options;
-        const top = rect.top;
-        const lastTop = lastRect.top;
-        const duration = Math.sqrt((top - lastTop) / gravity);
-        const style = {
-          transform: lastRect.transform(rect),
-          zIndex: 1,
-        };
-        options.setStyle(style);
-        return timer.loop(() => {
-          const seconds = (Date.now() - start) / 1000;
-          // const y = lastTop + gravity * seconds * seconds;
-          // const t = Math.min(1 - (top - y) / (top - lastTop), 1);
-          const t = Math.min(seconds / duration, 1);
-          let s;
-          if (rect.left === lastRect.left) {
-            s = t;
-          }
-          else {
-            s = Math.min(seconds * 4 / (Math.abs(rect.left - lastRect.left) / rect.width), 1);
-          }
-          rect.interpolate(lastRect, t * t, tRect);
-          tRect.left = (rect.left - lastRect.left) * s + lastRect.left;
-          style.transform = tRect.transform(rect);
-          options.setStyle(style);
-          return t * t * s;
-        })
-        .then(() => options.setStyle());
-      // });
-    }));
-  }
-
-  explodeAnimation(options, tile) {
-    return (options.timer(timer => {
-      const {rect, lastRect} = options;
-      const tRect = lastRect.clone();
-      timer.cancelable(() => tRect);
-      return Promise.resolve()
-      // .then(() => timer.frame())
-      .then(() => {
-        const gravity = options._agent.rect.width / 4;
-        const start = Date.now();
-        const top = rect.top;
-        const lastTop = lastRect.top;
-        const vx = (tile.x - tile.matchX) * gravity / 4 + (Math.random() - 0.5) * gravity / 2;
-        const vy = -(tile.y - tile.matchY) * gravity / 4 - Math.random() * gravity;
-        lastRect.angle = Math.PI * Math.random() * 4;
-        const style = {
-          transform: '',
-          zIndex: 2,
-        };
-        return timer.loop(() => {
-          const seconds = (Date.now() - start) / 1000;
-          const y = lastTop + vy * seconds + gravity * seconds * seconds;
-          const t = Math.min(1 - (top - y) / (top - lastTop), 1);
-          tRect.left = lastRect.left + vx * seconds;
-          tRect.top = y;
-          tRect.width = lastRect.width * (1 - seconds) / 1;
-          tRect.height = lastRect.height * (1 - seconds) / 1;
-          tRect.angle = lastRect.angle * seconds / 1;
-          // rect.interpolate(lastRect, t, tRect);
-          // style.transform = tRect.transform(rect);
-          const theta = rect.angle - tRect.angle;
-          const c = Math.cos(theta);
-          const s = Math.sin(theta);
-          const dx = tRect.left - rect.left;
-          const dy = tRect.top - rect.top;
-          const t2 = (1 - seconds);
-          style.transform = `matrix3d(${t2 * c}, ${t2 * s}, 0, 0, ${-t2 * s}, ${t2 * c}, 0, 0, 0, 0, ${(1 - c) + c}, 0, ${dx}, ${dy}, 0, 1)`;
-          options.setStyle(style);
-          return seconds / 1;
-        });
-      })
-      .then(() => {
-        this.cleanTile(tile);
-      });
-    }));
-  }
-
-  animateTile(tile) {
-    // return this.fallAnimation;
-    return (
-      typeof tile.matchX === 'number' ?
-      // (options => this.cleanTile(tile)) :
-      (options => this.explodeAnimation(options, tile)) :
-      tile.disappear ?
-      (options => this.disappearAnimation(options, tile)) :
-      options => (
-        // Don't animate if it didn't move
-        options.lastRect.equal(options.rect) ?
-          // (() => {
-          //   const key = gridKeyXY(tile.x, tile.y);
-          //   const lastCell = this.state.lastGrid.cells[key];
-          //   return lastCell && lastCell.color === tile.color ?
-          //     null :
-          //     this.appearAnimation(options);
-          // })() :
-          this.appearAnimation(options) :
-        // No vertical movement but there is horizontal movement, just slide
-        // options.lastRect.top === options.rect.top ?
-        // this.slideAnimation(options) :
-        // options.animateFromLast(
-        //   Math.sqrt(
-        //     Math.abs(options.rect.left - options.lastRect.left) / this.gravity
-        //   )
-        // ) :
-        // Perform a gravity like fall
-        this.fallAnimation(options)
-        // Simplest animation to demo
-        // options.animateFromLast(0.3)
-      )
-    );
   }
 
   renderTile(tile) {
-    // return (
-    return (<Animated
-      key={tile.key} animateKey={tile.key}
-      animate={this.animateTile(tile)}
-      >
-      <div key={tile.key} style={{
-        position: 'absolute',
-        width: `${100 / this.state.grid.width + 0.001953125}%`,
-        height: `${100 / this.state.grid.height + 0.001953125}%`,
-        left: `${tile.x * 100 / this.state.grid.width - 0.0009765625}%`,
-        bottom: `${tile.y * 100 / this.state.grid.height - 0.0009765625}%`,
-        background: colors[tile.color],
-      }} onClick={() => this.matchTile(tile)}></div>
-    </Animated>);
-    // );
-  }
-
-  handleReset() {
-    console.log('reset');
-    this.updateState({
-      lastGrid: {$set: this.state.grid},
-      grid: {$set: resetGrid(this.state.grid)},
-    });
-  }
-
-  handlePlayAgain() {
-    this.handleReset();
+    return <Animated key={tile.key} animateKey={tile.key}><div key={tile.key} style={{
+      position: 'absolute',
+      width: '25%',
+      height: '25%',
+      top: `${tile.y / 4 * 100}%`,
+      left: `${tile.x / 4 * 100}%`,
+      background: colors[tile.value] || '#000',
+    }}>{tile.value}</div></Animated>;
   }
 
   render() {
+    console.log(this.state.grid);
     const cells = Object.keys(this.state.grid.cells)
     .map(key => this.state.grid.cells[key])
     .filter(cell => cell);
-    const {width, height} = this.state.grid;
+    console.log(cells);
+    // const {width, height} = this.state.grid;
     return (
       <div className="game-board">
         <Clamp
-          width={width}
-          height={height + 1}>
+          width={4}
+          height={5}>
           <AnimatedAgent>
             <div className="screen">
-              <div className="bar" style={{height: `${1 / height * 100}%`}}>
+              <div className="bar" style={{height: `${1 / 5 * 100}%`}}>
                 <Score score={this.state.grid.score} />
                 <ResetButton reset={this.handleReset} />
               </div>
-              <Batch className="board" style={{height: `${(height - 1) / height * 100}%`}} items={cells}
+              <Batch className="board" style={{height: `${(5 - 1) / 5 * 100}%`}} items={cells}
                 subbatch={tile => tile.x}
-                subbatchIndex={tile => tile.y + ((tile.matchY >= 0 || tile.disappear) ? height : 0)}
                 >
                 {this.renderTile}
               </Batch>
-              <WinScreen
-                grid={this.state.grid}
-                playAgain={this.handlePlayAgain} />
             </div>
           </AnimatedAgent>
         </Clamp>

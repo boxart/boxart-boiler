@@ -3,11 +3,13 @@ export default class AnimateTimer {
     this._agent = agent;
     this.run = 1;
     this._oncancel = null;
+    this._canceled = false;
     this.promise = Promise.resolve();
   }
 
   _init(fn = function() {}) {
     this._oncancel = null;
+    this._canceled = false;
     this.promise = Promise.resolve(fn.call(this, this));
     return this;
   }
@@ -17,7 +19,7 @@ export default class AnimateTimer {
     return this._agent.frame()
     // return new Promise(requestAnimationFrame)
     .then(() => {
-      if (this.run !== run) {
+      if (this.run !== run || this._canceled) {
         throw new Error('Timer canceled');
       }
     });
@@ -27,7 +29,7 @@ export default class AnimateTimer {
     const run = this.run;
     return new Promise(resolve => setTimeout(resolve, delay))
     .then(() => {
-      if (this.run !== run) {
+      if (this.run !== run || this._canceled) {
         throw new Error('Timer canceled');
       }
     });
@@ -37,7 +39,7 @@ export default class AnimateTimer {
     const run = this.run;
     return new Promise((resolve, reject) => {
       const loop = () => {
-        if (this.run !== run) {
+        if (this.run !== run || this._canceled) {
           reject(new Error('Timer canceled'));
         }
         else if (fn() >= 1) {
@@ -62,6 +64,7 @@ export default class AnimateTimer {
 
   cancel() {
     this.run++;
+    this._canceled = true;
     let cancelResult;
     if (this._oncancel) {
       cancelResult = this._oncancel();

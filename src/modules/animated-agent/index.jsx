@@ -38,6 +38,7 @@ export default class AnimationAgent extends Component {
     // Dictionary of Animated property animateKey to Rect representing the
     // rectangular shape of the Animated's component in world space.
     this.rects = {};
+    this.lastRects = {};
     // Dictionary of Animated property animatedKey to an active animation.
     // Animations are a duck type object returned by the Animated's animate
     // property. Animations can have a `then` and `cancel` members. The then
@@ -166,33 +167,34 @@ export default class AnimationAgent extends Component {
     // Animate from one rect to another. The target is treated as the elements
     // origin so this animates from a relative position to (0, 0).
     return this.timer(timer => {
-      return Promise.resolve()
-      .then(() => {
-        const start = Date.now();
-        const style = {
-          transform: null,
-          zIndex: 1,
-        };
-        // A temporary storage value that can be reused to reduce memory churn
-        // and very easily track the position in the animation in case its
-        // canceled.
-        const tRect = lastRect.clone();
-        // In case its canceled return the current location.
-        timer.cancelable(() => tRect);
-        // Loop animation frames until its done.
-        return timer.loop(() => {
-          const now = Date.now();
-          // A value from 0 to 1 representing the position in the animation.
-          const t = Math.min((now - start) / 1000 / duration, 1);
-          // Create a transform that is the difference from the position in the
-          // animation to the origin of the element.
-          style.transform = rect.interpolate(lastRect, t, tRect)
-          .transform(rect);
-          this.setAnimatedStyle(animated, animatedEl, style);
-          // Return a position in time, timer.loop will resolve the promise it
-          // create when t is greater than or equal to 1.
-          return t;
-        });
+      const start = Date.now();
+      const style = {
+        transform: null,
+        zIndex: 1,
+      };
+      this.setAnimatedStyle(animated, animatedEl, style);
+      // A temporary storage value that can be reused to reduce memory churn
+      // and very easily track the position in the animation in case its
+      // canceled.
+      const tRect = lastRect.clone();
+      // In case its canceled return the current location.
+      timer.cancelable(() => {
+        this.setAnimatedStyle(animated, animatedEl);
+        return tRect;
+      });
+      // Loop animation frames until its done.
+      return timer.loop(() => {
+        const now = Date.now();
+        // A value from 0 to 1 representing the position in the animation.
+        const t = Math.min((now - start) / 1000 / duration, 1);
+        // Create a transform that is the difference from the position in the
+        // animation to the origin of the element.
+        style.transform = rect.interpolate(lastRect, t, tRect)
+        .transform(rect);
+        this.setAnimatedStyle(animated, animatedEl, style);
+        // Return a position in time, timer.loop will resolve the promise it
+        // create when t is greater than or equal to 1.
+        return t;
       })
       // Return any style set by the animation to their original values.
       .then(() => this.setAnimatedStyle(animated, animatedEl));
@@ -278,15 +280,19 @@ export default class AnimationAgent extends Component {
   _animate(key, animated, animatedEl, lastRect, rect) {
     const options = this.optionsPool.shift() || new AnimateCallbackOptions();
     options.set(this, animated, animatedEl, lastRect, rect);
-    this.animations[key] = animated.animate(options);
+    const animation = this.animations[key] = animated.animate(options);
     // If the animation is a thenable, use it to add the used options object
     // into a pool so it can be reused.
     if (this.animations[key] && this.animations[key].then) {
       this.animations[key].then(() => {
-        this.animations[key] = null;
+        if (animation === this.animations[key]) {
+          this.animations[key] = null;
+        }
         this.optionsPool.unshift(options);
       }, error => {
-        this.animations[key] = null;
+        if (animation === this.animations[key]) {
+          this.animations[key] = null;
+        }
         this.optionsPool.unshift(options);
 
         // Handle the Timer canceled error. Any other errors should be handled
@@ -336,7 +342,18 @@ export default class AnimationAgent extends Component {
         let lastRect;
         if (this.animations[key] && this.animations[key].cancel) {
           lastRect = this.animations[key].cancel();
+          this.animations[key] = null;
         }
+        // else {
+        //   this.lastRects[key] = null;
+        // }
+        // if (this.animations[key] && this.animations[key].cancel) {
+        //   lastRect = this.animations[key].cancel();
+        //   this.animations[key] = null;
+        // }
+        // if (!lastRect && this.lastRects[key]) {
+        //   lastRect = this.lastRects[key];
+        // }
         if (!lastRect) {
           lastRect = this.rects[key].clone();
         }
