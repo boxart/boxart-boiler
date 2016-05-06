@@ -3,11 +3,13 @@
 [![Build Status](https://ci.appveyor.com/api/projects/status/github/Bocoup/rwd-game-boiler?branch=master&svg=true)](https://ci.appveyor.com/project/Bocoup/rwd-game-boiler)
 [![Build Status](https://travis-ci.org/bocoup/rwd-game-boiler.svg?branch=master)](https://travis-ci.com/bocoup/rwd-game-boiler)
 
-A boilerplate repo for building responsive and accessible games on the web.
+A boilerplate repo for building responsive and accessible Open Web Games using the DOM.
 
 ## Why the DOM?
 
-Years of browsers fighting tooth-and-nail over who can parse a document the fastest has given us an incredibly performant platform to build on. HTML gives us a way to represent whatever information we mean to convey visually, no matter how complex, in a way that assistive technologies can tap into. At its very core, the web’s strength is in _publishing_. HTML, CSS, and JavaScript—used carefully—will allow us to build things that anyone with a connection to the web can consume via meaningful, sharable URLs.
+The DOM's boxmodel lends itself to responsive 2d-casual game board layouts, and the high tuned HTML render flows of our browsers ars more battery safe, while providing ooportunities for graphics accelleration and performance. With boxart-boiler games, the idea is to build DOM-first. If you want to drop down into lower level drawing APIs, you can always temporarily rasterize and enhance an element outside of boxart.
+
+Moreover, HTML gives us a way to represent whatever information we mean to convey visually, no matter how complex, in a way that assistive technologies can tap into. This is how we can make truly _open_ Open Web Games.
 
 ## System Dependencies
 
