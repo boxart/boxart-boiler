@@ -5,6 +5,10 @@
 
 A boilerplate repo for building responsive and accessible games on the web.
 
+## Why the DOM?
+
+Years of browsers fighting tooth-and-nail over who can parse a document the fastest has given us an incredibly performant platform to build on. HTML gives us a way to represent whatever information we mean to convey visually, no matter how complex, in a way that assistive technologies can tap into. At its very core, the web’s strength is in _publishing_. HTML, CSS, and JavaScript—used carefully—will allow us to build things that anyone with a connection to the web can consume via meaningful, sharable URLs.
+
 ## System Dependencies
 
 In order to use or contribute to this repo you'll need the following things 
