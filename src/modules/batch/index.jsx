@@ -24,12 +24,16 @@ export default class Batch extends Component {
       subbatchElements: [],
     };
     if (this.props.subbatch) {
+      this.subbatchFree = {};
+      this.keyedSubbatchIndex = {};
       this.props.items.forEach((item, index, items) => {
         const subbatch = this.props.subbatch(item, index, items);
-        const subbatchIndex = this.props.subbatchIndex(item, index, items);
         if (!this.state.subbatchs[subbatch]) {
           this.state.subbatchs[subbatch] = [];
         }
+        // const subbatchIndex = this.props.subbatchIndex(item, index, items);
+        const subbatchIndex = this.state.subbatchs[subbatch].length;
+        this.keyedSubbatchIndex[item.key] = subbatchIndex;
         this.state.subbatchs[subbatch][subbatchIndex] = this.state.items[index];
       });
       Object.keys(this.state.subbatchs).forEach(subbatchKey => {
@@ -65,13 +69,18 @@ export default class Batch extends Component {
             const oldItem = this.keyedItems[itemKey];
             const oldElement = this.keyedElements[itemKey];
             const oldBatch = this.props.subbatch(oldItem);
-            const oldBatchIndex = this.props.subbatchIndex(oldItem);
+            // const oldBatchIndex = this.props.subbatchIndex(oldItem);
+            const oldBatchIndex = this.keyedSubbatchIndex[oldItem.key];
             if (!change.subbatchs[oldBatch]) {
               change.subbatchs[oldBatch] = {$set: (this.state.subbatchs[oldBatch] || []).slice()};
             }
-            if (change.subbatchs[oldBatch].$set[oldBatchIndex] === oldElement) {
-              change.subbatchs[oldBatch].$set[oldBatchIndex] = null;
+            // if (change.subbatchs[oldBatch].$set[oldBatchIndex] === oldElement) {
+            change.subbatchs[oldBatch].$set[oldBatchIndex] = null;
+            if (!this.subbatchFree[oldBatch]) {
+              this.subbatchFree[oldBatch] = [];
             }
+            this.subbatchFree[oldBatch].push(oldBatchIndex);
+            // }
           }
           if (
             itemKey in this.keyedItems &&
@@ -96,10 +105,18 @@ export default class Batch extends Component {
           );
           if (this.props.subbatch) {
             const newBatch = this.props.subbatch(newProps.items[i], i, newProps.items);
-            const newBatchIndex = this.props.subbatchIndex(newProps.items[i], i, newProps.items);
+            // const newBatchIndex = this.props.subbatchIndex(newProps.items[i], i, newProps.items);
             if (!change.subbatchs[newBatch]) {
               change.subbatchs[newBatch] = {$set: (this.state.subbatchs[newBatch] || []).slice()};
             }
+            let newBatchIndex;
+            if (this.subbatchFree[newBatch].length) {
+              newBatchIndex = this.subbatchFree[newBatch].pop();
+            }
+            else {
+              newBatchIndex = change.subbatchs[newBatch].$set.length;
+            }
+            this.keyedSubbatchIndex[newProps.items[i].key] = newBatchIndex;
             change.subbatchs[newBatch].$set[newBatchIndex] = element;
             removeKeys[itemKey] = false;
           }
@@ -113,7 +130,8 @@ export default class Batch extends Component {
           if (removeKeys[removeKey]) {
             const item = this.keyedItems[removeKey];
             const subbatch = this.props.subbatch(item);
-            const subbatchIndex = this.props.subbatchIndex(item);
+            // const subbatchIndex = this.props.subbatchIndex(item);
+            const subbatchIndex = this.keyedSubbatchIndex[removeKey];
             if (!change.subbatchs[subbatch]) {
               change.subbatchs[subbatch] = {$set: (this.state.subbatchs[subbatch] || []).slice()};
             }
@@ -122,6 +140,7 @@ export default class Batch extends Component {
             }
             this.keyedItems[removeKey] = null;
             this.keyedElements[removeKey] = null;
+            this.keyedSubbatchIndex[removeKey] = null;
           }
         }
         for (const subbatchKey in change.subbatchs) {
