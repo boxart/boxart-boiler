@@ -48,6 +48,57 @@ function createGrid(_width, _height) {
   return grid;
 }
 
+function buildMatch(grid, [i, j], tmp = []) {
+  const here = grid.cells[gridKeyXY(i, j)].color;
+  if (
+    isSameColor(here, grid.cells[gridKey(addXY(directions[0], i, j))]) ||
+    isSameColor(here, grid.cells[gridKey(addXY(directions[1], i, j))]) ||
+    isSameColor(here, grid.cells[gridKey(addXY(directions[2], i, j))]) ||
+    isSameColor(here, grid.cells[gridKey(addXY(directions[3], i, j))])
+  ) {
+    let newestChecked = 0;
+    tmp.push([i, j]);
+    while (newestChecked < tmp.length) {
+      const coord = tmp[newestChecked++];
+      const neighbor = grid.cells[gridKey(coord)].color;
+      for (let d = 0; d < 4; d++) {
+        const newCoord = add(coord, directions[d]);
+        if (isSameColor(neighbor, grid.cells[gridKey(newCoord)])) {
+          let alreadyChecked = false;
+          for (let t = 0; t < tmp.length; t++) {
+            if (tmp[t][0] === newCoord[0] && tmp[t][1] === newCoord[1]) {
+              alreadyChecked = true;
+              break;
+            }
+          }
+          if (!alreadyChecked) {
+            tmp.push(newCoord);
+          }
+        }
+      }
+    }
+  }
+  return tmp;
+}
+
+function hasMatchesAvailable(grid) {
+  const {width, height} = grid;
+  const tmp = [];
+  const target = [];
+  for (let j = 0; j < height; j++) {
+    for (let i = 0; i < width; i++) {
+      if (!grid.cells[gridKeyXY(i, j)]) {continue;}
+      target[0] = i; target[1] = j;
+      buildMatch(grid, target, tmp);
+      if (tmp.length > 1) {
+        return true;
+      }
+      tmp.length = 0;
+    }
+  }
+  return false;
+}
+
 function resetGrid(grid) {
   const {width, height} = grid;
   const cells = {};
@@ -571,6 +622,9 @@ class Main extends Component {
                 >
                 {this.renderTile}
               </Batch>
+              <WinScreen
+                grid={this.state.grid}
+                playAgain={this.handlePlayAgain} />
             </div>
           </AnimatedAgent>
         </Clamp>
@@ -590,5 +644,26 @@ class Score extends Component {
 class ResetButton extends Component {
   render() {
     return <div className="reset" onClick={this.props.reset}>{'\u21bb'}</div>;
+  }
+}
+
+class WinScreen extends Component {
+  render() {
+    const hasMatches = hasMatchesAvailable(this.props.grid);
+    if (!hasMatches) {
+      return (<div className="win-screen" style={{
+        position: 'absolute',
+        top: `${100 / 9 * 4}%`,
+        // left: `${100 / 12 * 4}%`,
+        width: '100%',
+      }}>
+        <div>Score: {this.props.grid.score}</div>
+        <div className="win-screen-button"
+          onClick={this.props.playAgain}>
+          Play Again
+        </div>
+      </div>);
+    }
+    return <div></div>;
   }
 }
