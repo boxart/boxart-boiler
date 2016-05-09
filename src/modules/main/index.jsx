@@ -33,49 +33,41 @@ function gridKey(x, y) {
   return `${x},${y}`;
 }
 
+function lookupCell(grid, change, x, y) {
+  const gkey = gridKey(x, y);
+  return lookupCellKey(grid, change, gkey);
+}
+
+function lookupCellKey(grid, change, gkey) {
+  if (change.cells[gkey] && change.cells[gkey].$set) {
+    return change.cells[gkey].$set;
+  }
+  else if (!change.cells[gkey] && grid.cells[gkey]) {
+    return grid.cells[gkey];
+  }
+}
+
+function setCell(grid, change, x, y, key, value) {
+  change.cells[gridKey(x, y)] = {$set: {
+    x,
+    y,
+    key: key,
+    value: value,
+  }};
+}
+
+function moveCell(grid, change, gkey, x, y, key, value) {
+  setCell(grid, change, x, y, key, value);
+  change.cells[gkey] = {$set: null};
+}
+
 function checkGrid(grid, change, gkey, i, j) {
   const g2key = gridKey(i, j);
-  if (change.cells[g2key] && change.cells[g2key].$set) {
-    if (grid.cells[gkey].value === change.cells[g2key].$set.value) {
-      change.cells[g2key].$set = {
-        x: i,
-        y: j,
-        key: grid.cells[gkey].key,
-        value: grid.cells[gkey].value * 2,
-      };
-      change.cells[gkey] = {$set: null};
-      return true;
-    }
-    // if (j + 1 !== j) {
-    //   change.cells[g2key] = {$set: {
-    //     x: i,
-    //     y: j,
-    //     key: grid.cells[gkey].key,
-    //     value: grid.cells[gkey].value * 2,
-    //   }};
-    //   change.cells[gkey] = {$set: null};
-    // }
-  }
-  if (!change.cells[g2key] && grid.cells[g2key]) {
-    if (grid.cells[gkey].value === grid.cells[g2key].value) {
-      change.cells[g2key] = {$set: {
-        x: i,
-        y: j,
-        key: grid.cells[gkey].key,
-        value: grid.cells[gkey].value * 2,
-      }};
-      change.cells[gkey] = {$set: null};
-      return true;
-    }
-    // if (j + 1 !== j) {
-    //   change.cells[g2key] = {$set: {
-    //     x: i,
-    //     y: j,
-    //     key: grid.cells[gkey].key,
-    //     value: grid.cells[gkey].value * 2,
-    //   }};
-    //   change.cells[gkey] = {$set: null};
-    // }
+  const sourceCell = lookupCellKey(grid, change, gkey);
+  const targetCell = lookupCellKey(grid, change, g2key);
+  if (sourceCell && targetCell && sourceCell.value === targetCell.value) {
+    moveCell(grid, change, gkey, i, j, sourceCell.key, sourceCell.value * 2);
+    return true;
   }
   return false;
 }
@@ -83,20 +75,10 @@ function checkGrid(grid, change, gkey, i, j) {
 function checkGridEmpty(grid, change, gkey, i, j, i2, j2, i3, j3) {
   const g2key = gridKey(i, j);
   const g3key = gridKey(i2, j2);
-  if (
-    (
-      (change.cells[g2key] && change.cells[g2key].$set) || 
-      (!change.cells[g2key] && grid.cells[g2key])
-    )
-  ) {
+  if (lookupCellKey(grid, change, g2key)) {
     if (i2 !== i3 || j2 !== j3) {
-      change.cells[g3key] = {$set: {
-        x: i2,
-        y: j2,
-        key: grid.cells[gkey].key,
-        value: grid.cells[gkey].value,
-      }};
-      change.cells[gkey] = {$set: null};
+      const sourceCell = lookupCellKey(grid, change, gkey);
+      moveCell(grid, change, gkey, i2, j2, sourceCell.key, sourceCell.value);
     }
     return true;
   }
@@ -106,13 +88,8 @@ function checkGridEmpty(grid, change, gkey, i, j, i2, j2, i3, j3) {
 function checkGridEnd(grid, change, gkey, i, j) {
   const g2key = gridKey(i, j);
   if (!change.cells[g2key] && !grid.cells[g2key]) {
-    change.cells[g2key] = {$set: {
-      x: i,
-      y: j,
-      key: grid.cells[gkey].key,
-      value: grid.cells[gkey].value,
-    }};
-    change.cells[gkey] = {$set: null};
+    const sourceCell = lookupCellKey(grid, change, gkey);
+    moveCell(grid, change, gkey, i, j, sourceCell.key, sourceCell.value);
     return true;
   }
   return false;
@@ -123,12 +100,7 @@ function genCell(grid, change, gen, i, j, i2, j2) {
   for (let jj = j; jj < j2 + 1; jj++) {
     for (let ii = i; ii < i2 + 1; ii++) {
       const gkey = gridKey(ii, jj);
-      if (
-        (
-          (change.cells[gkey] && !change.cells[gkey].$set) ||
-          (!change.cells[gkey] && !grid.cells[gkey])
-        )
-      ) {
+      if (!lookupCellKey(grid, change, gkey)) {
         cells.push([ii, jj, change.cells[gkey], grid.cells[gkey]]);
       }
     }
@@ -138,12 +110,7 @@ function genCell(grid, change, gen, i, j, i2, j2) {
     const choice = cells[choiceIndex];
     console.log(cells, choice, choiceIndex);
     const gkey = gridKey(...choice);
-    change.cells[gkey] = {$set: {
-      x: choice[0],
-      y: choice[1],
-      key: gen(),
-      value: 2,
-    }};
+    setCell(grid, change, choice[0], choice[1], gen(), 2);
   }
 }
 
