@@ -18,10 +18,10 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 <iframe src=""></iframe>
 <a href="#">View Fullscreen</a>
 
-```
+~~~html
 <div class="board">
 </div>
-```
+~~~
 
 ### Touch event handling
 
@@ -35,7 +35,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 <iframe src=""></iframe>
 <a href="#">View Fullscreen</a>
 
-```
+~~~html
 <div class="board">
 </div>
-```
+~~~

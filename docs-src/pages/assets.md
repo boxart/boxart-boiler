@@ -18,10 +18,10 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 <iframe src=""></iframe>
 <a href="#">View Fullscreen</a>
 
-```
+~~~html
 <div class="board">
 </div>
-```
+~~~
 
 ### SVG
 
@@ -35,10 +35,10 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 <iframe src=""></iframe>
 <a href="#">View Fullscreen</a>
 
-```
+~~~html
 <div class="board">
 </div>
-```
+~~~
 
 ### Bitmap spreadsheets
 
@@ -52,7 +52,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 <iframe src=""></iframe>
 <a href="#">View Fullscreen</a>
 
-```
+~~~html
 <div class="board">
 </div>
-```
+~~~
