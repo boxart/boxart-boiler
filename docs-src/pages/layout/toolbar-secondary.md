@@ -9,6 +9,6 @@ categories: subpage
   <div class="play-area">
   </div>
   <div class="toolbar toolbar-secondary">
-    Secondary toolbar
+    Secondary Toolbar
   </div>
 </div>

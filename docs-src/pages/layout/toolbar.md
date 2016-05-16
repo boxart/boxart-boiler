@@ -6,7 +6,7 @@ categories: subpage
 ---
 <div class="board">
   <div class="toolbar">
-    Basic toolbar
+    Basic Toolbar
   </div>
   <div class="play-area">
   </div>

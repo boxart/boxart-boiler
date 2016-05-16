@@ -467,6 +467,9 @@ iframe {
 iframe.short {
 	height: 25em;
 }
+iframe.very-short {
+  height: 5em;
+}
 
 /* Page Footer
 ----------------------- */
