@@ -442,6 +442,7 @@ pre, pre code {
 .ex-hed, h4 {
 	font-family: "Determination sans", monospace;
 	text-transform: uppercase;
+	clear: left;
 	font-size: 1.2em;
 	font-weight: normal;
 	margin: 2.5em 0 1em 0;
@@ -455,6 +456,19 @@ pre, pre code {
 	background: none;
 	color: #eee;
 	font-size: 1em;
+}
+
+iframe {
+	border: 4px solid #e1e1e1;
+	width: 100%;
+	height: 35em;
+}
+
+iframe.short {
+	height: 25em;
+}
+iframe.very-short {
+  height: 5em;
 }
 
 /* Page Footer

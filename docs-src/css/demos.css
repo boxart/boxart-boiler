@@ -1,0 +1,175 @@
+/* 
+This stylesheet will need to be broken up into more modular chunks and integrated 
+into the actual Boxart system, rather than being maintained in multiple places. The
+docs site should then reference those “real” stylesheets, to act as both 
+documentation and as a living style guide.
+----------------- */
+
+
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+
+.a11y-only {
+  /* TEMP */
+  display: none;
+  /* /TEMP */
+}
+
+/*
+-----------------
+
+
+*/
+
+
+.board {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+.play-area {
+  background: rgba(50,100,100,.25);
+  display: flex;
+  outline: 1px solid rgba(50,100,100,.5);
+  flex-grow: 2;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+/* Toolbars
+--------------------------- */
+
+.toolbar {
+  min-height: 20%;
+  padding: .25% 1% 0 1%;
+  align-content: flex-end;
+}
+@media( min-height:30em ) {
+  .toolbar {
+    min-height: 10%;
+  }
+}
+
+/* DEMO STYLES ONLY: */
+.toolbar {
+    background: rgba(100,100,50,.25);
+    outline: 1px solid rgba(100,100,50,.5);
+}
+.toolbar-secondary {
+  background: rgba(100,50,100,.25);
+  outline: 1px solid rgba(100,50,100,.5);  
+}
+
+
+/* Individual modules 
+--------------------------- */
+
+/* Button Base
+-----------------
+Buttons are going to need to scale to match the height of their containing element; I don’t want to have to maintain a `vh` relative to the size of that element. We could use proportional scaling via `padding-bottom`, but that means real text won’t be viable in these—unless that text is wrapped in an element that repositions it correctly, but then we’ll lose horizontal scaling.
+
+Maybe the proportional button scaling needs to be a configuration option?
+*/
+
+.btn {
+  display: inline-block;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 16px;
+  padding: .5em;
+}
+
+/* Button Theming 
+-----------------
+Any open-ended theming should be minimal—overriding defaults only—and at the lowest possible specificity. A theming class should be applicable to any parent element of a themeable element.
+*/
+
+.theme-dark .btn {
+  background-color: #333;
+  background-image: linear-gradient( 0deg, rgba(255,255,255,.25), rgba(255,255,255,.5) );
+  border: 3px solid rgba(255,255,255,.1);
+  color: #fff;
+}
+.theme-light .btn {
+  border: 3px solid rgba(255,255,255,.5);
+  background-color: #ddd;
+  background-image: linear-gradient( 0deg, rgba(255,255,255,.25), rgba(255,255,255,.5) );
+}
+
+
+/* Button Groups 
+-----------------
+Eh, maybe, time permitting.
+*/
+
+/*
+.btn-group {
+  border-radius: 5px;
+}
+.btn-group .btn {
+  margin: 0 -2px;
+}
+.btn-group .btn:first-child {
+  border-radius: 5px 0 0 5px;
+}
+.btn-group .btn:last-child {
+  border-radius: 0 5px 5px 0;
+} */
+
+/* Alignments 
+----------------- 
+Should these only apply to grouping elements?
+
+Thinking we might want to default to centered, and optionally throw to the left or right. Floating isn’t really tenable here, since floated elements will throw off centering. Which, ugh.
+*/
+
+.toolbar {
+  text-align: center;
+}
+@media( max-height: 25em ) and ( min-width: 40em ) {
+  .board.break-col {
+    flex-direction: row;
+  }
+  .break-col .toolbar {
+    flex-direction: column;
+    min-width: 20%;
+    max-width: 25%;
+  }
+  .break-col .toolbar.break-top {
+    align-self: flex-start;
+  }
+  .break-col .toolbar.break-bottom {
+    align-self: flex-end;
+  }
+}
+
+.toolbar > * {
+  order: 2;
+  align-self: center;
+}
+.kick-left {
+  text-align: left;
+  float: left;
+  order: 0;
+}
+.kick-right {
+  float: right;
+  text-align: right;
+  order: 3;
+}
+
+
