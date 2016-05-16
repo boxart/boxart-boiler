@@ -5,19 +5,13 @@ permalink: /about/
 categories: home
 ---
 
-To start working with this repo and build your own responsive, accessible 
-game we recommend you either download the code for the latest release from 
-the [releases] page, or fork this repo and use git to clone your fork. 
+To start working with this repo and build your own responsive, accessible game we recommend you either download the code for the latest release from the [releases] page, or fork this repo and use git to clone your fork.
 
-Once the code is on your machine open a terminal in its directory and run 
-`npm install`; this will install all our dependencies and you'll be
-able to run the project's grunt tasks. To see the site hosted locally run
-`grunt` and visit [http://localhost:8080] in your browser of choice.
+Once the code is on your machine open a terminal in its directory and run `npm install`; this will install all our dependencies and you'll be able to run the project's grunt tasks. To see the site hosted locally run `grunt` and visit [http://localhost:8080] in your browser of choice.
 
 ## System Dependencies
 
-In order to use or contribute to this repo you'll need the following things 
-installed on your system:
+In order to use or contribute to this repo you'll need the following things installed on your system:
 
   - [NodeJS/NPM]
   - [Git]

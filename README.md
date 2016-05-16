@@ -7,25 +7,17 @@ BoxArt-Boiler is a boilerplate repo for building responsive and accessible Open 
 
 ## Why the DOM?
 
-The DOM's boxmodel lends itself to responsive 2D-casual game board layouts, and the highly-tuned HTML render flows of our browsers are more battery safe than canvas or WebGL alternatives, while also providing opportunities for graphics acceleration and performance. With boxart-boiler games, the idea is to build DOM-first. If you want to drop down into lower level drawing APIs, you can always temporarily rasterize and enhance an element outside of boxart.
-
-Moreover, HTML gives us a way to represent whatever information we mean to convey visually, no matter how complex, in a way that assistive technologies can tap into. This is how we can make truly _open_ Open Web Games.
+The HTML Document Object Model, or [DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction), and its accompanying CSS [box model](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Box_Model/Introduction_to_the_CSS_box_model) lend themselves to responsive 2D-casual game board layouts. The highly-tuned HTML render flows of our browsers are more battery safe than canvas or WebGL alternatives, while also providing opportunities for graphics acceleration and performance. With boxart-boiler games, the idea is to build DOM-first. If you want to drop down into lower level drawing APIs, you can always temporarily rasterize and enhance an element outside of boxart.
 
 ## Getting Started with BoxArt
 
-To start working with this repo and build your own responsive, accessible 
-game we recommend you either download the code for the latest release from 
-the [releases] page, or fork this repo and use git to clone your fork. 
+To start working with this repo and build your own responsive, accessible game we recommend you either download the code for the latest release from the [releases] page, or fork this repo and use git to clone your fork.
 
-Once the code is on your machine open a terminal in its directory and run 
-`npm install`; this will install all our dependencies and you'll be
-able to run the project's grunt tasks. To see the site hosted locally run
-`grunt` and visit [http://localhost:8080] in your browser of choice.
+Once the code is on your machine open a terminal in its directory and run `npm install`; this will install all our dependencies and you'll be able to run the project's grunt tasks. To see the site hosted locally run `grunt` and visit [http://localhost:8080] in your browser of choice.
 
 ## System Dependencies
 
-In order to use or contribute to this repo you'll need the following things 
-installed on your system:
+In order to use or contribute to this repo you'll need the following things installed on your system:
 
   - [NodeJS/NPM]
   - [Git]
