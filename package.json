@@ -11,9 +11,10 @@
     "url": "git+https://github.com/boxart/boxart-boiler.git"
   },
   "scripts": {
-    "build": "npm test && NODE_ENV=production webpack --config webpack.config.build.js",
+    "docs": "grunt docs",
+    "build": "grunt build",
     "lint": "grunt lint",
-    "start": "webpack-dev-server",
+    "start": "grunt",
     "test": "grunt test",
     "test-dev": "karma start"
   },
