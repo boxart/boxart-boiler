@@ -19,15 +19,16 @@
   animation: scanline 6s linear infinite;
 }
 .scanlines:after {
-  top: 0;
+  top: -100%;
   right: 0;
   bottom: 0;
   left: 0;
   z-index: 2;
   background: url(img/scanline.png);
   background-size: 100% 3px;
-  -webkit-animation: scanlines 1s steps(60) infinite;
-  animation: scanlines 1s steps(60) infinite;
+  transform: translateZ(0px);
+  -webkit-animation: scanlines 0.5s steps(30) infinite;
+  animation: scanlines 0.5s steps(30) infinite;
 }
 
 /* ANIMATE UNIQUE SCANLINE */
@@ -35,21 +36,25 @@
   0% {
     -webkit-transform: translate3d(0, 250%, 0);
     transform: translate3d(0, 250%, 0);
+    -webkit-transform: translate3d(0, 35vw, 0);
+    transform: translate3d(0, 35vw, 0);
   }
 }
 @keyframes scanline {
   0% {
     -webkit-transform: translate3d(0, 20000%, 0);
     transform: translate3d(0, 20000%, 0);
+    -webkit-transform: translate3d(0, 35vw, 0);
+    transform: translate3d(0, 35vw, 0);
   }
 }
 @-webkit-keyframes scanlines {
   0% {
-    background-position: 0 50%;
+    transform: translate3d(0, 25%, 0);
   }
 }
 @keyframes scanlines {
   0% {
-    background-position: 0 50%;
+    transform: translate3d(0, 25%, 0);
   }
 }
