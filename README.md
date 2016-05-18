@@ -17,6 +17,14 @@ To start working with this repo and build your own responsive, accessible game w
 
 Once the code is on your machine open a terminal in its directory and run `npm install`; this will install all our dependencies and you'll be able to run the project's grunt tasks. To see the site hosted locally run `grunt` and visit [http://localhost:8080] in your browser of choice.
 
+## Demo Branches
+
+For your own games, we recommend starting with [the `master` branch](https://github.com/boxart/boxart-boiler) and build from there. But if you want a working example of how BoxArt can be used, these branches contain demo games that you can download and run to see how different types of game logic and animation can be implemented:
+
+- [simple-demo](https://github.com/boxart/boxart-boiler/tree/simple-demo): A demo matching game demonstrating BoxArt's batched custom animation support
+- [box2d-demo](https://github.com/boxart/boxart-boiler/tree/box2d-demo): A demo showing how BoxArt can be used in conjunction with [Box2D](http://box2d.org/)
+- [2048-demo](https://github.com/boxart/boxart-boiler/tree/2048-demo): A BoxArt implementation of the addictive sliding number game
+
 ## System Dependencies
 
 In order to use or contribute to this repo you'll need the following things installed on your system:
