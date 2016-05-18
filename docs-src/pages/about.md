@@ -96,3 +96,7 @@ This project makes liberal use of the following technologies:
 [Autoprefixer]: https://github.com/postcss/autoprefixer
 [editor config plugin]: http://editorconfig.org/#download
 [continuous integration environment]: https://travis-ci.com
+
+Cross-Browser Testing generously provided by
+
+[![BrowserStack](img/browserstack_logo.png)](https://www.browserstack.com)
