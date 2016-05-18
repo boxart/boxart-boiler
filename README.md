@@ -5,6 +5,8 @@
 
 BoxArt-Boiler is a boilerplate repo for building responsive and accessible Open Web Games using the DOM.
 
+Participate in our planning process on our [![Waffle Board](https://badge.waffle.io/boxart/boxart-boiler.svg?label=in%20progress&title=Waffle%20Board)](http://waffle.io/boxart/boxart-boiler)
+
 ## Why the DOM?
 
 The HTML Document Object Model, or [DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction), and its accompanying CSS [box model](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Box_Model/Introduction_to_the_CSS_box_model) lend themselves to responsive 2D-casual game board layouts. The highly-tuned HTML render flows of our browsers are more battery safe than canvas or WebGL alternatives, while also providing opportunities for graphics acceleration and performance. With boxart-boiler games, the idea is to build DOM-first. If you want to drop down into lower level drawing APIs, you can always temporarily rasterize and enhance an element outside of boxart.
