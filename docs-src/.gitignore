@@ -1,0 +1,3 @@
+# Do not include generated documentation examples in the build: they will
+# be compiled from `/examples/` when the `grunt docs` command is run
+examples/
