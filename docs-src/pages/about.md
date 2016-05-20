@@ -71,7 +71,12 @@ The BoxArt-Boiler source contains a number of useful inline comments embedded wi
 ### Generate Docs
 `grunt docs` or `npm run docs`
 
-The `grunt docs` command (aliased to `npm run docs`) will use Jekyll to build the documentation from the [docs-src directory] into the `docs/` folder, and will then start a web server on http://localhost:4000/ : the documentation site can be viewed at this address, and the HTML documentation will automatically be re-generated if any of the source markdown files change. (Note however that this server does not include live reload, so you will need to manually refresh your browser window to see those changes.)
+The `grunt docs` command (aliased to `npm run docs`) will compile the live inline code example files, then use Jekyll to build the documentation site from the [docs-src directory] into the `docs/` folder. Once built, a web server will be available on http://localhost:4000/ : the documentation site can be viewed at this address, and the HTML documentation will automatically be re-generated if any of the source markdown files change. (Note however that this server does not include live reload, so you will need to manually refresh your browser window to see those changes.)
+
+### Developing Inline Examples
+`npm run docs-dev`
+
+Code for the live inline (iframed) examples within the documentation is contained within the `examples/` folder in the repository root. Running `npm run docs-dev` will start the Jekyll site as with `grunt docs`, but will start a webpack build _in parallel_ so that any changes to the examples source code will be compiled into the docs-src folder, and then picked up by the Jekyll watcher and rendered into the live docs site. This one command has the same effect as running `grunt jekyll` and `grunt build-examples-dev` in two separate terminals.
 
 ## Tech Stack and Tool Chain
 

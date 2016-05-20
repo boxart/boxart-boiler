@@ -1,173 +1,173 @@
 * {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 body {
-	margin: 0;
-	font-family: sans-serif;
+  margin: 0;
+  font-family: sans-serif;
 }
 img {
-	max-width: 100%;
+  max-width: 100%;
 }
 
 ul a, ol a, p a {
-	transition: border-bottom 0.2s ease;
-	border-bottom: 2px solid rgba( 150, 30, 15, .2 );
-	color: #981e0f;
-	text-decoration: none;
+  transition: border-bottom 0.2s ease;
+  border-bottom: 2px solid rgba( 150, 30, 15, .2 );
+  color: #981e0f;
+  text-decoration: none;
 }
 ul a:hover, ol a:hover, p a:hover {
-	color: #8b30e7;
-	text-decoration: none;
-	border-bottom: 2px solid #8b30e7;
+  color: #8b30e7;
+  text-decoration: none;
+  border-bottom: 2px solid #8b30e7;
 }
 
 ul {
-	list-style-type: square;
+  list-style-type: square;
 }
 ul li {
-	line-height: 1.2;
-	padding: .35em .5em;
+  line-height: 1.2;
+  padding: .35em .5em;
 }
 
 .a11y-only{
-	border: 0;
-	clip: rect(0 0 0 0);
-	height: 1px;
-	margin: -1px;
-	overflow: hidden;
-	padding: 0;
-	position: absolute;
-	width: 1px;
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
 }
 .a11y-only:active,
 .a11y-only:focus {
-	clip: auto;
-	height: auto;
-	margin: 0;
-	overflow: visible;
-	position: static;
-	width: auto;
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
 }
 
 main:after {
-	content: " ";
-	clear: both;
-	display: table;
+  content: " ";
+  clear: both;
+  display: table;
 }
 
 
 /* Header
 ----------------------- */
 .lede {
-	background: #000;
-	box-shadow: 0 0 1px #000; /* This is to hide the seam between the skewed element and the `outline` in Chrome. */
-	float: left;
-	width: 100%;
-	position: relative;
-	transform: rotate(-6deg) skewX(-6deg);
-	transform-origin: bottom left;
-	outline: 1em solid #000;
-	padding: 0 3.5%;
-	padding-top: 5%;
-	margin-bottom: 2.25em;
+  background: #000;
+  box-shadow: 0 0 1px #000; /* This is to hide the seam between the skewed element and the `outline` in Chrome. */
+  float: left;
+  width: 100%;
+  position: relative;
+  transform: rotate(-6deg) skewX(-6deg);
+  transform-origin: bottom left;
+  outline: 1em solid #000;
+  padding: 0 3.5%;
+  padding-top: 5%;
+  margin-bottom: 2.25em;
 }
 .lede:after {
-	content: " ";
-	display: table;
-	clear: both;
+  content: " ";
+  display: table;
+  clear: both;
 }
 
 .seal {
-	display: block;
-	position: absolute;
-	right: 2.5%;
-	bottom: 0;
-	margin-bottom: -10%;
-	width: 25%;
-	max-width: 200px;
-	transform: rotate(6deg) skewX(6deg);
+  display: block;
+  position: absolute;
+  right: 2.5%;
+  bottom: 0;
+  margin-bottom: -10%;
+  width: 25%;
+  max-width: 200px;
+  transform: rotate(6deg) skewX(6deg);
 }
 
 .intro {
-	background: #f1f1f1;
-	border-bottom: 1px solid #ccc;
-	margin: 0 -3.75% 1em -3.75%;
-	padding: 1em 3.75% 1.5em 3.75%;
+  background: #f1f1f1;
+  border-bottom: 1px solid #ccc;
+  margin: 0 -3.75% 1em -3.75%;
+  padding: 1em 3.75% 1.5em 3.75%;
 }
 .intro .hed-b {
-	font-size: 1.6em;
-	line-height: 1.1;
+  font-size: 1.6em;
+  line-height: 1.1;
 }
 
 .art {
-	transform: rotate(6deg) skewX(6deg) translateZ( 0 );
+  transform: rotate(6deg) skewX(6deg) translateZ( 0 );
 }
 .art img {
-	image-rendering: pixelated;
-	margin-top: 5%;
-	width: 100%;
+  image-rendering: pixelated;
+  margin-top: 5%;
+  width: 100%;
 }
 
 .title {
-	background: #000;
-	bottom: 0;
-	color: #e01c00;
-	position: relative;
-	font-size: 7.5vw;
-	padding-top: 2em;
-	position: relative;
-	float: left;
-	text-transform: uppercase;
-	padding-top: .85em;
-	padding-bottom: .25em;
-	margin-top: -6%;
-	width: 100%;
+  background: #000;
+  bottom: 0;
+  color: #e01c00;
+  position: relative;
+  font-size: 7.5vw;
+  padding-top: 2em;
+  position: relative;
+  float: left;
+  text-transform: uppercase;
+  padding-top: .85em;
+  padding-bottom: .25em;
+  margin-top: -6%;
+  width: 100%;
 }
 .title a {
-	color: #e01c00;
-	text-decoration: none;
+  color: #e01c00;
+  text-decoration: none;
 }
 .title-copy {
-	float: left;
+  float: left;
 }
 .title:after {
-	content: " ";
-	display: table;
-	clear: both;
+  content: " ";
+  display: table;
+  clear: both;
 }
 
 .vers {
-	font-size: .55em;
-	font-weight: bold;
-	position: absolute;
-	top: 0;
-	margin: .8em 0 0 0;
+  font-size: .55em;
+  font-weight: bold;
+  position: absolute;
+  top: 0;
+  margin: .8em 0 0 0;
 }
 .hed {
-	margin: 0;
-	padding: 0;
-	display: block;
-	float: left;
-	text-indent: -.06em;
+  margin: 0;
+  padding: 0;
+  display: block;
+  float: left;
+  text-indent: -.06em;
 }
 @media( min-width: 75em ) {
-	.title {
-		font-size: 5.6203125em;
-	}
+  .title {
+    font-size: 5.6203125em;
+  }
 }
 
 .subhed {
-	margin: 0;
-	color: #ffbf00;
-	clear: both;
-	float: right;
-	text-align: center;
-	font-weight: bold;
-	font-size: .5em;
-	margin-top: -.65em;
-	line-height: .9;
+  margin: 0;
+  color: #ffbf00;
+  clear: both;
+  float: right;
+  text-align: center;
+  font-weight: bold;
+  font-size: .5em;
+  margin-top: -.65em;
+  line-height: .9;
 }
 
 /* Docs Body
@@ -206,266 +206,269 @@ main:after {
 }
 
 .central {
-	padding: 0 3.5% 0 3.5%;
+  padding: 0 3.5% 0 3.5%;
 }
 
 [class*="hed-"] {
-	margin: 1.2em 0 .75em 0;
-	font-weight: normal;
+  margin: 1.2em 0 .75em 0;
+  font-weight: normal;
 }
 [class*="hed-"]+p {
-	margin-top: .5em;
+  margin-top: .5em;
 }
 .hed-a, h2 {
-	background: #981e0f;
-	color: #fff;
-	clear: left;
-	float: left;
-	font-family: "Determination sans", monospace;
-	font-weight: normal;
-	margin: 1.5em 0 1em 0;
-	padding: .35em 1em .35em 20%;
-	text-transform: uppercase;
-	line-height: 1;
-	font-size: 1.55em;
-	letter-spacing: .05em;
-	margin-left: -20%;
-	max-width: 115%;
-	position: relative;
+  background: #981e0f;
+  color: #fff;
+  clear: left;
+  float: left;
+  font-family: "Determination sans", monospace;
+  font-weight: normal;
+  margin: 1.5em 0 1em 0;
+  padding: .35em 1em .35em 20%;
+  text-transform: uppercase;
+  line-height: 1;
+  font-size: 1.55em;
+  letter-spacing: .05em;
+  margin-left: -20%;
+  max-width: 115%;
+  position: relative;
 }
 .hed-a:before, h2:before {
-	content: " ";
-	display: block;
-	background: #981e0f;
-	position: absolute;
-	left: 0;
-	top: 0;
-	z-index: -1;
-	width: 100%;
-	max-width: 105%;
-	padding-right: .65em;
-	height: .95em;
+  content: " ";
+  display: block;
+  background: #981e0f;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  width: 100%;
+  max-width: 105%;
+  padding-right: .65em;
+  height: .95em;
 }
 
 .hed-b, h3 {
-	background: #000;
-	color: #eee;
-	float: left;
-	font-family: "Determination Sans", monospace;
-	font-weight: normal;
-	padding: .25em .75em;
-	font-size: 1.3em;
-	margin-bottom: 1.25em;
-	margin-top: 2em;
-	letter-spacing: .1em;
-	text-transform: uppercase;
-	clear: left;
+  background: #000;
+  color: #eee;
+  float: left;
+  font-family: "Determination Sans", monospace;
+  font-weight: normal;
+  padding: .25em .75em;
+  font-size: 1.3em;
+  margin-bottom: 1.25em;
+  margin-top: 2em;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  clear: left;
 }
 .hed-b:after, h3:after {
-	content: " ";
-	background: #ddd;
-	display: block;
-	height: .55em;
-	width: 100%;
-	left: 0;
-	margin-top: -.825em;
-	position: absolute;
-	z-index: -1;
+  content: " ";
+  background: #ddd;
+  display: block;
+  height: .55em;
+  width: 100%;
+  left: 0;
+  margin-top: -.825em;
+  position: absolute;
+  z-index: -1;
 }
 
 
 p {
-	clear: both;
-	font-family: "Source Sans Pro", sans-serif;
-	font-size: 1.15em;
-	line-height: 1.45;
-	margin: 1.1em 0;
-	max-width: 960px;
+  clear: both;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 1.15em;
+  line-height: 1.45;
+  margin: 1.1em 0;
+  max-width: 960px;
 }
 p img {
-	margin: -.5em .5em -.35em .5em;
-	max-height: 1.8em;
+  margin: -.5em .5em -.35em .5em;
+  max-height: 1.8em;
 }
 .intro p {
-	font-size: 1.25em;
-	line-height: 1.4;
-	max-width: 1200px;
+  font-size: 1.25em;
+  line-height: 1.4;
+  max-width: 1200px;
 }
 .intro .hed-b, .intro h3 {
-	background: none;
-	padding: 0;
-	color: #333;
-	font-size: 1.4em;
-	letter-spacing: normal;
-	line-height: 1;
-	margin: .75em 0 .65em 0;
+  background: none;
+  padding: 0;
+  color: #333;
+  font-size: 1.4em;
+  letter-spacing: normal;
+  line-height: 1;
+  margin: .75em 0 .65em 0;
 }
 @media( min-width: 35em ) {
-	.intro .hed-b, .intro h3 {
-		font-size: 1.6em;
-	}
+  .intro .hed-b, .intro h3 {
+    font-size: 1.6em;
+  }
 }
 
 code {
-	background: #f1f1f1;
-	color: #444;
-	font-family: "Determination Mono", monospace;
-	font-size: .9em;
-	padding: 0 .35em;
+  background: #f1f1f1;
+  color: #444;
+  font-family: "Determination Mono", monospace;
+  font-size: .9em;
+  padding: 0 .35em;
 }
 .snippet {
-	position: relative;
-	margin: 2.5em 0;
+  position: relative;
+  margin: 2.5em 0;
 }
 .snippet:after {
-	content: " ";
-	background: -webkit-linear-gradient( 90deg, rgba(255,255,255,0), black );
-	background: -moz-linear-gradient( 90deg, rgba(255,255,255,0), black );
-	background: linear-gradient( 90deg, rgba(255,255,255,0), black );
-	pointer-events: none;
-	position: absolute;
-	right: 5px;
-	top: 5px;
-	bottom: 5px;
-	width: 2em;
+  content: " ";
+  background: -webkit-linear-gradient( 90deg, rgba(255,255,255,0), black );
+  background: -moz-linear-gradient( 90deg, rgba(255,255,255,0), black );
+  background: linear-gradient( 90deg, rgba(255,255,255,0), black );
+  pointer-events: none;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  bottom: 5px;
+  width: 2em;
 }
 pre {
-	overflow: auto;
-	background: #000;
-	font-size: 1em;
-	border: 5px solid #ddd;
-	margin: 0;
-	padding: .7em 2em .85em 1em;
-	width: 100%;
-	box-sizing: border-box;
+  overflow: auto;
+  background: #000;
+  font-size: 1em;
+  border: 5px solid #ddd;
+  margin: 0;
+  padding: .7em 2em .85em 1em;
+  width: 100%;
+  box-sizing: border-box;
 }
 pre, pre code {
-	color: #eee;
-	font-family: "Determination Mono", monospace;
-	font-size: 1.05em;
-	font-weight: normal;
-	line-height: 1.5;
+  color: #eee;
+  font-family: "Determination Mono", monospace;
+  font-size: 1.05em;
+  font-weight: normal;
+  line-height: 1.5;
  }
  pre code {
- 	padding: 0;
+  padding: 0;
  }
  pre ::selection {
- 	background: #ddd;
+  background: #ddd;
  }
  pre code {
-	background: none;
+  background: none;
 }
 
  /* Navs
 ----------------------- */
 
 .nav-blocks {
-	border-bottom: 10px solid #000;
-	padding: .45em 3.5% 1em 3.5%;
-	background: #61656b;
+  border-bottom: 10px solid #000;
+  padding: .45em 3.5% 1em 3.5%;
+  background: #61656b;
 }
 .nav-blocks:after {
-	content: " ";
-	clear: both;
-	display: table;
+  content: " ";
+  clear: both;
+  display: table;
 }
 .nav-blocks a {
-	color: #fff;
-	float: left;
-	font-family: "Joystix", sans-serif;
-	display: block;
-	font-size: 1em;
-	padding: .3em .5em .25em 1em;
-	margin: .2em 0;
-	text-decoration: none;
-	position: relative;
-	z-index: 2;
-	text-transform: uppercase;
-	width: 100%;
-	text-shadow: 1px 1px 0 #000, 2px 2px 0 #000, 3px 3px 0 #000;
-	cursor: pointer;
+  color: #fff;
+  float: left;
+  font-family: "Joystix", sans-serif;
+  display: block;
+  font-size: 1em;
+  padding: .3em .5em .25em 1em;
+  margin: .2em 0;
+  text-decoration: none;
+  position: relative;
+  z-index: 2;
+  text-transform: uppercase;
+  width: 100%;
+  text-shadow: 1px 1px 0 #000, 2px 2px 0 #000, 3px 3px 0 #000;
+  cursor: pointer;
 }
 @media( min-width: 30em ) {
-	.nav-blocks a {
-		font-size: 1.2em;
-	}
+  .nav-blocks a {
+    font-size: 1.2em;
+  }
 }
 @media( min-width: 40em ) {
-	.nav-blocks a {
-		font-size: 1.35em;
-		width: 50%;
-	}
+  .nav-blocks a {
+    font-size: 1.35em;
+    width: 50%;
+  }
 }
 @media( min-width: 50em ) {
-	.nav-blocks a {
-		font-size: 1.5em;
-	}
+  .nav-blocks a {
+    font-size: 1.5em;
+  }
 }
 .nav-blocks a:nth-child(odd) {
-	clear: left;
+  clear: left;
 }
 .nav-blocks a:hover {
-	color: #222;
-	text-shadow: none;
+  color: #222;
+  text-shadow: none;
 }
 
 .nav-blocks a:before,
 .nav-blocks a:after {
-	background: rgba(255,255,255,1);
-	content: " ";
-	display: block;
-	position: absolute;
-	left: .425em;
-	width: 100%;
-	height: 50.1%;
-	z-index: -1;
-	display: none;
-	cursor: pointer;
+  background: rgba(255,255,255,1);
+  content: " ";
+  display: block;
+  position: absolute;
+  left: .425em;
+  width: 100%;
+  height: 50.1%;
+  z-index: -1;
+  display: none;
+  cursor: pointer;
 }
 .nav-blocks a:after {
-	bottom: 0;
-	margin-left: -.850em;
+  bottom: 0;
+  margin-left: -.850em;
 }
 .nav-blocks a:before {
-	top: 0;
+  top: 0;
 }
 .nav-blocks a:hover:before,
 .nav-blocks a:hover:after  {
-	display: block;
+  display: block;
 }
  /* Example Sections
 ----------------------- */
 
 .example {
-	margin: 1em 0 3em 0;
+  margin: 1em 0 3em 0;
 }
 .ex-hed, h4 {
-	font-family: "Determination sans", monospace;
-	text-transform: uppercase;
-	clear: left;
-	font-size: 1.2em;
-	font-weight: normal;
-	margin: 2.5em 0 1em 0;
-	padding-left: 0;
-	letter-spacing: .1em;
-	padding-bottom: .25em;
-	text-indent: 1px;
-	border-bottom: 4px solid #e1e1e1;
+  font-family: "Determination sans", monospace;
+  text-transform: uppercase;
+  clear: left;
+  font-size: 1.2em;
+  font-weight: normal;
+  margin: 2.5em 0 1em 0;
+  padding-left: 0;
+  letter-spacing: .1em;
+  padding-bottom: .25em;
+  text-indent: 1px;
+  border-bottom: 4px solid #e1e1e1;
 }
 .ex-hed code {
-	background: none;
-	color: #eee;
-	font-size: 1em;
+  background: none;
+  color: #eee;
+  font-size: 1em;
 }
 
 iframe {
-	border: 4px solid #e1e1e1;
-	width: 100%;
-	height: 35em;
+  border: 4px solid #e1e1e1;
+  width: 100%;
+  height: 35em;
 }
 
 iframe.short {
-	height: 25em;
+  height: 25em;
+}
+iframe.somewhat-short {
+  height: 10em;
 }
 iframe.very-short {
   height: 5em;
@@ -475,36 +478,36 @@ iframe.very-short {
 ----------------------- */
 
 .page-foot {
-	background: #000;
-	clear: both;
-	margin-top: 15em;
-	outline: 2px solid #000;
-	padding-bottom: 20em;
-	position: relative;
+  background: #000;
+  clear: both;
+  margin-top: 15em;
+  outline: 2px solid #000;
+  padding-bottom: 20em;
+  position: relative;
 }
 
 .closing {
-	background: #000;
-	outline: 15px solid #000;
-	transform: rotate(-6deg) skewX(-6deg);
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	transform-origin: top left;
-	padding: 0 3.5% 5em 3.5%;
-	box-shadow: 0 0 1px #000; /* This is to hide the seam between the skewed element and the `outline` in Chrome. */
+  background: #000;
+  outline: 15px solid #000;
+  transform: rotate(-6deg) skewX(-6deg);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  transform-origin: top left;
+  padding: 0 3.5% 5em 3.5%;
+  box-shadow: 0 0 1px #000; /* This is to hide the seam between the skewed element and the `outline` in Chrome. */
 }
 .closing:after {
-	content: " ";
-	display: table;
-	clear: both;
+  content: " ";
+  display: table;
+  clear: both;
 }
 .closing .js {
-	display: block;
-	float: left;
-	margin-top: 2em;
-	transform: rotate(6deg) skewX(6deg);
-	width: 20%;
-	max-width: 125px;
+  display: block;
+  float: left;
+  margin-top: 2em;
+  transform: rotate(6deg) skewX(6deg);
+  width: 20%;
+  max-width: 125px;
 }
