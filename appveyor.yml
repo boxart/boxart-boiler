@@ -6,6 +6,14 @@ environment:
     - nodejs_version: 5
     - nodejs_version: 4
 
+matrix:
+  allow_failures:
+    - nodejs_version: 4
+
+cache:
+  # npm cache
+  - %APPDATA%\npm-cache
+
 install:
   - ps: Update-NodeJsInstallation (Get-NodeJsLatestBuild $env:nodejs_version)
   - npm install
