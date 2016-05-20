@@ -2,7 +2,6 @@
 
 var webpack = require('webpack');
 
-var mainWebpackConfig = require('../webpack.config.build');
 var docsExamplesWebpackConfig = require('../webpack.config.docs-examples');
 
 module.exports = function(grunt) {

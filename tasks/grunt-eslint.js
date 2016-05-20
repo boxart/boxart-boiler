@@ -10,6 +10,12 @@ module.exports = function(grunt) {
       },
       src: ['src/**/*.js{,x}'],
     },
+    examples: {
+      options: {
+        configFile: 'examples/.eslintrc',
+      },
+      src: ['examples/**/*.js{,x}'],
+    },
     tests: {
       options: {
         configFile: 'tests/.eslintrc',
