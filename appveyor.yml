@@ -11,7 +11,7 @@ matrix:
     - nodejs_version: 4
 
 cache:
-  - %APPDATA%\npm-cache # npm cache
+  - "%APPDATA%\npm-cache" # npm cache
 
 install:
   - ps: Update-NodeJsInstallation (Get-NodeJsLatestBuild $env:nodejs_version)
