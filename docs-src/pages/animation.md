@@ -21,6 +21,8 @@ import {Animated, AnimatedAgent} from 'boxart';
 
 `Animated` can also take a `animate` property, which should be a function defining the desired animation. Animations can be as complex as you require, but one of the simplest kinds of motion is a linear transition; `Animated` will default to this if no `animate` function is provided.
 
+If on successive renders that element moves to different places in the DOM, the `AnimatedAgent` will use the `animateKey` property to identify the new position. Rather than moving the element to the new location through JavaScript (which would require the browser to re-draw the page many times, causing irregular, stuttery motion or "jank"), the AnimatedAgent is instead identified in its new location, transformed back to the original position through CSS transforms (which do not cause a reflow), and then animated into the desired final position via CSS.
+
 <iframe src="../examples/animation-simple.html" class="somewhat-short"></iframe>
 <a href="#">View Fullscreen</a>
 
