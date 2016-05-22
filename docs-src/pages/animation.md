@@ -28,7 +28,7 @@ If on successive renders that element moves to different places in the DOM, the 
 
 ~~~html
 <div class="board">
-class Main extends Component {
+class Main extends UpdateAncestor {
 
   constructor() {
     super();
@@ -82,8 +82,7 @@ This can work with any number of elements, so long as they have unique `animateK
 <a href="#">View Fullscreen</a>
 
 ~~~javascript
-import Component from '../../src/modules/update-ancestor';
-class Main extends Component {
+class Main extends UpdateAncestor {
   constructor() {
     super();
 
@@ -119,6 +118,12 @@ class Main extends Component {
   }
 }
 ~~~
+
+#### UpdateAncestor
+
+`Animated` and `AnimatedAgent` are exports of the [boxart](http://github.com/boxart/boxart) package; the `UpdateAncestor` component used in the examples above is defined within [boxart-boiler](http://github.com/boxart/boxart-boiler). `UpdateAncestor` provides auto-binding and convenience methods for using [react-addons-update](https://facebook.github.io/react/docs/update.html), and can be used to wrap animated elements in order to simplify the process of re-rendering on update.
+
+`UpdateAncestor` may be imported from `src/modules/update-ancestor`.
 
 ### Sprites
 
