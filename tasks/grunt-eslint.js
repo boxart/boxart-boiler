@@ -16,6 +16,12 @@ module.exports = function(grunt) {
       },
       src: ['examples/**/*.js{,x}'],
     },
+    tools: {
+      options: {
+        configFile: 'tools/.eslintrc',
+      },
+      src: ['tools/**/*.js{,x}'],
+    },
     tests: {
       options: {
         configFile: 'tests/.eslintrc',

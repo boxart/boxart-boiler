@@ -7,10 +7,11 @@ module.exports = {
   context: __dirname,
   entry: {
     main: './src',
+    'animated-preview': './tools/animated-preview',
   },
   output: {
     path: 'dist',
-    filename: '[hash].js',
+    filename: '[name].js',
   },
   devtool: 'source-map',
   module: {
@@ -60,6 +61,13 @@ module.exports = {
       filename: 'index.html',
       template: './src/index.html',
       inject: 'body',
+      chunks: ['main'],
+    }),
+    new HtmlWepbackPlugin({
+      filename: 'animated-preview.html',
+      template: './tools/animated-preview/index.html',
+      inject: 'body',
+      chunks: ['animated-preview'],
     }),
   ],
 };

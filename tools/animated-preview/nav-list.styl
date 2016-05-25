@@ -1,0 +1,44 @@
+.nav-list {
+  flex: 0 0 auto;
+  // flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-list-expand {
+  flex: 1 1 auto;
+}
+
+.nav-list-header {
+  cursor: pointer;
+  flex: 0 0 auto;
+  background: darken(gray, 20%);
+  font-size: 1.5em;
+  padding: 0.75em;
+}
+
+.nav-list-content {
+  background: lighten(gray, 20%);
+  flex: 0 0 auto;
+  height: 0;
+  overflow: scroll;
+  transition: all 0.3s;
+}
+
+.nav-list-content-expand {
+  flex: 1 1 auto;
+  height: calc(50% - 3em);
+  height: 100px;
+}
+
+.nav-list-item {
+  background: lighten(gray, 50%);
+}
+
+.nav-list-item:nth-child(2n) {
+  background: lighten(gray, 30%);
+}
+
+.nav-list-item-selected {
+  background: white;
+}
