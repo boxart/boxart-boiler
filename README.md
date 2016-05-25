@@ -1,7 +1,7 @@
 # boxart-boiler
 
-[![Build Status](https://ci.appveyor.com/api/projects/status/github/boxart/boxart-boiler?branch=master&svg=true)](https://ci.appveyor.com/project/boxart/boxart-boiler)
-[![Build Status](https://travis-ci.org/boxart/boxart-boiler.svg?branch=master)](https://travis-ci.com/boxart/boxart-boiler)
+[![Build status](https://ci.appveyor.com/api/projects/status/41hbjsq051aykso6/branch/master?svg=true)](https://ci.appveyor.com/project/robocoup/boxart-boiler/branch/master)
+[![Build Status](https://travis-ci.org/boxart/boxart-boiler.svg?branch=master)](https://travis-ci.org/boxart/boxart-boiler)
 
 BoxArt-Boiler is a boilerplate repo for building responsive and accessible Open Web Games using the DOM.
 
