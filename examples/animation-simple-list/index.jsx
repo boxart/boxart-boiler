@@ -27,7 +27,7 @@ class Main extends Component {
       <div className="game-board">
         <AnimatedAgent>
           <ul>
-            {this.state.numbers.map((num) => <Animated
+            {this.state.numbers.map(num => <Animated
               animateKey={num}
               key={num}>
               <li>{num}</li>

@@ -12,19 +12,19 @@ class Main extends Component {
     super();
 
     this.state = {
-      pos: 'left'
+      pos: 'left',
     };
   }
 
   swap() {
     this.setState({
-      pos: this.state.pos === 'left' ? 'right' : 'left'
+      pos: this.state.pos === 'left' ? 'right' : 'left',
     });
   }
 
   render() {
-    var pos1, pos2;
-    var animatedContent = (
+    let pos1, pos2;
+    const animatedContent = (
       <Animated animateKey="h1">
         <p><strong>Animated Content</strong></p>
       </Animated>
@@ -32,7 +32,8 @@ class Main extends Component {
 
     if (this.state.pos === 'right') {
       pos1 = animatedContent;
-    } else {
+    }
+    else {
       pos2 = animatedContent;
     }
 
