@@ -76,6 +76,16 @@ Built files are output into the `dist/` directory.
 
 The BoxArt-Boiler source contains a number of useful inline comments embedded within the code, but this repository also includes user documentation for all available BoxArt & BoxArt-Boiler features. This documentation is contained within the [docs-src directory], and can be rendered and viewed using the commands below.
 
+### Docs Dependencies
+
+The BoxArt documentation site is built using [Jekyll](https://jekyllrb.com/), so there are a few dependencies you must install before you can work on the docs site locally:
+
+1. [Install Ruby](https://www.ruby-lang.org/en/documentation/installation/) if it is not already available on your machine
+2. [Install RubyGems](https://rubygems.org/pages/download) if the `gem` command is not already available on your machine
+3. [Install Jekyll](https://jekyllrb.com/docs/installation/) with `gem install jekyll`
+
+Once Jekyll has been installed, the commands below will execute successfully.
+
 ### Generate Docs
 `grunt docs` or `npm run docs`
 
@@ -84,7 +94,7 @@ The `grunt docs` command (aliased to `npm run docs`) will compile the live inlin
 ### Developing Inline Examples
 `npm run docs-dev`
 
-Code for the live inline (iframed) examples within the documentation is contained within the `examples/` folder in the repository root. Running `npm run docs-dev` will start the Jekyll site as with `grunt docs`, but will start a webpack build _in parallel_ so that any changes to the examples source code will be compiled into the docs-src folder, and then picked up by the Jekyll watcher and rendered into the live docs site. This one command has the same effect as running `grunt jekyll` and `grunt build-examples-dev` in two separate terminals.
+Code for the live inline (iframed) examples within the documentation is contained within the `examples/` folder in the repository root. Running `npm run docs-dev` will start the Jekyll site as with `grunt docs`, but will start a webpack build _in parallel_ so that any changes to the examples source code will be compiled into the docs-src folder, and then picked up by the Jekyll watcher and rendered into the live docs site. This one command has the same effect as running `grunt jekyll` and `grunt build-examples-dev` in two separate terminals (which may be preferable if you don't mind having more terminals open, as build errors are occasionally swallowed by the `parallelshell` utility).
 
 ## Tech Stack and Tool Chain
 
