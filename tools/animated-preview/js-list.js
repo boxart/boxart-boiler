@@ -10,14 +10,16 @@ module.exports = (() => {
   // that addition of complexity we can opt to exclude index files since they
   // are the entry into a folder. This does mean making armatures as the index
   // of a folder would be invisible to the preview tool. If a project can make
-  // more specific assumptions it should do so to reopen that oppurtunity, like
-  // how animated-preview excludes its root folder.
+  // more specific assumptions then it should do so in order to reopen that
+  // opportunity, like how animated-preview excludes its root folder.
   const srcContext = require.context(
     '../../src', true,
-    /(^(?!.*(index|animated-preview)).*\.jsx?$)|(animated-preview\/[^\\]*\/.*\.jsx?$)/);
+    /(^(?!.*(index|animated-preview)).*\.jsx?$)|(animated-preview\/[^\\]*\/.*\.jsx?$)/
+  );
   const toolsContext = require.context(
     '..', true,
-    /(^(?!.*(index|animated-preview)).*\.jsx?$)|(animated-preview\/[^\\]*\/.*\.jsx?$)/);
+    /(^(?!.*(index|animated-preview)).*\.jsx?$)|(animated-preview\/[^\\]*\/.*\.jsx?$)/
+  );
   return srcContext.keys().map(key => srcContext(key))
   .concat(toolsContext.keys().map(key => toolsContext(key)));
 })();

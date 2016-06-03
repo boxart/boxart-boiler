@@ -19,9 +19,15 @@ export default class Box extends Component {
   }
 
   render() {
-    return (<div ref="parent" style={{width: '100%', height: '100%'}}>
-      <div ref="box" style={{width: '33%', paddingBottom: '33%', background: 'black'}}></div>
-      <div ref="boxDestination" style={{position: 'absolute', right: 0, width: '33%', paddingBottom: '33%'}}></div>
+    return (<div ref="parent" style={{
+      width: '100%',
+      height: '100%'
+    }}>
+      <div ref="box" style={{
+        width: '33%',
+        paddingBottom: '33%',
+        background: 'black'
+      }}></div>
     </div>);
   }
 }

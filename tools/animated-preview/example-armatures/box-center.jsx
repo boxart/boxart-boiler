@@ -19,10 +19,22 @@ export default class BoxCenter extends Component {
   }
 
   render() {
-    return (<div ref="parent" style={{width: '100%', height: '100%', transform: 'translate(50%, 50%)'}}>
+    return (<div ref="parent" style={{
+      width: '100%',
+      height: '100%',
+      transform: 'translate(50%, 50%)'
+    }}>
       <div style={{width: '33%', paddingBottom: '33%'}}>
-        <div style={{width: '100%', height: '100%', transform: 'translate(-50%, -50%)'}}>
-          <div ref="box" style={{width: '100%', paddingBottom: '100%', background: 'black'}}></div>
+        <div style={{
+          width: '100%',
+          height: '100%',
+          transform: 'translate(-50%, -50%)'
+        }}>
+          <div ref="box" style={{
+            width: '100%',
+            paddingBottom: '100%',
+            background: 'black'
+          }}></div>
         </div>
       </div>
     </div>);

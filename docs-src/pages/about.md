@@ -17,6 +17,10 @@ For your own games, we recommend starting with [the `master` branch](https://git
 - [box2d-demo](https://github.com/boxart/boxart-boiler/tree/box2d-demo): A demo showing how BoxArt can be used in conjunction with [Box2D](http://box2d.org/)
 - [2048-demo](https://github.com/boxart/boxart-boiler/tree/2048-demo): A BoxArt implementation of the addictive sliding number game
 
+## Animation Preview Tool
+
+With the development server running (see "grunt" default task section, below), visit [localhost:8080/animated-preview.html](http://localhost:8080/animated-preview.html) to see a set of animation clips that can be applied to a variety of armatures. This tool permits animation clips to be viewed (and therefore developed) in isolation before they are applied to a game environment.
+
 ## System Dependencies
 
 In order to use or contribute to this repo you'll need the following things installed on your system:
