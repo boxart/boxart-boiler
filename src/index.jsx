@@ -12,6 +12,7 @@ import Component from './modules/auto-bind-ancestor';
 import Main from './modules/main';
 import FullViewport from './modules/full-viewport';
 import PreventZoom from './modules/prevent-zoom';
+import WebPClassSupport from './modules/webp-class-support';
 
 if (!global.Intl) {
   require('intl');
@@ -29,7 +30,9 @@ class IntlMain extends Component {
     return (
       <SoundContext soundjs={SoundJS}>
         <IntlProvider locale="en" messages={strings}>
-          <PreventZoom><FullViewport><Main /></FullViewport></PreventZoom>
+          <WebPClassSupport>
+            <PreventZoom><FullViewport><Main /></FullViewport></PreventZoom>
+          </WebPClassSupport>
         </IntlProvider>
       </SoundContext>
     );

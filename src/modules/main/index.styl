@@ -50,3 +50,42 @@
 .win-screen-button {
   cursor: pointer;
 }
+
+tile-background($color) {
+  .png & {
+    background: no-repeat center/100% url('images/tilegame_' + $color + '_1500w.png');
+    @media (max-height: 3016px) {
+      background: no-repeat center/100% url('images/tilegame_' + $color + '_750w.png');
+    }
+    @media (max-height: 1458px) {
+      background: no-repeat center/100% url('images/tilegame_' + $color + '_325w.png');
+    }
+    @media (max-height: 729px) {
+      background: no-repeat center/100% url('images/tilegame_' + $color + '_162w.png');
+    }
+    @media (max-height: 364px) {
+      background: no-repeat center/100% url('images/tilegame_' + $color + '_81w.png');
+    }
+  }
+  .webp & {
+    background: no-repeat center/100% url('images/tilegame_' + $color + '_1500w.webp');
+    @media (max-height: 3016px) {
+      background: no-repeat center/100% url('images/tilegame_' + $color + '_750w.webp');
+    }
+    @media (max-height: 1458px) {
+      background: no-repeat center/100% url('images/tilegame_' + $color + '_325w.webp');
+    }
+    @media (max-height: 729px) {
+      background: no-repeat center/100% url('images/tilegame_' + $color + '_162w.webp');
+    }
+    @media (max-height: 364px) {
+      background: no-repeat center/100% url('images/tilegame_' + $color + '_81w.webp');
+    }
+  }
+}
+
+for $color in ('blue' 'green' 'purple' 'red') {
+  .tile-{$color} {
+    tile-background($color);
+  }
+}

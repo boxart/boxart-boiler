@@ -311,6 +311,7 @@ function cleanGrid(grid, cells) {
 }
 
 const colors = ['#777', '#999', '#bbb', '#ddd'];
+const css_colors = ['blue', 'green', 'purple', 'red'];
 
 class Main extends Component {
 
@@ -501,13 +502,13 @@ class Main extends Component {
       key={tile.key} animateKey={tile.key}
       animate={this.animateTile(tile)}
       >
-      <div key={tile.key} style={{
+      <div key={tile.key} className={`tile-${css_colors[tile.color]}`} style={{
         position: 'absolute',
         width: `${100 / this.state.grid.width + 0.001953125}%`,
         height: `${100 / this.state.grid.height + 0.001953125}%`,
         left: `${tile.x * 100 / this.state.grid.width - 0.0009765625}%`,
         bottom: `${tile.y * 100 / this.state.grid.height - 0.0009765625}%`,
-        background: colors[tile.color],
+        // background: colors[tile.color],
       }} onClick={() => this.matchTile(tile)}></div>
     </Animated>);
   }
