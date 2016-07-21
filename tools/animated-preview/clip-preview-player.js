@@ -30,6 +30,7 @@ export default class ClipPreviewPlayer extends ClipPlayer {
   }
 
   setClip(clip) {
+    this._store = null;
     if (this.clip !== clip) {
       this._restore();
     }

@@ -259,7 +259,7 @@ export default class ClipPlayer {
     const wireProperties = this._getWireProperties();
 
     this._replace();
-    this._primeStore(inputs);
+    this._primeStore(inputs, wires, wireProperties);
     const timer = options.timer();
     timer.cancelable(() => this._restore());
     const start = Date.now();
@@ -268,9 +268,10 @@ export default class ClipPlayer {
       const now = Date.now();
       const t = Math.min(now - start, clipDuration);
       this._step(t, inputs, wires, wireProperties);
-      return t;
+      return t / clipDuration;
     })
-    .then(() => this._restore());
+    .then(() => this._restore())
+    .catch(() => {});
 
     return timer;
   }
@@ -282,4 +283,11 @@ export default class ClipPlayer {
 
 ClipPlayer.isClip = function(data) {
   return data.metadata && data.metadata.duration;
+};
+
+ClipPlayer.animate = function(options, armature, clip) {
+  const player = new ClipPlayer();
+  player.setArmature(armature);
+  player.setClip(clip);
+  return player.animate(options);
 };
