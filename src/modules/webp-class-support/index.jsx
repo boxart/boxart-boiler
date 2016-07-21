@@ -1,4 +1,4 @@
-import React, {Component, Children} from 'react';
+import {Component, Children} from 'react';
 import {findDOMNode} from 'react-dom';
 
 export default class WebPClassSupport extends Component {
@@ -6,47 +6,59 @@ export default class WebPClassSupport extends Component {
     super(...args);
 
     this.supports = {
-      lossy: false,
-      lossless: false,
       alpha: false,
     };
 
+    if (typeof localStorage !== 'undefined' && localStorage._webp_support) {
+      try {
+        this.supports = JSON.parse(localStorage._webp_support);
+      }
+      catch (e) {}
+    }
+
     const setter = (feature, result) => {
       this.supports[feature] = result;
+      if (typeof localStorage !== 'undefined') {
+        localStorage._webp_support = JSON.stringify(this.supports);
+      }
       this.updateClass();
     };
-    this.check_webp_feature('lossy', setter);
-    this.check_webp_feature('lossless', setter);
-    this.check_webp_feature('alpha', setter);
+    this.checkWebpFeature('alpha', setter);
   }
 
-  // check_webp_feature:
-  //   'feature' can be one of 'lossy', 'lossless', 'alpha' or 'animation'.
-  //   'callback(feature, result)' will be passed back the detection result (in an asynchronous way!)
-  check_webp_feature(feature, callback) {
-      var kTestImages = {
-          lossy: "UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA",
-          lossless: "UklGRhoAAABXRUJQVlA4TA0AAAAvAAAAEAcQERGIiP4HAA==",
-          alpha: "UklGRkoAAABXRUJQVlA4WAoAAAAQAAAAAAAAAAAAQUxQSAwAAAARBxAR/Q9ERP8DAABWUDggGAAAABQBAJ0BKgEAAQAAAP4AAA3AAP7mtQAAAA==",
-          animation: "UklGRlIAAABXRUJQVlA4WAoAAAASAAAAAAAAAAAAQU5JTQYAAAD/////AABBTk1GJgAAAAAAAAAAAAAAAAAAAGQAAABWUDhMDQAAAC8AAAAQBxAREYiI/gcA"
-      };
-      var img = new Image();
-      img.onload = function () {
-          var result = (img.width > 0) && (img.height > 0);
-          callback(feature, result);
-      };
-      img.onerror = function () {
-          callback(feature, false);
-      };
-      img.src = "data:image/webp;base64," + kTestImages[feature];
+  componentDidMount() {
+    this.updateClass();
   }
 
   componentDidUpdate() {
     this.updateClass();
   }
 
+  // checkWebpFeature:
+  //   'feature' can be one of 'lossy', 'lossless', 'alpha' or 'animation'.
+  //   'callback(feature, result)' will be passed back the detection result (in an asynchronous way!)
+  checkWebpFeature(feature, callback) {
+    if (typeof Image === 'undefined') {
+      return callback(feature, false);
+    }
+    const kTestImages = {
+      lossy: 'UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA',
+      lossless: 'UklGRhoAAABXRUJQVlA4TA0AAAAvAAAAEAcQERGIiP4HAA==',
+      alpha: 'UklGRkoAAABXRUJQVlA4WAoAAAAQAAAAAAAAAAAAQUxQSAwAAAARBxAR/Q9ERP8DAABWUDggGAAAABQBAJ0BKgEAAQAAAP4AAA3AAP7mtQAAAA==',
+      animation: 'UklGRlIAAABXRUJQVlA4WAoAAAASAAAAAAAAAAAAQU5JTQYAAAD/////AABBTk1GJgAAAAAAAAAAAAAAAAAAAGQAAABWUDhMDQAAAC8AAAAQBxAREYiI/gcA',
+    };
+    const img = new Image();
+    img.onload = function() {
+      const result = (img.width > 0) && (img.height > 0);
+      callback(feature, result);
+    };
+    img.onerror = function() {
+      callback(feature, false);
+    };
+    img.src = 'data:image/webp;base64,' + kTestImages[feature];
+  }
+
   updateClass() {
-    console.log(this.supports);
     if (this.supports.alpha) {
       findDOMNode(this).classList.add('webp');
       findDOMNode(this).classList.remove('png');
