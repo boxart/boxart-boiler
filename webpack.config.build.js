@@ -39,7 +39,7 @@ var loaders = [
       ),
     },
     {
-      test: /\.(png|webm|svg)$/,
+      test: /\.(png|webm|webp|svg)$/,
       loader: 'file-loader',
     },
     {
