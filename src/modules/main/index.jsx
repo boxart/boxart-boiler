@@ -6,8 +6,13 @@ import {Animated, AnimatedAgent, Batch, BatchFactory} from 'boxart';
 import Component from '../update-ancestor';
 
 import Clamp from '../clamp';
+import ClipPlayer from '../../../tools/animated-preview/clip-player';
 
 import {int} from '../../util/rng';
+
+import Shell from './shell';
+
+const clips = require.context('./clips');
 
 function intGen(rngState) {
   const fn = () => {
@@ -17,6 +22,35 @@ function intGen(rngState) {
   };
   fn.state = rngState;
   return fn;
+}
+
+function gridKeyXY(x, y) {
+  return `${x}-${y}`;
+}
+
+function gridKey([x, y]) {
+  return `${x}-${y}`;
+}
+
+// function swapGrid(grid, {from, to}) {
+//   return update(grid, {
+//     [gridKey(from)]: grid[gridKey[to]],
+//     [gridKey(to)]: grid[gridKey[from]],
+//   });
+// }
+
+function add(a, b) {
+  return [a[0] + b[0], a[1] + b[1]];
+}
+
+function addXY(a, x, y) {
+  return [a[0] + x, a[1] + y];
+}
+
+const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
+
+function isSameColor(here, cell) {
+  return cell && cell.color === here;
 }
 
 function createGrid(_width, _height) {
@@ -144,35 +178,6 @@ function resetGrid(grid) {
   }
   change.gen = {$set: gen.state};
   return update(grid, change);
-}
-
-function gridKeyXY(x, y) {
-  return `${x}-${y}`;
-}
-
-function gridKey([x, y]) {
-  return `${x}-${y}`;
-}
-
-// function swapGrid(grid, {from, to}) {
-//   return update(grid, {
-//     [gridKey(from)]: grid[gridKey[to]],
-//     [gridKey(to)]: grid[gridKey[from]],
-//   });
-// }
-
-function add(a, b) {
-  return [a[0] + b[0], a[1] + b[1]];
-}
-
-function addXY(a, x, y) {
-  return [a[0] + x, a[1] + y];
-}
-
-const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
-
-function isSameColor(here, cell) {
-  return cell && cell.color === here;
 }
 
 function matchGrid(grid, target) {
@@ -310,8 +315,8 @@ function cleanGrid(grid, cells) {
   return update(grid, change);
 }
 
-const colors = ['#777', '#999', '#bbb', '#ddd'];
-const css_colors = ['blue', 'green', 'purple', 'red'];
+// const colors = ['#777', '#999', '#bbb', '#ddd'];
+const cssColors = ['blue', 'green', 'purple', 'red'];
 
 class Main extends Component {
 
@@ -323,6 +328,7 @@ class Main extends Component {
       lastGrid: {cells: {}},
       grid: createGrid(12, 8),
     };
+    this.shells = {};
   }
 
   matchTile(tile) {
@@ -448,7 +454,6 @@ class Main extends Component {
     timer.cancelable(() => tRect);
     const gravity = options.agent.rect.width / 4;
     const start = Date.now();
-    const top = rect.top;
     const lastTop = lastRect.top;
     const vx = (tile.x - tile.matchX) * gravity / 4 + (Math.random() - 0.5) * gravity / 2;
     const vy = -(tile.y - tile.matchY) * gravity / 4 - Math.random() * gravity;
@@ -482,7 +487,17 @@ class Main extends Component {
   animateTile(tile) {
     return options => {
       if (typeof tile.matchX === 'number') {
-        return this.explodeAnimation(options, tile);
+        const arm = this.shells[tile.key];
+        const timer = ClipPlayer.animate(options, arm, clips('./shell-burst'));
+        timer.then(() => {
+          this.cleanTile(tile);
+          arm.getWires().box.style.opacity = 0;
+        }, () => {
+          this.cleanTile(tile);
+          arm.getWires().box.style.opacity = 0;
+        });
+        return timer;
+        // return this.explodeAnimation(options, tile);
       }
       else if (tile.disappear) {
         return this.disappearAnimation(options, tile);
@@ -502,14 +517,16 @@ class Main extends Component {
       key={tile.key} animateKey={tile.key}
       animate={this.animateTile(tile)}
       >
-      <div key={tile.key} className={`tile-${css_colors[tile.color]}`} style={{
+      <div key={tile.key} style={{
         position: 'absolute',
         width: `${100 / this.state.grid.width + 0.001953125}%`,
         height: `${100 / this.state.grid.height + 0.001953125}%`,
         left: `${tile.x * 100 / this.state.grid.width - 0.0009765625}%`,
         bottom: `${tile.y * 100 / this.state.grid.height - 0.0009765625}%`,
         // background: colors[tile.color],
-      }} onClick={() => this.matchTile(tile)}></div>
+      }} onClick={() => this.matchTile(tile)}>
+        <Shell ref={shell => {this.shells[tile.key] = shell;}} color={cssColors[tile.color]} />
+      </div>
     </Animated>);
   }
 
@@ -534,7 +551,7 @@ class Main extends Component {
     const tRect = lastRect.clone();
     tRect.t = rect.t || 0;
     if (tRect.t >= 1) {
-      return;
+      return options.timer();
     }
     const style = {opacity: 0};
     rect.transformStyle(tRect, style);

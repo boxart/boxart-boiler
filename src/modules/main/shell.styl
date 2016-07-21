@@ -1,0 +1,343 @@
+tile-background($color) {
+  background: no-repeat center/100% url('images/tilegame_' + $color + '_1500w.png');
+
+  .webp & {
+    background: no-repeat center/100% url('images/tilegame_' + $color + '_1500w.webp');
+  }
+}
+
+.shell {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+}
+
+// for $color in ('blue' 'green' 'purple' 'red') {
+//   .shell-{$color} {
+//     tile-background($color);
+//   }
+// }
+
+shell-piece-background($color, $side) {
+  background: no-repeat center/100% url('images/tilegame_' + $color + '_' + $side + '_cropped.png');
+}
+
+shell-piece-background-sizes($color, $side) {
+  .png & {
+    background: no-repeat center/100% url('images/tilegame_' + $color + '_' + $side + '_cropped_1500w.png');
+  }
+
+  .webp & {
+    background: no-repeat center/100% url('images/tilegame_' + $color + '_' + $side + '_cropped_1500w.webp');
+  }
+}
+
+shell-sheet($sheet, $position_size) {
+  &, .webp & {
+    @media (max-height: 3016px) {
+      background: no-repeat unquote($position_size) url('images/tilegame_sheet_' + $sheet + '_750w.webp');
+    }
+    @media (max-height: 1458px) {
+      background: no-repeat unquote($position_size) url('images/tilegame_sheet_' + $sheet + '_325w.webp');
+    }
+    @media (max-height: 729px) {
+      background: no-repeat unquote($position_size) url('images/tilegame_sheet_' + $sheet + '_162w.webp');
+    }
+    @media (max-height: 364px) {
+      background: no-repeat unquote($position_size) url('images/tilegame_sheet_' + $sheet + '_81w.webp');
+    }
+  }
+
+  .png & {
+    @media (max-height: 3016px) {
+      background: no-repeat unquote($position_size) url('images/tilegame_sheet_' + $sheet + '_750w.png');
+    }
+    @media (max-height: 1458px) {
+      background: no-repeat unquote($position_size) url('images/tilegame_sheet_' + $sheet + '_325w.png');
+    }
+    @media (max-height: 729px) {
+      background: no-repeat unquote($position_size) url('images/tilegame_sheet_' + $sheet + '_162w.png');
+    }
+    @media (max-height: 364px) {
+      background: no-repeat unquote($position_size) url('images/tilegame_sheet_' + $sheet + '_81w.png');
+    }
+  }
+}
+
+shell-sheet-1($position_size) {
+  shell-sheet(1, $position_size);
+}
+
+shell-sheet-2($position_size) {
+  shell-sheet(2, $position_size);
+}
+
+.shell-top {
+  position: absolute;
+  left: 13.86%
+  width: 60.43%;
+  padding-bottom: 56.8%;
+  opacity: 0;
+
+  .shell-green & {
+    left: 7.06%;
+    width: 69.63%;
+    padding-bottom: 56.8%;
+  }
+
+  .shell-purple & {
+    left: 22%;
+    width: 48.03%;
+    padding-bottom: 56.8%;
+  }
+
+  .shell-red & {
+    left: 7.26%;
+    width: 69.13%;
+    padding-bottom: 46.26%;
+  }
+
+  for $color in () {
+    .shell-{$color} & {
+      shell-piece-background($color, 'top');
+    }
+  }
+
+  for $color in ('blue' 'green' 'purple' 'red') {
+    .shell-{$color} & {
+      shell-piece-background-sizes($color, 'top');
+    }
+  }
+
+  .shell-blue & {
+    shell-sheet-1('97.25% 0%/453.09%');
+  }
+
+  .shell-green & {
+    shell-sheet-1('100% 100%/392.23%');
+  }
+
+  .shell-purple & {
+    shell-sheet-2('29.06% 67.35%/568.88%');
+  }
+
+  .shell-red & {
+    shell-sheet-2('82.46% 29.95%/395.36%');
+  }
+}
+
+.shell-right {
+  position: absolute;
+  top: 9.5%;
+  left: 45.93%;
+  width: 54.06%;
+  padding-bottom: 67.2%;
+  opacity: 0;
+
+  .shell-green & {
+    top: 6.36%;
+    left: 45.93%;
+    width: 54.06%;
+    padding-bottom: 73.76%;
+  }
+
+  .shell-purple & {
+    top: 14.36%;
+    left: 45.93%;
+    width: 54.06%;
+    padding-bottom: 65.7%;
+  }
+
+  .shell-red & {
+    top: 6.76%;
+    left: 45.93%;
+    width: 54.06%;
+    padding-bottom: 63.7%;
+  }
+
+  for $color in () {
+    .shell-{$color} & {
+      shell-piece-background($color, 'right');
+    }
+  }
+
+  for $color in ('blue' 'green' 'purple' 'red') {
+    .shell-{$color} & {
+      shell-piece-background-sizes($color, 'right');
+    }
+  }
+
+  .shell-blue & {
+    shell-sheet-1('42.39% 99%/531.94%');
+  }
+
+  .shell-green & {
+    shell-sheet-1('94.58% 31.46%/495.88%');
+  }
+
+  .shell-purple & {
+    shell-sheet-2('-0.5% 85.95%/476.27%');
+  }
+
+  .shell-red & {
+    shell-sheet-2('46.31% -1%/486.46%');
+  }
+}
+
+.shell-bottom {
+  position: absolute;
+  top: 64.3%;
+  left: 15.5%;
+  width: 73.5%;
+  padding-bottom: 35.7%;
+  opacity: 0;
+
+  .shell-green & {
+    top: 64.3%;
+    left: 12.9%;
+    width: 81.4%;
+    padding-bottom: 35.7%;
+  }
+
+  .shell-purple & {
+    top: 64.3%;
+    left: 13.13%;
+    width: 81.03%;
+    padding-bottom: 35.7%;
+  }
+
+  .shell-red & {
+    top: 64.3%;
+    left: 25.73%;
+    width: 56.23%;
+    padding-bottom: 35.7%;
+  }
+
+  for $color in () {
+    .shell-{$color} & {
+      shell-piece-background($color, 'bottom');
+    }
+  }
+
+  for $color in ('blue' 'green' 'purple' 'red') {
+    .shell-{$color} & {
+      shell-piece-background-sizes($color, 'bottom');
+    }
+  }
+
+  .shell-blue & {
+    shell-sheet-1('0.88% 101.5%/371.68%');
+  }
+
+  .shell-green & {
+    shell-sheet-1('1.47% 85.66%/335.73%');
+  }
+
+  .shell-purple & {
+    shell-sheet-2('34.04% 45.25%/337.39%');
+  }
+
+  .shell-red & {
+    shell-sheet-2('46.68% 28.02%/486.46%');
+  }
+}
+
+.shell-left {
+  position: absolute;
+  top: 19.66%;
+  width: 50.16%;
+  padding-bottom: 62.5%;
+  opacity: 0;
+
+  .shell-green & {
+    top: 17.86%;
+    width: 49.6%;
+    padding-bottom: 70.6%;
+  }
+
+  .shell-purple & {
+    top: 24%;
+    width: 50.2%;
+    padding-bottom: 63.86%;
+  }
+
+  .shell-red & {
+    top: 17.93%;
+    width: 50.2%;
+    padding-bottom: 62.86%;
+  }
+
+  for $color in () {
+    .shell-{$color} & {
+      shell-piece-background($color, 'left');
+    }
+  }
+
+  for $color in ('blue' 'green' 'purple' 'red') {
+    .shell-{$color} & {
+      shell-piece-background-sizes($color, 'left');
+    }
+  }
+
+  .shell-blue & {
+    shell-sheet-1('65.41% 100%/564.18%');
+  }
+
+  .shell-green & {
+    shell-sheet-1('97.75% 70.62%/547.59%');
+  }
+
+  .shell-purple & {
+    shell-sheet-2('1.5% 48.48%/497.08%');
+  }
+
+  .shell-red & {
+    shell-sheet-2('70.23% 0%/525.12%');
+  }
+}
+
+.shell-chick {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  padding-bottom: 80%;
+  opacity: 0;
+  tile-background('chick');
+  shell-sheet-2('0% 0%/267.36%');
+
+  .shell-purple & {
+    top: 25%;
+    width: 70%;
+    padding-bottom: 70%;
+  }
+}
+
+.shell-cover {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  padding-bottom: 100%;
+
+  for $color in ('blue' 'green' 'purple' 'red') {
+    .shell-{$color} & {
+      tile-background($color);
+    }
+  }
+
+  .shell-blue & {
+    shell-sheet-1('top left/276.01%');
+  }
+
+  .shell-green & {
+    shell-sheet-1('58.52% 0%/276.01%');
+  }
+
+  .shell-purple & {
+    shell-sheet-1('0% 58.52%/276.01%');
+  }
+
+  .shell-red & {
+    shell-sheet-1('58.52% 58.52%/276.01%');
+  }
+}
